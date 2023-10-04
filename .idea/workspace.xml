@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="Initial project setup finished.&#10;No code yet." />
+    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="Initial project setup finished.&#10;No code yet.">
+      <change afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/action.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/app.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/common/innerContainer.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/core/combinedReducer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/core/footer.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/core/head.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/core/route.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/development.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/webpack.config.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/frontend" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -25,11 +42,18 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/weareandrei/Documents/Omega",
+    "last_opened_file_path": "/Users/weareandrei/Documents/Omega/frontend/src/core",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src/core" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -39,6 +63,7 @@
       <option name="presentableId" value="Default" />
       <updated>1696441191689</updated>
       <workItem from="1696441192811" duration="522000" />
+      <workItem from="1696441725611" duration="3163000" />
     </task>
     <task id="LOCAL-00001" summary="Initial project setup finished.&#10;No code yet.">
       <created>1696441554023</created>
