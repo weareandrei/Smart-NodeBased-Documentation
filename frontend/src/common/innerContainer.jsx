@@ -1,9 +1,8 @@
 /* eslint-disable react/display-name,react/prop-types */
 import React from 'react'
-import Container from '@material-ui/core/Container'
 
 export default ({...props}) =>
-    <Container {...props}
+    <div {...props}
                style={{...style.innerContainer, ...props.style}}/>
 
 const style = {

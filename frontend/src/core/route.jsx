@@ -4,8 +4,7 @@ import loadable from '@loadable/component'
 import map from 'lodash/map'
 import InnerContainer from '../common/innerContainer'
 
-const Store = loadable(() => import(/*webpackChunkName: "store"*/'../store/store'))
-const FeaturedStore = loadable(() => import(/*webpackChunkName: "featuredStore"*/'../featuredstore/featuredStore'))
+const MainPage = loadable(() => import(/*webpackChunkName: "store"*/'../main/main'))
 
 const Routes = () =>
     <Switch>
@@ -19,8 +18,8 @@ const NoMatch = () =>
     </InnerContainer>
 
 const routes = [
-    {exact: true, path: '/store', component: FeaturedStore},
-    {exact: true, path: '/store/:slug', component: Store},
+    {exact: true, path: '/', component: MainPage},
+    {exact: true, path: '/main', component: MainPage},
     {component: NoMatch}]
 
 export default Routes

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="Initial project setup finished.&#10;No code yet.">
-      <change afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/action.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/common/innerContainer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/core/combinedReducer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/core/footer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/core/head.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/core/route.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/development.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/reducer.js" afterDir="false" />
+    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="Improved setup (NOT WORKING).&#10;+ Reducers (Combined)&#10;+ Router&#10;+ App container">
+      <change afterPath="$PROJECT_DIR$/frontend/.babelrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/core/asyncAction.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/main/main.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/webpack/loaders.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/webpack/resolve.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/action.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/common/innerContainer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/common/innerContainer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/core/combinedReducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/core/combinedReducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/core/route.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/core/route.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/reducer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/webpack.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,7 +42,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/weareandrei/Documents/Omega/frontend/src/core",
+    "last_opened_file_path": "/Users/weareandrei/Documents/Omega/frontend/src",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
@@ -51,7 +51,14 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src" />
+      <recent name="$PROJECT_DIR$/frontend" />
       <recent name="$PROJECT_DIR$/frontend/src/core" />
+      <recent name="$PROJECT_DIR$/frontend/public" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src" />
+      <recent name="$PROJECT_DIR$/frontend/public" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -63,7 +70,7 @@
       <option name="presentableId" value="Default" />
       <updated>1696441191689</updated>
       <workItem from="1696441192811" duration="522000" />
-      <workItem from="1696441725611" duration="3163000" />
+      <workItem from="1696441725611" duration="12199000" />
     </task>
     <task id="LOCAL-00001" summary="Initial project setup finished.&#10;No code yet.">
       <created>1696441554023</created>
@@ -72,7 +79,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696441554023</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Improved setup (NOT WORKING).&#10;+ Reducers (Combined)&#10;+ Router&#10;+ App container">
+      <created>1696445037003</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1696445037003</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -91,6 +105,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial project setup finished.&#10;No code yet." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial project setup finished.&#10;No code yet." />
+    <MESSAGE value="Improved setup (NOT WORKING).&#10;+ Reducers (Combined)&#10;+ Router&#10;+ App container" />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved setup (NOT WORKING).&#10;+ Reducers (Combined)&#10;+ Router&#10;+ App container" />
   </component>
 </project>

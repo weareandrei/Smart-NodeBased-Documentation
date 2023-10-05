@@ -6,8 +6,10 @@ import { connectRouter, routerMiddleware } from 'connected-react-router'
 import {createBrowserHistory} from 'history'
 
 import application from '../reducer'
+import asyncAction from "./asyncAction"
 
 export const history = createBrowserHistory({basename: '/'})
+const env = 'dev'
 
 const persistConfig = {
     key: 'root',
@@ -18,10 +20,11 @@ const persistConfig = {
 
 const createStore = (combinedReducer) => {
     const middleware = [
+        asyncAction,
         routerMiddleware(history)
     ].filter(Boolean)
 
-    return applyMiddleware(...middleware)(_createStore)(combinedReducer &&
+    return applyMiddleware(...middleware)(_createStore)(combinedReducer,
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 }
 
