@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <Container component="footer" maxWidth="lg" sx={{ marginTop: '2rem' }}>
             <Typography variant="body2" color="text.secondary" align="center">
-                © {new Date().getFullYear()} Your Website Name
+                © {new Date().getFullYear()} Omega
             </Typography>
             <Typography variant="body2" color="text.secondary" align="center">
                 <Link color="inherit" href="/privacy-policy">

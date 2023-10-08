@@ -14,7 +14,6 @@ const initialState = {
 const appReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_NOTIFICATION:
-            console.log('Add notification, action :', action)
             return {
                 ...state,
                 notifications: [...state.notifications, {

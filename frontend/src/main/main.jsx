@@ -1,11 +1,22 @@
 import React from 'react'
+import {connect} from 'react-redux'
+import {withCookies} from "react-cookie";
+import {withRouter} from "react-router-dom";
+import {withMediaQuery} from "@/common/media";
 
-const MainPage = () => {
-    return (
-        <div className="SpritesheetPage">
-            <h2>Unity Dev Tools</h2>
-        </div>
-    )
+
+class MainPage extends React.Component {
+
+    render() {
+        console.log('Render MAIN')
+        return (
+            <dev>
+                Main Page
+            </dev>
+        )
+    }
+
 }
 
-export default MainPage
+export default connect((state) => ({
+}))(withCookies(withRouter(withMediaQuery(MainPage))))

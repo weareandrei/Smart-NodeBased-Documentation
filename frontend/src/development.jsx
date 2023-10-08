@@ -2,7 +2,7 @@ import React from 'react'
 import {createRoot} from 'react-dom/client'
 import {AppContainer} from 'react-hot-loader'
 import App from './app'
-import {store, history} from './core/combinedReducer'
+import { store, history } from './core/store'
 
 const container = document.getElementById('root')
 const root = createRoot(container)

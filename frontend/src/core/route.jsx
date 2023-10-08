@@ -1,25 +1,15 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 import loadable from '@loadable/component'
-import map from 'lodash/map'
-import InnerContainer from '../common/innerContainer'
 
 const MainPage = loadable(() => import(/*webpackChunkName: "store"*/'../main/main'))
+const Auth = loadable(() => import(/*webpackChunkName: "store"*/'../auth/auth'))
 
 const Routes = () =>
     <Switch>
-        {map(routes, (route) => <Route key={route.path || 'nomatch'}
-                                       {...route}/>)}
+        <Route exact path="/" component={Auth} />
+        <Route path={`/auth`} component={Auth} />
+        <Route path={`/main`} component={MainPage} />
     </Switch>
-
-const NoMatch = () =>
-    <InnerContainer>
-        <h3>Sorry the page is not found</h3>
-    </InnerContainer>
-
-const routes = [
-    {exact: true, path: '/', component: MainPage},
-    {exact: true, path: '/main', component: MainPage},
-    {component: NoMatch}]
 
 export default Routes
