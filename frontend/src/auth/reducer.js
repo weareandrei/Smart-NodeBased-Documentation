@@ -5,12 +5,14 @@ import sortBy from 'lodash/sortBy'
 import {
     VALIDATE_USER_CREDENTIALS,
     USER_CREDENTIALS_CORRECT,
-    USER_CREDENTIALS_WRONG
+    USER_CREDENTIALS_WRONG,
+    USER_DATA_LOADED
 } from "./action"
 
 const initialState = {
     authenticated : false,
-    loading: true
+    loading: true,
+    userData: {}
 }
 
 const authReducer = (state = initialState, action) => {
@@ -30,6 +32,12 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 authenticated: false,
+                loading: false
+            }
+        case USER_DATA_LOADED:
+            return {
+                ...state,
+                userData: action.data,
                 loading: false
             }
         default:

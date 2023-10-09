@@ -10,18 +10,24 @@ import Box from '@mui/material/Box'
 
 import NavigationTop from './navigationTop'
 import NavigationLeft from './navigationLeft'
+import PropTypes from "prop-types";
 
 class Navigation extends React.Component {
 
-    render() {
-        return this.renderNavigation()
+    static propTypes = {
+        fullNav: PropTypes.bool.isRequired
     }
 
-    renderNavigation = () =>
+    render = () =>
+        this.props.fullNav ? this.renderFullNavigation() : this.renderMiniNavigation()
+
+    renderFullNavigation = () =>
         <div style={style.navigationContainer}>
             <NavigationTop/>
             <NavigationLeft/>
         </div>
+
+    renderMiniNavigation = () => <NavigationTop/>
 
 }
 

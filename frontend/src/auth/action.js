@@ -1,6 +1,7 @@
 export const VALIDATE_USER_CREDENTIALS = 'ADD_NOTIFICATION'
 export const USER_CREDENTIALS_CORRECT = 'USER_CREDENTIALS_CORRECT'
 export const USER_CREDENTIALS_WRONG = 'USER_CREDENTIALS_WRONG'
+export const USER_DATA_LOADED = 'USER_DATA_LOADED'
 
 const userCredentialsValidating = (user) => ({
     type: VALIDATE_USER_CREDENTIALS,
@@ -13,6 +14,11 @@ const userCredentialsCorrect = () => ({
 
 const userCredentialsWrong = () => ({
     type: USER_CREDENTIALS_WRONG
+})
+
+const userDataLoaded = (data) => ({
+    type: USER_DATA_LOADED,
+    data: data
 })
 
 export const validateUser = (credentials) => {
@@ -32,6 +38,7 @@ export const validateUser = (credentials) => {
                 console.log('response from credentials, : ', response)
                 if (response.ok) {
                     dispatch(userCredentialsCorrect())
+                    dispatch(userDataLoaded(response.json))
                     console.log('correct credentials')
                 } else {
                     dispatch(userCredentialsWrong())

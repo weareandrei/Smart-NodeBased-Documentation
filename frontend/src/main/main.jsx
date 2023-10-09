@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {withCookies} from "react-cookie";
 import {withRouter} from "react-router-dom";
 import {withMediaQuery} from "@/common/media";
+import {Container} from "@mui/material";
 
 
 class MainPage extends React.Component {
@@ -10,9 +11,9 @@ class MainPage extends React.Component {
     render() {
         console.log('Render MAIN')
         return (
-            <dev>
+            <Container>
                 Main Page
-            </dev>
+            </Container>
         )
     }
 

@@ -20,9 +20,6 @@ class App extends React.Component {
   }
 
   render() {
-      console.log('Render APP')
-      console.log(this.props.history)
-      console.log('\n')
       return (
         <CookiesProvider>
             {this.renderProvider()}
@@ -46,7 +43,8 @@ class App extends React.Component {
       <div>
         <Head/>
 
-        <Navigation/>
+          {/*{this.renderNavigation(this.props.history.location.pathname)}*/}
+          <Navigation fullNav={true} />
 
         <div style={style.content}>
           <Route/>
@@ -54,6 +52,16 @@ class App extends React.Component {
 
         <Footer/>
       </div>
+
+    // renderNavigation = (path) =>  {
+    //     console.log('Pathname ... ', path)
+    //     // This probably needs to be done using the STATE, not PROPS.
+    //     if (path === '/auth') {
+    //         return <Navigation fullNav={false} />
+    //     } else {
+    //         return <Navigation fullNav={true} />
+    //     }
+    // }
 }
 
 const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)

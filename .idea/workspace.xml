@@ -1,32 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="Improved setup (Working).&#10;+ Webpack Config improved&#10;+ Combined Reducer improved.&#10;+ Package.json many changes">
-      <change afterPath="$PROJECT_DIR$/backend/auth/auth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/auth/action.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/auth/auth.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/auth/reducer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/common/icon/omega.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/common/icon/omegaLogo.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/common/media.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/core/rootReducer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/core/store.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/navigation/action.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/navigation/navigation.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/navigation/navigationLeft.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/navigation/navigationTop.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/navigation/reducer.js" afterDir="false" />
+    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="React Route used more properly.&#10;Basic authenticaion API works and allows us to move to Main page.">
+      <change afterPath="$PROJECT_DIR$/backend/auth/auth.test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/core/combinedReducer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/core/footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/core/footer.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/core/route.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/core/route.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/development.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/development.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/auth/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/auth/action.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/auth/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/auth/reducer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/navigation/navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/navigation/navigation.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,6 +65,16 @@
       <recent name="$PROJECT_DIR$/frontend/public" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration name="auth.test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/backend/auth/auth.test.js" working-dir="$PROJECT_DIR$/backend/auth">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Node.js.auth.test.js" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -89,7 +84,7 @@
       <option name="presentableId" value="Default" />
       <updated>1696441191689</updated>
       <workItem from="1696441192811" duration="522000" />
-      <workItem from="1696441725611" duration="45823000" />
+      <workItem from="1696441725611" duration="49110000" />
     </task>
     <task id="LOCAL-00001" summary="Initial project setup finished.&#10;No code yet.">
       <created>1696441554023</created>
@@ -112,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696504087473</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="React Route used more properly.&#10;Basic authenticaion API works and allows us to move to Main page.">
+      <created>1696786738085</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1696786738085</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -133,6 +135,7 @@
     <MESSAGE value="Initial project setup finished.&#10;No code yet." />
     <MESSAGE value="Improved setup (NOT WORKING).&#10;+ Reducers (Combined)&#10;+ Router&#10;+ App container" />
     <MESSAGE value="Improved setup (Working).&#10;+ Webpack Config improved&#10;+ Combined Reducer improved.&#10;+ Package.json many changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved setup (Working).&#10;+ Webpack Config improved&#10;+ Combined Reducer improved.&#10;+ Package.json many changes" />
+    <MESSAGE value="React Route used more properly.&#10;Basic authenticaion API works and allows us to move to Main page." />
+    <option name="LAST_COMMIT_MESSAGE" value="React Route used more properly.&#10;Basic authenticaion API works and allows us to move to Main page." />
   </component>
 </project>
