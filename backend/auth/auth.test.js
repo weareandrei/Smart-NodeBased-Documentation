@@ -1,24 +1,44 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://weareandrei:Andrews8208@omega.owkrpxa.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
-});
+const { MongoClient, ObjectId } = require('mongodb')
 
-async function run() {
+const main = async () => {
+    const uri = "mongodb+srv://weareandrei:Andrews8208@omega.owkrpxa.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
+    const client = new MongoClient(uri);
+
     try {
-        // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
-        // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        console.log('Connected successfully');
+
+        const database = client.db('documentation'); // Replace 'your-database-name' with your actual database name
+        const collection = database.collection('documentation'); // Replace 'documentation' with your actual collection name
+
+        const documentId = '6523592fd730e1f9120fbef6';
+
+        const query = { _id: new ObjectId(documentId) };
+        const result = await collection.findOne(query);
+
+        if (result) {
+            console.log('Retrieved document:', result);
+        } else {
+            console.log('Document not found');
+        }
+    } catch (e) {
+        console.error('Error:', e);
     } finally {
-        // Ensures that the client will close when you finish/error
         await client.close();
+        console.log('Connection closed');
     }
 }
-run().catch(console.dir);
+
+const main2 = async () => {
+    const uri = 'mongodb+srv://weareandrei:Andrews8208@omega.owkrpxa.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp'
+    const client = new MongoClient(uri)
+
+    try {
+        await client.connect()
+        console.log('connected successfully')
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+main()
