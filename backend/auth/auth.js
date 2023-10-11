@@ -1,45 +1,40 @@
-const {MongoClient,ServerApiVersion} = require('mongodb');
+const { DocumentationModel } = require('../mongodb/model');
 
-const loginUser = async (req, res) => {
-    // const user = req.body
-    await main()
-
-    res.status(200).json({ success: true })
-}
-
-const main = async () => {
-    const uri = "mongodb+srv://weareandrei:Andrews8208@omega.owkrpxa.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
-
-    const client = new MongoClient(uri, {
-        serverApi: {
-            version: ServerApiVersion.v1,
-            strict: true,
-            deprecationErrors: true,
-        }
-    });
+const validateUserCredentials = async (req, res) => {
+    console.log('API Called - /validateUserCredentials');
+    const { username, password } = req.body;
 
     try {
-        // Connect to the MongoDB cluster
-        await client.connect();
+        // const user = await DocumentationModel.find({});
+        const user = {
+            "_id": {
+                "$oid": "652367f3e9a268c7fc1e6efa"
+            },
+            "username": "user",
+            "password": "pass",
+            "documentationId": "6523592fd730e1f9120fbef6"
+        }
+        console.log('Username:', username);
+        console.log('User:', user);
 
-        // Make the appropriate DB calls
-        await  listDatabases(client);
+        if (!user) {
+            console.log('404, User not found')
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
 
-    } catch (e) {
-        console.error(e);
-    } finally {
-        await client.close();
+        if (user.password === password) {
+            res.json(user);
+            return;
+        }
+        console.log('404, Wrong password')
+        res.status(404).json({ message: 'Wrong password' });
+    } catch (error) {
+        console.log('500,', error.message)
+        res.status(500).json({ message: error.message })
     }
-}
-
-const listDatabases = async(client) => {
-    const databasesList = await client.db().admin().listDatabases();
-
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 };
 
-
 module.exports = {
-    loginUser,
+    validateUserCredentials,
 };

@@ -65,7 +65,7 @@ class Auth extends React.Component {
     signedIn = (authState) => {
         if (authState === 'signedIn') {
             const nextPage = this.props.location && this.props.location.pathname === 'login' ?
-                '/main' : '/main'
+                '/dashboard' : '/dashboard'
             this.props.history.push(nextPage)
         }
     }

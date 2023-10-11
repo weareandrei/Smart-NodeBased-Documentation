@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="React Route used more properly.&#10;Basic authenticaion API works and allows us to move to Main page.">
-      <change afterPath="$PROJECT_DIR$/backend/auth/auth.test.js" afterDir="false" />
+    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="auth.test works. &#10;Can connect to mongoDB and retrieve objects.">
+      <change afterPath="$PROJECT_DIR$/backend/auth/authMangoose.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/authPure.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/mongodb/get.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/mongodb/model.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/dashboard/action.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/dashboard/reducer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/documentation/documentation.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/tasks/tasks.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/auth/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/auth.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/action.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/auth/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/auth/action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/auth/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/auth/reducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/auth/auth.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/auth/auth.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/core/route.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/core/route.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dashboard/dashboard.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/navigation/navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/navigation/navigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/navigation/navigationLeft.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/navigation/navigationLeft.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/reducer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -58,20 +76,28 @@
       <recent name="$PROJECT_DIR$/frontend/public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backend/mongodb" />
       <recent name="$PROJECT_DIR$/frontend/src/common/icon" />
       <recent name="$PROJECT_DIR$/frontend/src/navigation" />
       <recent name="$PROJECT_DIR$/frontend/src/navigation/component" />
       <recent name="$PROJECT_DIR$/frontend/src" />
-      <recent name="$PROJECT_DIR$/frontend/public" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="auth.test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/backend/auth/auth.test.js" working-dir="$PROJECT_DIR$/backend/auth">
+  <component name="RunManager" selected="Node.js.authMangoose.test.js">
+    <configuration name="authMangoose.test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/backend/auth/authMangoose.test.js" working-dir="$PROJECT_DIR$/backend/auth">
+      <method v="2" />
+    </configuration>
+    <configuration name="authPure.test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/backend/auth/authPure.test.js" working-dir="$PROJECT_DIR$/backend/auth">
+      <method v="2" />
+    </configuration>
+    <configuration name="auth.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/backend/auth/auth.js" working-dir="$PROJECT_DIR$/backend/auth">
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Node.js.auth.test.js" />
+        <item itemvalue="Node.js.authMangoose.test.js" />
+        <item itemvalue="Node.js.authPure.test.js" />
+        <item itemvalue="Node.js.auth.js" />
       </list>
     </recent_temporary>
   </component>
@@ -84,7 +110,7 @@
       <option name="presentableId" value="Default" />
       <updated>1696441191689</updated>
       <workItem from="1696441192811" duration="522000" />
-      <workItem from="1696441725611" duration="49110000" />
+      <workItem from="1696441725611" duration="78842000" />
     </task>
     <task id="LOCAL-00001" summary="Initial project setup finished.&#10;No code yet.">
       <created>1696441554023</created>
@@ -114,7 +140,21 @@
       <option name="project" value="LOCAL" />
       <updated>1696786738085</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Successfully accessed mongoDB">
+      <created>1696818652133</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1696818652133</updated>
+    </task>
+    <task id="LOCAL-00006" summary="auth.test works. &#10;Can connect to mongoDB and retrieve objects.">
+      <created>1696867081499</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1696867081499</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -136,6 +176,20 @@
     <MESSAGE value="Improved setup (NOT WORKING).&#10;+ Reducers (Combined)&#10;+ Router&#10;+ App container" />
     <MESSAGE value="Improved setup (Working).&#10;+ Webpack Config improved&#10;+ Combined Reducer improved.&#10;+ Package.json many changes" />
     <MESSAGE value="React Route used more properly.&#10;Basic authenticaion API works and allows us to move to Main page." />
-    <option name="LAST_COMMIT_MESSAGE" value="React Route used more properly.&#10;Basic authenticaion API works and allows us to move to Main page." />
+    <MESSAGE value="Successfully accessed mongoDB" />
+    <MESSAGE value="auth.test works. &#10;Can connect to mongoDB and retrieve objects." />
+    <option name="LAST_COMMIT_MESSAGE" value="auth.test works. &#10;Can connect to mongoDB and retrieve objects." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/frontend/src/dashboard/dashboard.jsx</url>
+          <line>6</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

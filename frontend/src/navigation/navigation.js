@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 class Navigation extends React.Component {
 
     static propTypes = {
+        // history: PropTypes.object.isRequired,
         fullNav: PropTypes.bool.isRequired
     }
 

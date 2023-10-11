@@ -1,3 +1,5 @@
+import {loadedDocumentation} from "@/action";
+
 export const VALIDATE_USER_CREDENTIALS = 'ADD_NOTIFICATION'
 export const USER_CREDENTIALS_CORRECT = 'USER_CREDENTIALS_CORRECT'
 export const USER_CREDENTIALS_WRONG = 'USER_CREDENTIALS_WRONG'
@@ -25,9 +27,7 @@ export const validateUser = (credentials) => {
     return (dispatch) => {
         dispatch(userCredentialsValidating())
 
-        console.log('fetching credentials, : ', credentials)
-
-        fetch("http://localhost:8081/userCredentialsValidate", {
+        fetch("http://localhost:8081/validateUserCredentials", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,19 +35,18 @@ export const validateUser = (credentials) => {
             body: JSON.stringify(credentials)
         })
             .then((response) => {
-                console.log('response from credentials, : ', response)
                 if (response.ok) {
-                    dispatch(userCredentialsCorrect())
-                    dispatch(userDataLoaded(response.json))
-                    console.log('correct credentials')
+                    response.json().then((data) => {
+                        console.log('loaded user correctly: ', data);
+                        dispatch(userCredentialsCorrect())
+                        dispatch(userDataLoaded(data));
+                    });
                 } else {
                     dispatch(userCredentialsWrong())
-                    console.log('wrong credentials')
                 }
             })
             .catch((error) => {
                 dispatch(userCredentialsWrong())
-                console.log('wrong credentials')
             })
     }
 }

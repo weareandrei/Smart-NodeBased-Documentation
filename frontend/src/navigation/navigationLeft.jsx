@@ -1,13 +1,22 @@
 /* eslint-disable max-lines */
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import AppBar from '@mui/material/AppBar'
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import Grid from "@mui/material/Grid"
 import IconButton from '@mui/material/IconButton'
 import OmegaLogo from "@/common/icon/omegaLogo"
+import {connect} from "react-redux";
+import {withCookies} from "react-cookie";
+import {withRouter} from "react-router-dom";
+import {withMediaQuery} from "@/common/media";
 
-export default class NavigationLeft extends React.Component {
+class NavigationLeft extends React.Component {
+
+    static propTypes = {
+        // history: PropTypes.object.isRequired
+    }
 
     render() {
         return this.renderNavigationSideMenu()
@@ -26,7 +35,7 @@ export default class NavigationLeft extends React.Component {
             </IconButton>
 
             <div style={style.appBar.appsContainer}>
-                <IconButton>
+                <IconButton onClick={this.goToDocumentation()}>
                     <AccountCircleIcon/>
                 </IconButton>
                 <IconButton>
@@ -47,6 +56,10 @@ export default class NavigationLeft extends React.Component {
                 Tree Structure
             </Grid>
         </AppBar>
+
+    goToDocumentation = () => {
+        // return this.props.history.push('/documentation')
+    }
 
 }
 
@@ -93,3 +106,5 @@ const style = {
     }
 }
 
+export default connect((state) => ({
+}))(withCookies(withRouter(withMediaQuery(NavigationLeft))))

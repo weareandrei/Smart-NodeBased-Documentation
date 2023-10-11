@@ -4,11 +4,16 @@ import sortBy from 'lodash/sortBy'
 
 import {
     ADD_NOTIFICATION,
-    DISMISS_NOTIFICATION
+    DISMISS_NOTIFICATION,
+    LOADING_DOCUMENTATION,
+    LOADED_DOCUMENTATION,
+    LOADED_DOCUMENTATION_FAIL
+
 } from "./action"
 
 const initialState = {
-    notifications : []
+    notifications : [],
+    documentation: null
 }
 
 const appReducer = (state = initialState, action) => {
@@ -26,6 +31,20 @@ const appReducer = (state = initialState, action) => {
             return {
                 ...state,
                 notifications: dismissNotification(state.notifications, action.notificationId)
+            }
+        case LOADING_DOCUMENTATION:
+            return {
+                ...state,
+            }
+        case LOADED_DOCUMENTATION:
+            console.log(action)
+            return {
+                ...state,
+                documentation: action.documentation
+            }
+        case LOADED_DOCUMENTATION_FAIL:
+            return {
+                ...state,
             }
         default:
             return state

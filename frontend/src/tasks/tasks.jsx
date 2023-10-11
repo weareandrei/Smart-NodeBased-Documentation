@@ -6,13 +6,13 @@ import {withMediaQuery} from "@/common/media";
 import {Container} from "@mui/material";
 
 
-class MainPage extends React.Component {
+class Tasks extends React.Component {
 
     render() {
-        console.log('Render MAIN')
+        console.log('Render TASKS')
         return (
             <Container>
-                Main Page
+                Tasks Page
             </Container>
         )
     }
@@ -20,4 +20,4 @@ class MainPage extends React.Component {
 }
 
 export default connect((state) => ({
-}))(withCookies(withRouter(withMediaQuery(MainPage))))
+}))(withCookies(withRouter(withMediaQuery(Tasks))))
