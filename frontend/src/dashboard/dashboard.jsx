@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
         return (
             <Container>
                 <div>
-                    <p>Main Page</p>
+                    <p>Dashboard page</p>
                     <p>Documentation:</p>
                     <pre>{documentationContent}</pre>
                 </div>
