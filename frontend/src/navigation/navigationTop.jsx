@@ -17,7 +17,7 @@ export default class NavigationTop extends React.Component {
             <div style={style.addressContainer}>
                 <h2 style={style.projectNameHeader}>Project name</h2>
                 <Divider orientation="vertical" sx={{width: '1px', background: '#fff'}}/>
-                <div style={style.projectPathHeader}>Breacrumbs</div>
+                <div style={style.projectPathHeader}>Breadcrumbs</div>
             </div>
 
             <IconButton>

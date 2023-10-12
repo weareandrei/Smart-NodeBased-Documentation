@@ -11,8 +11,9 @@ import {connect} from "react-redux";
 import {withCookies} from "react-cookie";
 import {withRouter} from "react-router-dom";
 import {withMediaQuery} from "@/common/media";
-import Divider from "@mui/material/Divider";
 import map from 'lodash/map'
+import get from 'lodash/get'
+import DocumentationBar from './documentationBar'
 
 class NavigationLeft extends React.Component {
 
@@ -25,41 +26,17 @@ class NavigationLeft extends React.Component {
         documentation: null
     }
 
-    state = {
-        currentAvailableHeaders: []
-    }
-
-    // Update the componentDidUpdate method
-    componentDidUpdate(prevProps) {
-        // Check if the documentation prop has changed
-        if (prevProps.documentation !== this.props.documentation) {
-            // Calculate the new headers based on the updated documentation prop
-            const newHeaders = this.determineHeaders(this.props.documentation);
-
-            // Update the state with the new headers
-            this.setState({
-                currentAvailableHeaders: newHeaders,
-            });
-        }
-    }
-
-    componentDidMount() {
-        const newHeaders = this.determineHeaders(this.props.documentation);
-        // Update the state with the new headers
-        this.setState({
-            currentAvailableHeaders: newHeaders,
-        });
-    }
-
     render() {
-        console.log('documentation: ', this.props.documentation)
         return this.renderNavigationSideMenu()
     }
 
     renderNavigationSideMenu = () =>
         <div>
             {this.renderAppBar()}
-            {this.props.history.location.pathname === '/documentation' ?  this.renderDocumentationBar() : null}
+            {this.props.history.location.pathname === '/documentation' ?
+                <DocumentationBar
+                    history={this.props.history}
+                    documentation={this.props.documentation}/> : null}
         </div>
 
     renderAppBar = () =>
@@ -81,22 +58,6 @@ class NavigationLeft extends React.Component {
             </div>
         </AppBar>
 
-    renderDocumentationBar = () =>
-        <AppBar style={style.documentationBar.container}>
-            <div> Back button </div>
-
-            <div>
-                <h4>Header 1</h4>
-                <Divider orientation="horizontal" sx={{width: '1px', background: '#fff'}}/>
-                <div>
-                    {console.log(this.state.currentAvailableHeaders)}
-                    {map(this.state.currentAvailableHeaders, (header, index) => (
-                        <h4 key={index}>{header}</h4>
-                    ))}
-                </div>
-            </div>
-        </AppBar>
-
     goToPage = (page) => {
         switch (page) {
             case 'documentation':
@@ -110,15 +71,6 @@ class NavigationLeft extends React.Component {
                 break
 
         }
-    }
-
-    determineHeaders = (currentDocumentation) => {
-        if (currentDocumentation) {
-            // Get the keys (field names) from the documentation object
-            const headers = Object.keys(currentDocumentation);
-            return headers;
-        }
-        return [];
     }
 
 }
