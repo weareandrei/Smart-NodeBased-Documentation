@@ -1,3 +1,5 @@
+import {selectNode} from "@/documentation/action";
+
 export const ADD_NOTIFICATION = 'ADD_NOTIFICATION'
 export const DISMISS_NOTIFICATION = 'DISMISS_NOTIFICATION'
 export const LOADING_DOCUMENTATION = 'LOADING_DOCUMENTATION'
@@ -43,6 +45,7 @@ export const loadDocumentation = (documentationId) => {
                 if (response.ok) {
                     response.json().then((data) => {
                         console.log('loaded documentation correctly: ', data);
+                        dispatch(selectNode(data.doc));
                         dispatch(loadedDocumentation(data));
                     });
                 } else {

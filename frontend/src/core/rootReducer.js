@@ -1,13 +1,12 @@
-// rootReducer.js
+import { combineReducers } from 'redux'
+import { connectRouter } from 'connected-react-router'
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 
-import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // Use localStorage as storage
-
-import application from '../reducer'; // Your application reducer
-import navigationReducer from '../navigation/reducer';
-import authReducer from "@/auth/reducer"; // Your navigation reducer
+import application from '../reducer'
+import navigationReducer from '../navigation/reducer'
+import authReducer from "@/auth/reducer"
+import documentationReducer from "@/documentation/reducer"
 
 const persistConfig = {
     key: 'root',
@@ -20,7 +19,8 @@ const createRootReducer = (history) =>
         application,
         navigation: navigationReducer,
         auth: authReducer,
-        router: connectRouter(history), // Integrating connected-react-router with history
+        documentation: documentationReducer,
+        router: connectRouter(history),
     })
 
 const rootReducer = (history) => {

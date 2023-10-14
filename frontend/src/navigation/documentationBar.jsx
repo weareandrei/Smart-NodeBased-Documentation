@@ -4,7 +4,6 @@ import PropTypes from "prop-types"
 import AppBar from "@mui/material/AppBar"
 import Divider from "@mui/material/Divider"
 import map from "lodash/map"
-import get from "lodash/get"
 
 import List from '@mui/material/List'
 import ListSubheader from '@mui/material/ListSubheader'
@@ -23,20 +22,21 @@ export default class DocumentationBar extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.documentation !== this.props.documentation) {
-            const newHeaders = this.determineHeaders(this.props.documentation);
-
+            const newHeaders = this.props.documentation.children
+            console.log('newHeaders', newHeaders)
             this.setState({
                 currentAvailableHeaders: newHeaders,
-            });
+            })
         }
     }
 
     componentDidMount() {
-        const newHeaders = this.determineHeaders(this.props.documentation);
+        console.log('this.props.documentation, ', this.props.documentation)
+        const newHeaders = this.props.documentation.children
 
         this.setState({
             currentAvailableHeaders: newHeaders,
-        });
+        })
     }
 
     render() {
@@ -65,29 +65,15 @@ export default class DocumentationBar extends React.Component {
                         Documentation Headers
                     </ListSubheader>}>
 
-                {map(this.state.currentAvailableHeaders, (child, index) =>
+                {map(headersTree, (child, index) =>
                     <NavTreeItem
+                        key={index}
                         title={child.title}
                         children={child.children}
                         childDepthLevel={1}/>)}
 
             </List>
         </div>
-
-
-    determineHeaders = (currentDocumentation) => {
-        if (currentDocumentation) {
-            // if (get(currentDocumentation, '_id', false)) {
-            //     currentDocumentation = currentDocumentation.doc
-            // }
-            //
-            // const headers = map(currentDocumentation, (object) => object.title)
-
-            return currentDocumentation.doc;
-        }
-
-        return [];
-    }
 
 }
 

@@ -36,7 +36,7 @@ class NavigationLeft extends React.Component {
             {this.props.history.location.pathname === '/documentation' ?
                 <DocumentationBar
                     history={this.props.history}
-                    documentation={this.props.documentation}/> : null}
+                    documentation={this.props.documentation.doc}/> : null}
         </div>
 
     renderAppBar = () =>

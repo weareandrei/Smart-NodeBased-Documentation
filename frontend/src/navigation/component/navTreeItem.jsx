@@ -12,13 +12,13 @@ import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import StarBorder from '@mui/icons-material/StarBorder'
 import List from '@mui/material/List'
-import map from "lodash/map";
+import map from "lodash/map"
 
 export default class NavTreeItem extends React.Component {
 
     static propTypes = {
         title: PropTypes.string.isRequired,
-        children: PropTypes.object,
+        children: PropTypes.array,
         childDepthLevel: PropTypes.number.isRequired
     }
 
@@ -50,6 +50,7 @@ export default class NavTreeItem extends React.Component {
                     <List component="div" disablePadding>
                         {map(this.props.children, (child, index) =>
                             <NavTreeItem
+                                key={index}
                                 title={child.title}
                                 children={child.children}
                                 childDepthLevel={this.props.childDepthLevel+1}/>)}
