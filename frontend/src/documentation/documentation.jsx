@@ -19,13 +19,15 @@ class Documentation extends React.Component {
 
     render() {
         return (
-            <Container style={style.gridBackground}
-                       ref={this.containerRef}>
+            <Container style={style.gridBackground}>
                 {
                     !isEmpty(this.props.selectedNode.children) &&
                     // this.calculateNodesPosition(this.props.selectedNode.children) &&
                     map(this.props.selectedNode.children, (nodeChild, index) =>
-                        <Node key={index} node={nodeChild} firstLevel={true}></Node>
+                        <Node key={index}
+                              node={nodeChild}
+                              onClick={this.props.selectNode}
+                              firstLevel={true}/>
                     )
                 }
             </Container>

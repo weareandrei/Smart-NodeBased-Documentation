@@ -2,12 +2,13 @@ import React from 'react'
 import {Container} from "@mui/material"
 import PropTypes from "prop-types"
 import map from "lodash/map"
-import MainNode from "./mainNode"
+import Button from '@mui/material/Button';
 
 export default class Node extends React.Component {
 
     static propTypes = {
         node: PropTypes.object.isRequired,
+        onClick: PropTypes.func.isRequired,
         firstLevel: PropTypes.bool
     }
 
@@ -23,17 +24,26 @@ export default class Node extends React.Component {
             <div style={style.nodeContainer}>
                 {this.props.node.children &&
                     map(this.props.node.children, (nodeChild, index) =>
-                        <Node key={index} node={nodeChild}></Node>)}
+                        <Node key={index}
+                              node={nodeChild}
+                              onClick={this.props.onClick}/>)}
             </div>
         </div>
 
-    renderMainNode = (node) =>
-        <MainNode node={node}/>
+    renderMainNode = () =>
+        <Button onClick={() => this.props.onClick(this.props.node)}>
+            <Container style={style.mainNode}>
+                <div style={{color: '#fff'}}>{this.props.node.title}</div>
+            </Container>
+        </Button>
+
 
     renderRegularNode = () =>
-        <Container style={style.regularNode}>
-            <div style={{color: '#fff'}}>{this.props.node.title}</div>
-        </Container>
+        <Button onClick={() => this.props.onClick(this.props.node)}>
+            <Container style={style.regularNode}>
+                <div style={{color: '#fff'}}>{this.props.node.title}</div>
+            </Container>
+        </Button>
 }
 
 const style = {
@@ -43,6 +53,15 @@ const style = {
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
         alignItems: 'flex-start'
+    },
+    mainNode: {
+        width: '200px',
+        height: '100px',
+        margin: '25px',
+        padding: '18px',
+        background: '#3E4854',
+        borderRadius: '20px'
+
     },
     regularNode: {
         width: '180px',
