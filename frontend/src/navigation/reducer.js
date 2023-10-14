@@ -1,4 +1,4 @@
-import {NAVIGATE_TO_PAGE, UPDATE_NAV_HEIGHT} from './action'
+import {NAVIGATE_TO_PAGE, NAVIGATE_TO_NODE, UPDATE_NAV_HEIGHT} from './action'
 
 const initialState = {
     currentPage: 'Main',
@@ -12,8 +12,12 @@ const navigationReducer = (state = initialState, action) => {
                 ...state,
                 currentPage: action.payload,
             }
+        case NAVIGATE_TO_NODE:
+            return {
+                ...state,
+                currentPage: action.payload,
+            }
         case UPDATE_NAV_HEIGHT: {
-            console.log("Update nav height, height: ", action.height)
             return {
                 ...state,
                 navigationHeight: getNavigationHeight(),

@@ -19,6 +19,7 @@ const initialState = {
 const appReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_NOTIFICATION:
+            console.log('')
             return {
                 ...state,
                 notifications: [...state.notifications, {
@@ -37,7 +38,6 @@ const appReducer = (state = initialState, action) => {
                 ...state,
             }
         case LOADED_DOCUMENTATION:
-            console.log(action)
             return {
                 ...state,
                 documentation: action.documentation

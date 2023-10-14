@@ -4,22 +4,23 @@ import PropTypes from 'prop-types'
 
 import AppBar from '@mui/material/AppBar'
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
-import Grid from "@mui/material/Grid"
 import IconButton from '@mui/material/IconButton'
 import OmegaLogo from "@/common/icon/omegaLogo"
 import {connect} from "react-redux";
 import {withCookies} from "react-cookie";
 import {withRouter} from "react-router-dom";
 import {withMediaQuery} from "@/common/media";
-import map from 'lodash/map'
-import get from 'lodash/get'
+
+import * as actions from './action'
+
 import DocumentationBar from './documentationBar'
 
 class NavigationLeft extends React.Component {
 
     static propTypes = {
         history: PropTypes.object.isRequired,
-        documentation: PropTypes.object
+        documentation: PropTypes.object,
+        selectNode: PropTypes.func.isRequired
     }
 
     static defaultProps = {
@@ -35,6 +36,7 @@ class NavigationLeft extends React.Component {
             {this.renderAppBar()}
             {this.props.history.location.pathname === '/documentation' ?
                 <DocumentationBar
+                    selectNode={this.props.selectNode}
                     history={this.props.history}
                     documentation={this.props.documentation.doc}/> : null}
         </div>
@@ -120,4 +122,4 @@ const style = {
 
 export default connect((state) => ({
     documentation: state.application.documentation
-}))(withCookies(withRouter(withMediaQuery(NavigationLeft))))
+}), actions)(withCookies(withRouter(withMediaQuery(NavigationLeft))))

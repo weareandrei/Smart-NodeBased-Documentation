@@ -12,18 +12,17 @@ import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import StarBorder from '@mui/icons-material/StarBorder'
 import List from '@mui/material/List'
+
 import map from "lodash/map"
+import get from "lodash/get"
 
 export default class NavTreeItem extends React.Component {
 
     static propTypes = {
         title: PropTypes.string.isRequired,
-        children: PropTypes.array,
-        childDepthLevel: PropTypes.number.isRequired
-    }
-
-    static defaultProps = {
-        children: []
+        childDepthLevel: PropTypes.number.isRequired,
+        node: PropTypes.object.isRequired,
+        onClick: PropTypes.func.isRequired
     }
 
     state = {
@@ -37,30 +36,28 @@ export default class NavTreeItem extends React.Component {
     renderNavItem = () => {
         return (
             <div>
-                <ListItemButton onClick={() => this.toggleItemCollapse()}
-                                sx={{ pl: 4 * (this.props.childDepthLevel-1) }}>
+                <ListItemButton
+                    onClick={() => {
+                        this.toggleItemCollapse();
+                        this.props.onClick(this.props.node);
+                    }}
+                    sx={{ pl: 4 * (this.props.childDepthLevel - 1) }}>
                     <ListItemIcon>
                         <InboxIcon />
                     </ListItemIcon>
                     <ListItemText primary={this.props.title} />
-                    {!isEmpty(this.props.children) &&
+                    {!isEmpty(get(this.props.node, 'children')) &&
                         (this.state.open ? <ExpandLess /> : <ExpandMore />)}
                 </ListItemButton>
                 <Collapse in={this.state.open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {map(this.props.children, (child, index) =>
+                        {map(this.props.node.children, (child, index) =>
                             <NavTreeItem
                                 key={index}
                                 title={child.title}
-                                children={child.children}
-                                childDepthLevel={this.props.childDepthLevel+1}/>)}
-
-                        <ListItemButton sx={{ pl: 4 * this.props.childDepthLevel }}>
-                            <ListItemIcon>
-                                <StarBorder />
-                            </ListItemIcon>
-                            <ListItemText primary="Starred" />
-                        </ListItemButton>
+                                node={child}
+                                childDepthLevel={this.props.childDepthLevel+1}
+                                onClick={this.props.onClick}/>)}
                     </List>
                 </Collapse>
             </div>
@@ -72,4 +69,5 @@ export default class NavTreeItem extends React.Component {
             open: !prevState.open,
         }));
     }
+
 }

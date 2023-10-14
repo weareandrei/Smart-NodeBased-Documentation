@@ -13,34 +13,35 @@ export default class DocumentationBar extends React.Component {
 
     static propTypes = {
         history: PropTypes.object.isRequired,
-        documentation: PropTypes.object.isRequired
+        documentation: PropTypes.object.isRequired,
+        selectNode: PropTypes.func.isRequired
     }
 
     state = {
-        currentAvailableHeaders: []
+        currentAvailableNodes: []
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.documentation !== this.props.documentation) {
-            const newHeaders = this.props.documentation.children
-            console.log('newHeaders', newHeaders)
+            const newNodes = this.props.documentation.children
+            console.log('newHeaders', newNodes)
             this.setState({
-                currentAvailableHeaders: newHeaders,
+                currentAvailableNodes: newNodes,
             })
         }
     }
 
     componentDidMount() {
         console.log('this.props.documentation, ', this.props.documentation)
-        const newHeaders = this.props.documentation.children
+        const newNodes = this.props.documentation.children
 
         this.setState({
-            currentAvailableHeaders: newHeaders,
+            currentAvailableNodes: newNodes,
         })
     }
 
     render() {
-        return this.renderDocumentationBar()
+        return this.props.documentation && this.renderDocumentationBar()
     }
 
     renderDocumentationBar = () =>
@@ -50,11 +51,11 @@ export default class DocumentationBar extends React.Component {
             <Divider orientation="horizontal" sx={{width: '2px', background: '#fff'}}/>
 
             <div>
-                {this.renderDocumentationTree(this.state.currentAvailableHeaders)}
+                {this.renderDocumentationTree(this.state.currentAvailableNodes)}
             </div>
         </AppBar>
 
-    renderDocumentationTree = (headersTree) =>
+    renderDocumentationTree = (nodesTree) =>
         <div>
             <List
                 sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
@@ -65,13 +66,14 @@ export default class DocumentationBar extends React.Component {
                         Documentation Headers
                     </ListSubheader>}>
 
-                {map(headersTree, (child, index) =>
+                {
+                    map(nodesTree, (node) =>
                     <NavTreeItem
-                        key={index}
-                        title={child.title}
-                        children={child.children}
-                        childDepthLevel={1}/>)}
-
+                        key={node.nodeId}
+                        title={node.title}
+                        childDepthLevel={1}
+                        node={node}
+                        onClick={this.props.selectNode}/>)}
             </List>
         </div>
 

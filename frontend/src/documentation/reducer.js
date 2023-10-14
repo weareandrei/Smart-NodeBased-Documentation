@@ -8,6 +8,7 @@ const initialState = {
 const documentationReducer = (state = initialState, action) => {
     switch (action.type) {
         case SELECT_NODE:
+            console.log('SELECT_NODE')
             return {
                 ...state,
                 selectedNode: action.node,
