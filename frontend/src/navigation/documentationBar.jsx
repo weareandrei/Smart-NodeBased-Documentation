@@ -8,6 +8,7 @@ import map from "lodash/map"
 import List from '@mui/material/List'
 import ListSubheader from '@mui/material/ListSubheader'
 import NavTreeItem from './component/navTreeItem'
+import Button from "@mui/material/Button";
 
 export default class DocumentationBar extends React.Component {
 
@@ -46,8 +47,13 @@ export default class DocumentationBar extends React.Component {
 
     renderDocumentationBar = () =>
         <AppBar style={style.documentationBar.container}>
-            <div> Back button </div>
-
+            <Button variant="text"
+                    style={style.goBackButton}
+                    onClick={() => this.props.selectNode(this.props.documentation)}>
+                <p style={{margin: '0', padding: '7px', textAlign: 'center', width: '100%'}}>
+                    Go back...
+                </p>
+            </Button>
             <Divider orientation="horizontal" sx={{width: '2px', background: '#fff'}}/>
 
             <div>
@@ -61,10 +67,11 @@ export default class DocumentationBar extends React.Component {
                 sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
-                subheader={
-                    <ListSubheader component="div" id="nested-list-subheader">
-                        Documentation Headers
-                    </ListSubheader>}>
+                // subheader={
+                //     <ListSubheader component="div" id="nested-list-subheader">
+                //         Documentation Headers
+                //     </ListSubheader>}
+            >
 
                 {
                     map(nodesTree, (node) =>
@@ -112,12 +119,19 @@ const style = {
     documentationBar: {
         container: {
             ...navContainer,
+            padding: '15px',
             paddingTop: '60px',
             left: '68px',
-            width: '200px',
+            width: '250px',
             background: '#fff',
             color: '#111',
             zIndex: '1000'
         }
+    },
+    goBackButton: {
+        marginTop: '10px',
+        fontSize: '14px',
+        color: '#000',
+        width: '100%'
     }
 }

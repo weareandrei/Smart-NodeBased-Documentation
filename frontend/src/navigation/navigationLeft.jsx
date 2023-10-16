@@ -3,14 +3,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import AppBar from '@mui/material/AppBar'
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import IconButton from '@mui/material/IconButton'
 import OmegaLogo from "@/common/icon/omegaLogo"
-import {connect} from "react-redux";
-import {withCookies} from "react-cookie";
-import {withRouter} from "react-router-dom";
-import {withMediaQuery} from "@/common/media";
-
+import {connect} from "react-redux"
+import {withCookies} from "react-cookie"
+import {withRouter} from "react-router-dom"
+import {withMediaQuery} from "@/common/media"
+import ArticleIcon from '@mui/icons-material/Article'
+import FactCheckIcon from '@mui/icons-material/FactCheck'
+import SmsIcon from '@mui/icons-material/Sms'
 import * as actions from './action'
 
 import DocumentationBar from './documentationBar'
@@ -49,13 +50,13 @@ class NavigationLeft extends React.Component {
 
             <div style={style.appBar.appsContainer}>
                 <IconButton onClick={() => this.goToPage('documentation')}>
-                    <AccountCircleIcon/>
+                    <ArticleIcon/>
                 </IconButton>
                 <IconButton onClick={() => this.goToPage('tasks')}>
-                    <AccountCircleIcon/>
+                    <FactCheckIcon/>
                 </IconButton>
                 <IconButton>
-                    <AccountCircleIcon/>
+                    <SmsIcon/>
                 </IconButton>
             </div>
         </AppBar>

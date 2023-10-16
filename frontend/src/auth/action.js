@@ -4,6 +4,7 @@ export const VALIDATE_USER_CREDENTIALS = 'ADD_NOTIFICATION'
 export const USER_CREDENTIALS_CORRECT = 'USER_CREDENTIALS_CORRECT'
 export const USER_CREDENTIALS_WRONG = 'USER_CREDENTIALS_WRONG'
 export const USER_DATA_LOADED = 'USER_DATA_LOADED'
+export const SIGN_OUT = 'SIGN_OUT'
 
 const userCredentialsValidating = (user) => ({
     type: VALIDATE_USER_CREDENTIALS,
@@ -21,6 +22,10 @@ const userCredentialsWrong = () => ({
 const userDataLoaded = (data) => ({
     type: USER_DATA_LOADED,
     data: data
+})
+
+export const signOut = () => ({
+    type: SIGN_OUT
 })
 
 export const validateUser = (credentials) => {

@@ -1,21 +1,21 @@
 /* eslint-disable max-lines */
 import React from 'react'
 import * as actions from './action'
+
 import {connect} from 'react-redux'
 import {withCookies} from 'react-cookie'
 import {withMediaQuery} from '../common/media'
 import {withRouter} from 'react-router-dom'
 
-import Box from '@mui/material/Box'
-
 import NavigationTop from './navigationTop'
 import NavigationLeft from './navigationLeft'
-import PropTypes from "prop-types";
+import PropTypes from "prop-types"
 
 class Navigation extends React.Component {
 
     static propTypes = {
-        // history: PropTypes.object.isRequired,
+        signOut: PropTypes.func.isRequired,
+        history: PropTypes.object.isRequired,
         fullNav: PropTypes.bool.isRequired
     }
 
@@ -24,8 +24,8 @@ class Navigation extends React.Component {
 
     renderFullNavigation = () =>
         <div style={style.navigationContainer}>
-            <NavigationTop/>
-            <NavigationLeft/>
+            <NavigationTop history={this.props.history} signOut={this.props.signOut}/>
+            <NavigationLeft history={this.props.history}/>
         </div>
 
     renderMiniNavigation = () => <NavigationTop/>

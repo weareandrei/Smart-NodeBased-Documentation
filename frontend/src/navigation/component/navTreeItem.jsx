@@ -13,6 +13,9 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import StarBorder from '@mui/icons-material/StarBorder'
 import List from '@mui/material/List'
 
+import Typography from '@mui/material/Typography';
+
+
 import map from "lodash/map"
 import get from "lodash/get"
 
@@ -41,11 +44,17 @@ export default class NavTreeItem extends React.Component {
                         this.toggleItemCollapse();
                         this.props.onClick(this.props.node);
                     }}
-                    sx={{ pl: 4 * (this.props.childDepthLevel - 1) }}>
-                    <ListItemIcon>
+                    sx={{ pr: 1, pl: 4 * (this.props.childDepthLevel - 1) + 1}}>
+                    <ListItemIcon style={{minWidth: 'auto', maxWidth: 'auto', marginRight: '10px'}}>
                         <InboxIcon />
                     </ListItemIcon>
-                    <ListItemText primary={this.props.title} />
+
+                    {/*<Typography display="block" noWrap={false} gutterBottom style={{textOverflow: 'ellipsis'}}>*/}
+                    {/*    {this.props.title}*/}
+                    {/*</Typography>*/}
+
+                    <ListItemText primaryTypographyProps={{ style: { whiteSpace: "nowrap", overflow: 'hidden', textOverflow: 'ellipsis' } }}
+                                  primary={this.props.title} />
                     {!isEmpty(get(this.props.node, 'children')) &&
                         (this.state.open ? <ExpandLess /> : <ExpandMore />)}
                 </ListItemButton>

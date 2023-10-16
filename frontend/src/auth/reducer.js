@@ -6,7 +6,8 @@ import {
     VALIDATE_USER_CREDENTIALS,
     USER_CREDENTIALS_CORRECT,
     USER_CREDENTIALS_WRONG,
-    USER_DATA_LOADED
+    USER_DATA_LOADED,
+    SIGN_OUT
 } from "./action"
 
 const initialState = {
@@ -39,6 +40,10 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 userData: action.data,
                 loading: false
+            }
+        case SIGN_OUT:
+            return {
+                ...initialState
             }
         default:
             return state
