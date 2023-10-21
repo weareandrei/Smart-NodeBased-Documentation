@@ -1,7 +1,7 @@
 const {mongoose} = require('mongoose');
 
 const main = async () => {
-    const mongoString = 'mongodb+srv://weareandrei:Andrews8208@omega.owkrpxa.mongodb.net/User?retryWrites=true&w=majority&appName=AtlasApp'
+    const mongoString = 'mongodb+srv://weareandrei:Andrews8208@omega.owkrpxa.mongodb.net/retryWrites=true&w=majority&appName=AtlasApp'
 
     try {
         mongoose.connect(mongoString, { dbName: "User", useNewUrlParser: true, useUnifiedTopology: true })

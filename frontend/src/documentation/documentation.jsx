@@ -6,30 +6,36 @@ import {withMediaQuery} from "@/common/media"
 import {Container} from "@mui/material"
 import * as actions from './action'
 import PropTypes from "prop-types"
-import isEmpty from "lodash/isEmpty"
-import map from "lodash/map"
-import Node from './component/node'
+
+import NodesGridSurface from './component/nodesGridSurface'
 
 class Documentation extends React.Component {
 
     static propTypes = {
         selectedNode: PropTypes.object.isRequired,
+        displayedNodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired
+    }
+
+    static defaultProps = {
+        displayedNodes: []
     }
 
     render() {
         return (
             <Container style={style.gridBackground}>
-                {
-                    !isEmpty(this.props.selectedNode.children) &&
-                    // this.calculateNodesPosition(this.props.selectedNode.children) &&
-                    map(this.props.selectedNode.children, (nodeChild, index) =>
-                        <Node key={index}
-                              node={nodeChild}
-                              onClick={this.props.selectNode}
-                              firstLevel={true}/>
-                    )
-                }
+                <NodesGridSurface nodes={this.props.displayedNodes}
+                                  selectNode={this.props.selectNode}/>
+                {/*{*/}
+                {/*    !isEmpty(this.props.selectedNode.children) &&*/}
+                {/*    // this.calculateNodesPosition(this.props.selectedNode.children) &&*/}
+                {/*    map(this.props.selectedNode.children, (nodeChild, index) =>*/}
+                {/*        <Node key={index}*/}
+                {/*              node={nodeChild}*/}
+                {/*              onClick={this.props.selectNode}*/}
+                {/*              firstLevel={true}/>*/}
+                {/*    )*/}
+                {/*}*/}
             </Container>
         )
     }
@@ -44,14 +50,15 @@ const style = {
         backgroundPosition: '-19px -19px',
         height: '100vh',
         width: '100vw',
-        display: 'flex',
-        flexDirection: 'horizontal',
-        flexWrap: 'wrap',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start'
+        // display: 'flex',
+        // flexDirection: 'horizontal',
+        // flexWrap: 'wrap',
+        // justifyContent: 'flex-start',
+        // alignItems: 'flex-start'
     }
 }
 
 export default connect((state) => ({
-    selectedNode: state.documentation.selectedNode
+    selectedNode: state.documentation.selectedNode,
+    displayedNodes: state.documentation.displayedNodes
 }), actions)(withCookies(withRouter(withMediaQuery(Documentation))))

@@ -9,66 +9,45 @@ export default class Node extends React.Component {
     static propTypes = {
         node: PropTypes.object.isRequired,
         onClick: PropTypes.func.isRequired,
-        firstLevel: PropTypes.bool
+        firstLevel: PropTypes.bool,
+        size: PropTypes.object.isRequired
     }
 
     static defaultProps = {
-        firstLevel: false
+        firstLevel: false,
     }
 
     render = () =>
-        <div>
-            {this.props.firstLevel ?
-                this.renderMainNode(this.props.node) :
-                this.renderRegularNode(this.props.node)}
-            <div style={style.nodeContainer}>
-                {this.props.node.children &&
-                    map(this.props.node.children, (nodeChild, index) =>
-                        <Node key={index}
-                              node={nodeChild}
-                              onClick={this.props.onClick}/>)}
-            </div>
-        </div>
+        this.props.firstLevel ?
+            this.renderMainNode(this.props.node) :
+            this.renderRegularNode(this.props.node)
 
     renderMainNode = () =>
-        <Button onClick={() => this.props.onClick(this.props.node)}>
-            <Container style={style.mainNode}>
-                <div style={{color: '#fff'}}>{this.props.node.title}</div>
-            </Container>
+        <Button key={this.props.node.id} style={style.nodeButtonContainer} onClick={() => this.props.onClick(this.props.node)}>
+            <div style={style.node(true)}>{this.props.node.title}</div>
         </Button>
 
 
     renderRegularNode = () =>
-        <Button onClick={() => this.props.onClick(this.props.node)}>
-            <Container style={style.regularNode}>
-                <div style={{color: '#fff'}}>{this.props.node.title}</div>
-            </Container>
+        <Button key={this.props.node.id} style={style.nodeButtonContainer}  onClick={() => this.props.onClick(this.props.node)}>
+            <div style={style.node(false)}>{this.props.node.title}</div>
         </Button>
 }
 
 const style = {
-    nodeContainer: {
-        display: 'flex',
-        flexDirection: 'horizontal',
-        flexWrap: 'wrap',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start'
+    nodeButtonContainer: {
+        width: '100%',
+        height: '100%',
+        background: '#3E4854'
     },
-    mainNode: {
-        width: '200px',
-        height: '100px',
-        margin: '25px',
-        padding: '18px',
-        background: '#3E4854',
-        borderRadius: '20px'
-
-    },
-    regularNode: {
-        width: '180px',
-        height: '86px',
-        margin: '25px',
-        padding: '16px',
-        background: '#788390',
-        borderRadius: '20px'
+    node: (main) =>
+        main ? {
+            width: '100%',
+            // background: '#3E4854',
+            // borderRadius: '20px'
+    } : {
+            width: '100%',
+            // background: '#788390',
+            // borderRadius: '20px'
     }
 }

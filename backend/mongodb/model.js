@@ -21,6 +21,6 @@ const UserModelSchema = new Schema({
 })
 
 module.exports = {
-    DocumentationModel: mongoose.model("doocumentation", DocumentationModelSchema, 'doocumentation'),
-    UserModel: mongoose.model("Userr", UserModelSchema, 'Userr')
+    DocumentationModel: mongoose.model("documentation", DocumentationModelSchema, 'documentation'),
+    UserModel: mongoose.model("User", UserModelSchema, 'User')
 }
