@@ -1,8 +1,10 @@
 import React from 'react'
-import {Container} from "@mui/material"
 import PropTypes from "prop-types"
+import Button from '@mui/material/Button'
+import {ArcherElement} from 'react-archer'
+import get from "lodash/get";
 import map from "lodash/map"
-import Button from '@mui/material/Button';
+import isEmpty from "lodash/isEmpty";
 
 export default class Node extends React.Component {
 
@@ -14,7 +16,7 @@ export default class Node extends React.Component {
     }
 
     static defaultProps = {
-        firstLevel: false,
+        firstLevel: false
     }
 
     render = () =>
@@ -22,16 +24,43 @@ export default class Node extends React.Component {
             this.renderMainNode(this.props.node) :
             this.renderRegularNode(this.props.node)
 
-    renderMainNode = () =>
-        <Button key={this.props.node.id} style={style.nodeButtonContainer} onClick={() => this.props.onClick(this.props.node)}>
-            <div style={style.node(true)}>{this.props.node.title}</div>
-        </Button>
+    renderMainNode = (node) => {
+        const arrowRelations = this.getArrowRelations(node)
+        return (
+            <ArcherElement
+                id={'node' + node.id}
+                { ... arrowRelations }>
+                <Button id={'node' + node.id} key={node.id} style={style.nodeButtonContainer}
+                        onClick={() => this.props.onClick(node)}>
+                    <div style={style.node(true)}>{node.title}</div>
+                </Button>
+            </ArcherElement>
+        )
+    }
 
+    renderRegularNode = (node) =>
+        <ArcherElement id={'node'+node.id}>
+            <Button key={node.id} style={style.nodeButtonContainer}  onClick={() => this.props.onClick(node)}>
+                <div style={style.node(false)}>{node.title}</div>
+            </Button>
+        </ArcherElement>
 
-    renderRegularNode = () =>
-        <Button key={this.props.node.id} style={style.nodeButtonContainer}  onClick={() => this.props.onClick(this.props.node)}>
-            <div style={style.node(false)}>{this.props.node.title}</div>
-        </Button>
+    getArrowRelations = (node) => {
+        const arrowDirections = []
+
+        if (get(node, 'children', false) && !isEmpty(node.children)) {
+            map(node.children, (child) => {
+                arrowDirections.push({
+                    targetId: 'node' + child.id,
+                    targetAnchor: 'top',
+                    sourceAnchor: 'bottom',
+                    style: {strokeDasharray: '5,5'}
+                })
+            })
+        }
+
+        return isEmpty(arrowDirections) ? {} : {arrowDirections}
+    }
 }
 
 const style = {

@@ -1,11 +1,14 @@
 import React from "react"
 import map from "lodash/map"
+import filter from "lodash/filter"
 import find from "lodash/find"
-import random from "lodash/random"
 import RGL, { WidthProvider } from "react-grid-layout"
 import PropTypes from "prop-types"
 import Node from "./node"
-import Button from '@mui/material/Button';
+import get from "lodash/get"
+import isEmpty from "lodash/isEmpty"
+import { ArcherContainer, ArcherElement } from 'react-archer';
+import ReactFlow from 'reactflow';
 
 const ReactGridLayout = WidthProvider(RGL)
 
@@ -14,6 +17,7 @@ export default class NodesGridSurface extends React.PureComponent {
     static propTypes = {
         nodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired,
+        updateNode: PropTypes.func.isRequired,
 
         isDraggable: PropTypes.bool,
         isResizable: PropTypes.bool,
@@ -26,57 +30,74 @@ export default class NodesGridSurface extends React.PureComponent {
         isDraggable: true,
         isResizable: true,
         rowHeight: 30,
-        onLayoutChange: function() {},
         cols: 25
     }
 
     state = {
-        dragging: false
+        dragging: false,
+        previousLayout: [],
+        nodesRendered: false
+    }
+
+    componentDidMount() {
+        // Set a timeout to ensure nodes are fully rendered
+        setTimeout(() => {
+            this.setState({ nodesRendered: true })
+        }, 0)
     }
 
     render() {
         const layout = this.getNodesGridLayout(this.props.nodes)
-        console.log(layout)
         return (
-            <ReactGridLayout
-                layout={layout}
-                onLayoutChange={this.onLayoutChange}
-                onResize={this.onResize}
-                onDrag={this.onDrag}  // Add this line
-                onDragStop={this.onDragStop}  // Add this line
-                { ... {
-                    isDraggable: this.props.isDraggable,
-                    isResizable: this.props.isResizable,
-                    rowHeight: this.props.rowHeight,
-                    onLayoutChange: this.props.onLayoutChange,
-                    cols: this.props.cols}}>
-                {map(this.props.nodes, (node) => {
-                    // return this.renderNode(node)
-                    return <div key={node.id}>
-                                <Node node={node}
-                                      onClick={() => this.handleClick(node)}
-                                      firstLevel={true}
-                                      size={this.getNodeSize(layout, node.id)}/>
-                            </div>
-                })}
-            </ReactGridLayout>
+            <ArcherContainer strokeColor="blue">
+                <ReactGridLayout
+                    layout={layout}
+                    onLayoutChange={this.onLayoutChange}
+                    onResize={this.onResize}
+                    onDrag={this.onDrag}
+                    onDragStop={this.onDragStop}
+                    { ... {
+                        isDraggable: this.props.isDraggable,
+                        isResizable: this.props.isResizable,
+                        rowHeight: this.props.rowHeight,
+                        cols: this.props.cols,
+                        preventCollision: true,
+                        verticalCompact: false}}>
+                    {this.renderNodes(this.props.nodes, layout)}
+                </ReactGridLayout>
+                {/*{this.state.nodesRendered && this.renderArrows(this.props.nodes)}*/}
+            </ArcherContainer>
         )
     }
 
-    getNodesGridLayout = (nodes) =>
-        map(nodes, (node) => ({
+    getNodesGridLayout = (nodes) => {
+        const layout = map(nodes, (node) => ({
             i: node.id,
             ...node.size
         }))
 
-    // Layout example :
-    // ---------------------------
-    // [
-    //     { i: "1", x: 0, y: 0, w: 2, h: 2/*, static: true*/ },
-    //     { i: "2", x: 2, y: 0, w: 3, h: 2/*, minW: 2, maxW: 4*/ },
-    //     { i: "3", x: 5, y: 0, w: 2, h: 2 },
-    //     { i: "4", x: 7, y: 0, w: 2, h: 2 }
-    // ]
+        this.state.previousLayout = layout
+        return layout
+    }
+
+    renderNodes = (nodes, layout) =>
+        map(nodes, (node) =>
+            <div key={node.id}>
+                <Node node={node}
+                      onClick={() => this.handleClick(node)}
+                      firstLevel={true}
+                      size={this.getNodeSize(layout, node.id)}/>
+            </div>)
+
+    // renderArrows = (nodes) =>
+    //     map(nodes, (node) => {
+    //         if (get(node, 'children', false) && !isEmpty(node.children)) {
+    //             return map(node.children, (child) =>
+    //                 </ArcherElement>
+    //             )
+    //         }
+    //         return null
+    //     })
 
     getNodeSize = (layout, nodeId) => {
         const thisNodeSize = find(layout, (node) => node.i === nodeId)
@@ -87,83 +108,50 @@ export default class NodesGridSurface extends React.PureComponent {
     }
 
     onDrag = () => {
-        console.log('dragging')
         this.setState({ dragging: true })
     }
 
     onDragStop = () => {
-        console.log('stopped dragging');
         // Clear any existing timers
         if (this.dragStopTimer) {
-            clearTimeout(this.dragStopTimer);
+            clearTimeout(this.dragStopTimer)
         }
         // Set a timer to update dragging to false after 0.05 seconds
         this.dragStopTimer = setTimeout(() => {
-            this.setState({ dragging: false });
+            this.setState({ dragging: false })
         }, 50); // 50 milliseconds (0.05 seconds)
     }
 
     handleClick = (node) => {
-        console.log('handleClick, dragging: ', this.state.dragging )
         if (!this.state.dragging) {
             this.props.selectNode(node)
         }
     }
 
-    // determineDataGrid = (node, index) => ({
-    //     x: (index * 2) % 12,
-    //     y: Math.floor(index / 6),
-    //     w: random(1, 2),
-    //     h: random(1, 3),
-    //     node: node,
-    //     title: node.title
-    // })
+    onLayoutChange = (updatedLayout) => {
+        const modifiedNodes = this.findModifiedNodes(this.state.previousLayout, updatedLayout)
+        // do a throttle and update entire object for those nodes
+    }
 
-    // generateDOM() {
-    //     // Generate items with properties from the layout, rather than pass the layout directly
-    //     const nodes = this.generateNodes();
-    //     return map(nodes, (node) => {
-    //         return (
-    //             <div key={node.title} data-grid={node}>
-    //
-    //             </div>
-    //         )
-    //     })
-    // }
+    findModifiedNodes = (previousLayout, updatedLayout) => {
+        const modifiedNodes = filter(previousLayout, (previousNode, index) => !this.nodesEqual(previousNode, updatedLayout[index]))
+        if (!modifiedNodes) {
+            return
+        }
+        console.log('modifiedNode',modifiedNodes)
+        this.state.previousLayout = updatedLayout
+        return modifiedNodes
+    }
 
-    // generateNodes() {
-    //     console.log('this.props.selectedNode', this.props.selectedNode)
-    //     return map(this.props.selectedNode.children, (node, index) => {
-    //         const w = random(1, 2)
-    //         const h = random(1, 3)
-    //         return {
-    //             x: (index * 2) % 12,
-    //             y: Math.floor(index / 6),
-    //             w: w,
-    //             h: h,
-    //             node: node,
-    //             title: node.title
-    //         }
-    //     })
-    // }
+    nodesEqual = (node1, node2) => {
+        if (node1.w !== node2.w ||
+            node1.h !== node2.h ||
+            node1.x !== node2.x ||
+            node1.y !== node2.y) {
+            return false
+        }
 
-    // onLayoutChange(layout) {
-    //     this.props.onLayoutChange(layout);
-    // }
-    //
-    // onResize(layout, oldLayoutItem, layoutItem, placeholder) {
-    //     // `oldLayoutItem` contains the state of the item before the resize.
-    //     // You can modify `layoutItem` to enforce constraints.
-    //
-    //     if (layoutItem.h < 3 && layoutItem.w > 2) {
-    //         layoutItem.w = 2;
-    //         placeholder.w = 2;
-    //     }
-    //
-    //     if (layoutItem.h >= 3 && layoutItem.w < 2) {
-    //         layoutItem.w = 2;
-    //         placeholder.w = 2;
-    //     }
-    // }
+        return true
+    }
 
 }

@@ -6,7 +6,6 @@ import Divider from "@mui/material/Divider"
 import map from "lodash/map"
 
 import List from '@mui/material/List'
-import ListSubheader from '@mui/material/ListSubheader'
 import NavTreeItem from './component/navTreeItem'
 import Button from "@mui/material/Button";
 
@@ -25,7 +24,6 @@ export default class DocumentationBar extends React.Component {
     componentDidUpdate(prevProps) {
         if (prevProps.documentation !== this.props.documentation) {
             const newNodes = this.props.documentation.children
-            console.log('newHeaders', newNodes)
             this.setState({
                 currentAvailableNodes: newNodes,
             })
@@ -33,7 +31,6 @@ export default class DocumentationBar extends React.Component {
     }
 
     componentDidMount() {
-        console.log('this.props.documentation, ', this.props.documentation)
         const newNodes = this.props.documentation.children
 
         this.setState({

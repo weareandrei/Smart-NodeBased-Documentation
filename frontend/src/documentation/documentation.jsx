@@ -14,7 +14,8 @@ class Documentation extends React.Component {
     static propTypes = {
         selectedNode: PropTypes.object.isRequired,
         displayedNodes: PropTypes.array.isRequired,
-        selectNode: PropTypes.func.isRequired
+        selectNode: PropTypes.func.isRequired,
+        updateNode: PropTypes.func.isRequired
     }
 
     static defaultProps = {
@@ -25,17 +26,8 @@ class Documentation extends React.Component {
         return (
             <Container style={style.gridBackground}>
                 <NodesGridSurface nodes={this.props.displayedNodes}
-                                  selectNode={this.props.selectNode}/>
-                {/*{*/}
-                {/*    !isEmpty(this.props.selectedNode.children) &&*/}
-                {/*    // this.calculateNodesPosition(this.props.selectedNode.children) &&*/}
-                {/*    map(this.props.selectedNode.children, (nodeChild, index) =>*/}
-                {/*        <Node key={index}*/}
-                {/*              node={nodeChild}*/}
-                {/*              onClick={this.props.selectNode}*/}
-                {/*              firstLevel={true}/>*/}
-                {/*    )*/}
-                {/*}*/}
+                                  selectNode={this.props.selectNode}
+                                  updateNode={this.props.updateNode}/>
             </Container>
         )
     }
@@ -49,12 +41,7 @@ const style = {
         backgroundSize: '20px 20px',
         backgroundPosition: '-19px -19px',
         height: '100vh',
-        width: '100vw',
-        // display: 'flex',
-        // flexDirection: 'horizontal',
-        // flexWrap: 'wrap',
-        // justifyContent: 'flex-start',
-        // alignItems: 'flex-start'
+        width: '100vw'
     }
 }
 

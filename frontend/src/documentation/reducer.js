@@ -1,4 +1,4 @@
-import {SELECT_NODE} from './action'
+import {SELECT_NODE, UPDATE_NODE} from './action'
 const MAX_NODE_LEVELS_DISPLAYED = 3
 
 import flatMap from 'lodash/flatMap'
@@ -13,7 +13,12 @@ const initialState = {
 const documentationReducer = (state = initialState, action) => {
     switch (action.type) {
         case SELECT_NODE:
-            console.log('SELECT_NODE')
+            return {
+                ...state,
+                selectedNode: action.node,
+                displayedNodes: getAllChildren(action.node, 1, MAX_NODE_LEVELS_DISPLAYED)
+            }
+        case UPDATE_NODE:
             return {
                 ...state,
                 selectedNode: action.node,
