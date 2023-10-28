@@ -1,4 +1,4 @@
-import {loadedDocumentation} from "@/action";
+import {loadedDocumentation} from "../action"
 
 export const VALIDATE_USER_CREDENTIALS = 'ADD_NOTIFICATION'
 export const USER_CREDENTIALS_CORRECT = 'USER_CREDENTIALS_CORRECT'

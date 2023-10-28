@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {withCookies} from "react-cookie"
 import {withRouter} from "react-router-dom"
-import {withMediaQuery} from "@/common/media"
+import {withMediaQuery} from "../common/media"
 import {Container} from "@mui/material"
 import * as actions from './action'
 import PropTypes from "prop-types"
@@ -25,7 +25,7 @@ class Documentation extends React.Component {
     render() {
         return (
             <Container style={style.gridBackground}>
-                <NodesGridSurface nodes={this.props.displayedNodes}
+                <NodesGridSurface initialNodes={this.props.displayedNodes}
                                   selectNode={this.props.selectNode}
                                   updateNode={this.props.updateNode}/>
             </Container>

@@ -1,78 +1,59 @@
 const path = require('path')
-const {version} = require('./package.json')
-const loaders = require('./webpack/loaders')
-const webpack = require('webpack')
-const cloneDeep = require('lodash/cloneDeep')
-const concat = require('lodash/concat')
-const set = require('lodash/set')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
-const WriteFilePlugin = require('write-file-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
 
-const buildModule = {
-    rules: [
-        set(cloneDeep(loaders.babel), 'options.plugins', concat(loaders.babel.options.plugins, 'react-hot-loader/babel')),
-        loaders.css,
-        loaders.less,
-        loaders.image,
-        loaders.font,
-        loaders.mjs,
-        loaders.worker,
-        {
-            test: /\.(js|jsx)$/, // Match JavaScript and JSX files
-            exclude: /node_modules/,
-            use: {
-                loader: 'babel-loader', // Use Babel for transpiling JSX and ES6
-            },
+const cssModule = {
+    test: /\.css$/,
+    use: ['style-loader', 'css-loader']
+}
+
+const babelLoader = {
+    test: /\.jsx?$/,
+    exclude: /node_modules/,
+    use: {
+        loader: "babel-loader",
+        options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
         }
+
+    }
+}
+
+const modules = {
+    module: {
+        rules: [ cssModule, babelLoader ]
+    }
+}
+
+const plugins = {
+    plugins: [
+        new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            title: 'Omega',
+            template: './index.html'
+        })
     ]
 }
 
 module.exports = {
     mode: 'development',
-    context: __dirname,
-    entry: [
-        'react-hot-loader/patch',
-        './src/development.jsx'
-    ],
+    entry: {
+        main: path.resolve(__dirname, './src/development.jsx')
+    },
     output: {
-        path: path.join(__dirname, 'dist'),
-        filename: 'bundle.js',
-        chunkFilename: `[name].chunk.${version}.js`,
-        publicPath: '/dist/',
-        hotUpdateChunkFilename: 'hot/[id].[hash].hot-update.js',
-        hotUpdateMainFilename: 'hot/[hash].hot-update.json'
+        path: path.resolve(__dirname, './dist'),
+        filename: 'bundle.js'
     },
-    module: buildModule,
-    plugins: [
-        // Generates an HTML file with a script tag to include the bundle
-        new CleanWebpackPlugin(),
-        new webpack.LoaderOptionsPlugin({options: {}}),
-        new webpack.NamedModulesPlugin(),
-        new WriteFilePlugin(),
-        new CopyPlugin([{from: 'src/public', to: '.'}]),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.EnvironmentPlugin({NODE_ENV: 'development'}),
-        new webpack.HashedModuleIdsPlugin(),
-        new HtmlWebpackPlugin({template: './index.html', hash: true})
-    ],
     resolve: {
-        modules: ['node_modules'],
-        extensions: ['.js', '.jsx', '.json', '.less', '.css', '.mjs'],
-        alias: {
-            '@': path.resolve(__dirname, 'src')
-        }
+        extensions: ['.js', '.jsx']
     },
-    devtool: 'inline-source-map',
     devServer: {
-        hot: true,
-        writeToDisk: true,
-        port: 8080,
-        historyApiFallback: {
-            index: 'index.html'
+        historyApiFallback: true,
+        static: {
+            directory: path.join(__dirname, 'dist'), // Adjust this to your output directory
         },
-        publicPath: '/dist/'
+        port: 8080, // You can change the port to your desired value
     },
-    node: {fs: 'empty'}
+    ...modules,
+    ...plugins
 }

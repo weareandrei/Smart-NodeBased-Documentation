@@ -4,11 +4,11 @@ import PropTypes from 'prop-types'
 
 import AppBar from '@mui/material/AppBar'
 import IconButton from '@mui/material/IconButton'
-import OmegaLogo from "@/common/icon/omegaLogo"
+import OmegaLogo from "../common/icon/omegaLogo"
 import {connect} from "react-redux"
 import {withCookies} from "react-cookie"
 import {withRouter} from "react-router-dom"
-import {withMediaQuery} from "@/common/media"
+import {withMediaQuery} from "../common/media"
 import ArticleIcon from '@mui/icons-material/Article'
 import FactCheckIcon from '@mui/icons-material/FactCheck'
 import SmsIcon from '@mui/icons-material/Sms'

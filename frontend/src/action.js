@@ -1,4 +1,4 @@
-import {selectNode} from "@/documentation/action";
+import {selectNode} from "./documentation/action"
 
 export const ADD_NOTIFICATION = 'ADD_NOTIFICATION'
 export const DISMISS_NOTIFICATION = 'DISMISS_NOTIFICATION'

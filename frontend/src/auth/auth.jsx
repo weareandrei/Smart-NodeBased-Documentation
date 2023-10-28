@@ -4,12 +4,12 @@ import * as actions from './action'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {withCookies} from 'react-cookie'
-import {withMediaQuery} from '@/common/media'
+import {withMediaQuery} from '../common/media'
 import {withRouter} from 'react-router-dom'
 
 import Button from '@mui/material/Button'
-import {validateUser} from "@/auth/action";
-import {TextField} from "@mui/material";
+import {validateUser} from "./action";
+import {TextField} from "@mui/material"
 
 
 class Auth extends React.Component {

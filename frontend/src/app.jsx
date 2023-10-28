@@ -5,7 +5,7 @@ import Head from "./core/head"
 import Footer from "./core/footer"
 import {persistor} from './core/store'
 import {PersistGate} from "redux-persist/integration/react"
-import {ConnectedRouter} from 'connected-react-router'
+import { Router } from "react-router-dom"
 import {connect, Provider} from 'react-redux'
 import Route from './core/route'
 
@@ -32,9 +32,9 @@ class App extends React.Component {
         <PersistGate loading={null}
                      persistor={persistor}>
           <React.Suspense fallback={<div/>}>
-            <ConnectedRouter history={this.props.history}>
+            <Router history={this.props.history}>
               {this.renderApp()}
-            </ConnectedRouter>
+            </Router>
           </React.Suspense>
         </PersistGate>
       </Provider>

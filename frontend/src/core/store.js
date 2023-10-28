@@ -1,31 +1,49 @@
-// store.js
+// weird gotcha - install history v4.10.1
+// see open issue: https://github.com/supasate/connected-react-router/issues/312#issuecomment-647082777
+import { combineReducers } from "redux"
+import { createBrowserHistory } from "history"
+import { createReduxHistoryContext } from 'redux-first-history'
+import { configureStore } from "@reduxjs/toolkit"
+import { persistReducer, persistStore } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+// import thunk from 'redux-thunk'
 
-import { createStore, applyMiddleware, compose } from 'redux';
-import { createBrowserHistory } from 'history';
-import { routerMiddleware } from 'connected-react-router';
-import { persistStore } from 'redux-persist';
-import thunk from 'redux-thunk'; // Import Redux Thunk middleware
+import application from '../reducer'
+import navigationReducer from '../navigation/reducer'
+import authReducer from '../auth/reducer'
+import documentationReducer from '../documentation/reducer'
 
-import rootReducer from './rootReducer'; // Your rootReducer
+const persistConfig = {
+    key: 'root',
+    storage,
+    // Add any specific configuration for redux-persist here
+}
 
-// Create a history instance
-export const history = createBrowserHistory();
+const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
+    history: createBrowserHistory()
+    //other options if needed
+})
 
-// Create the middleware for connecting history with Redux
-const routerMiddlewareInstance = routerMiddleware(history);
+const combinedReducers = combineReducers({
+    application: application,
+    navigation: navigationReducer,
+    auth: authReducer,
+    documentation: documentationReducer,
+    router: routerReducer
+})
 
-// Redux DevTools Extension
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const persistedReducer = persistReducer(persistConfig, combinedReducers)
 
-const middlewares = [routerMiddlewareInstance, thunk];
+const preloadedState = {}
+const store = configureStore({
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(routerMiddleware),
+    reducer: persistedReducer,
+    preloadedState
+})
 
-// Create the Redux store
-const store = createStore(
-    rootReducer(history), // Pass history to the rootReducer
-    composeEnhancers(applyMiddleware(...middlewares))
-);
+const persistor = persistStore(store)
+const history = createReduxHistory(store)
 
-// Create the persistor
-const persistor = persistStore(store);
+export { store, history, persistor }
 
-export { store, persistor };

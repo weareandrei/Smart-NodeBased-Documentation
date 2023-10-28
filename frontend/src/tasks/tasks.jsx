@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {withCookies} from "react-cookie";
 import {withRouter} from "react-router-dom";
-import {withMediaQuery} from "@/common/media";
+import {withMediaQuery} from "../common/media";
 import {Container} from "@mui/material";
 
 

@@ -1,4 +1,4 @@
-import {NAVIGATE_TO_NODE} from "@/navigation/action";
+import {NAVIGATE_TO_NODE} from "../navigation/action"
 
 export const SELECT_NODE = 'SELECT_NODE'
 export const UPDATE_NODE = 'UPDATE_NODE'
