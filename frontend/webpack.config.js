@@ -38,10 +38,10 @@ const plugins = {
 module.exports = {
     mode: 'development',
     entry: {
-        main: path.resolve(__dirname, './src/development.jsx')
+        main:path.join(__dirname, './src/development.jsx')
     },
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.join(__dirname, './dist'),
         filename: 'bundle.js'
     },
     resolve: {
@@ -50,7 +50,7 @@ module.exports = {
     devServer: {
         historyApiFallback: true,
         static: {
-            directory: path.join(__dirname, 'dist'), // Adjust this to your output directory
+            directory: path.join(__dirname, './dist'), // Adjust this to your output directory
         },
         port: 8080, // You can change the port to your desired value
     },

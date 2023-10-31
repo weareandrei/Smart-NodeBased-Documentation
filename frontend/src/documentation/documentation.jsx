@@ -25,7 +25,7 @@ class Documentation extends React.Component {
     render() {
         return (
             <Container style={style.gridBackground}>
-                <NodesGridSurface initialNodes={this.props.displayedNodes}
+                <NodesGridSurface nodes={this.props.displayedNodes}
                                   selectNode={this.props.selectNode}
                                   updateNode={this.props.updateNode}/>
             </Container>
@@ -37,9 +37,9 @@ class Documentation extends React.Component {
 const style = {
     gridBackground: {
         background: 'white',
-        backgroundImage: 'radial-gradient(#9C9C9C 1px, transparent 0)',
-        backgroundSize: '20px 20px',
-        backgroundPosition: '-19px -19px',
+        // backgroundImage: 'radial-gradient(#9C9C9C 1px, transparent 0)',
+        // backgroundSize: '20px 20px',
+        // backgroundPosition: '-19px -19px',
         height: '100vh',
         width: '100vw'
     }
