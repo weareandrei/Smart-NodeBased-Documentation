@@ -69,15 +69,17 @@ export default class DocumentationBar extends React.Component {
                 //         Documentation Headers
                 //     </ListSubheader>}
             >
-
-                {
-                    map(nodesTree, (node) =>
-                    <NavTreeItem
-                        key={node.nodeId}
-                        title={node.title}
-                        childDepthLevel={1}
-                        node={node}
-                        onClick={this.props.selectNode}/>)}
+                {map(nodesTree, (node) => {
+                        console.log('nodeId is ', node.nodeId)
+                        return (<NavTreeItem
+                            key={node.nodeId}
+                            title={node.title}
+                            childDepthLevel={1}
+                            node={node}
+                            onClick={this.props.selectNode}
+                        />)
+                    }
+                )}
             </List>
         </div>
 

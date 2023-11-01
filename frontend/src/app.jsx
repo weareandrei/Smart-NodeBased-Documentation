@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {CookiesProvider} from 'react-cookie/lib'
 import Head from "./core/head"
 import Footer from "./core/footer"
-import {persistor} from './core/store'
+import {store, persistor, history} from './core/store'
 import {PersistGate} from "redux-persist/integration/react"
 import { Router } from "react-router-dom"
 import {connect, Provider} from 'react-redux'
@@ -15,8 +15,6 @@ import Navigation from "./navigation/navigation"
 class App extends React.Component {
 
   static propTypes = {
-    history: PropTypes.object.isRequired,
-    store: PropTypes.object.isRequired
   }
 
   render() {
@@ -28,11 +26,11 @@ class App extends React.Component {
   }
 
   renderProvider = () =>
-      <Provider store={this.props.store}>
+      <Provider store={store}>
         <PersistGate loading={null}
                      persistor={persistor}>
           <React.Suspense fallback={<div/>}>
-            <Router history={this.props.history}>
+            <Router history={history}>
               {this.renderApp()}
             </Router>
           </React.Suspense>
@@ -43,7 +41,6 @@ class App extends React.Component {
       <div>
         <Head/>
 
-          {/*{this.renderNavigation(this.props.history.location.pathname)}*/}
           <Navigation fullNav={true} />
 
         <div style={style.content}>
@@ -52,19 +49,9 @@ class App extends React.Component {
 
         <Footer/>
       </div>
-
-    // renderNavigation = (path) =>  {
-    //     console.log('Pathname ... ', path)
-    //     // This probably needs to be done using the STATE, not PROPS.
-    //     if (path === '/auth') {
-    //         return <Navigation fullNav={false} />
-    //     } else {
-    //         return <Navigation fullNav={true} />
-    //     }
-    // }
 }
 
-const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+// const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 const style = {
     content: {

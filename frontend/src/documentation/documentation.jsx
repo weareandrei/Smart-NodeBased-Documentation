@@ -6,6 +6,7 @@ import {withMediaQuery} from "../common/media"
 import {Container} from "@mui/material"
 import * as actions from './action'
 import PropTypes from "prop-types"
+import isEmpty from "lodash/isEmpty"
 
 import NodesGridSurface from './component/nodesGridSurface'
 
@@ -25,12 +26,15 @@ class Documentation extends React.Component {
     render() {
         return (
             <Container style={style.gridBackground}>
-                <NodesGridSurface nodes={this.props.displayedNodes}
-                                  selectNode={this.props.selectNode}
-                                  updateNode={this.props.updateNode}/>
+                {!isEmpty(this.props.displayedNodes) && this.renderNodesGrid()}
             </Container>
         )
     }
+
+    renderNodesGrid = () =>
+        <NodesGridSurface nodes={this.props.displayedNodes}
+                          selectNode={this.props.selectNode}
+                          updateNode={this.props.updateNode}/>
 
 }
 

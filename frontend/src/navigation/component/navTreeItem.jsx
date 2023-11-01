@@ -60,13 +60,16 @@ export default class NavTreeItem extends React.Component {
                 </ListItemButton>
                 <Collapse in={this.state.open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {map(this.props.node.children, (child, index) =>
-                            <NavTreeItem
-                                key={index}
-                                title={child.title}
-                                node={child}
-                                childDepthLevel={this.props.childDepthLevel+1}
-                                onClick={this.props.onClick}/>)}
+                        {map(this.props.node.children, (child) => {
+                            console.log('child id is ', child.id)
+                            return (<NavTreeItem
+                            key = {child.id}
+                            title = {child.title}
+                            node = {child}
+                            childDepthLevel = {this.props.childDepthLevel + 1}
+                            onClick = {this.props.onClick}
+                            />)}
+                        )}
                     </List>
                 </Collapse>
             </div>

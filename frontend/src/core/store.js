@@ -1,27 +1,26 @@
-// weird gotcha - install history v4.10.1
-// see open issue: https://github.com/supasate/connected-react-router/issues/312#issuecomment-647082777
 import { combineReducers } from "redux"
 import { createBrowserHistory } from "history"
 import { createReduxHistoryContext } from 'redux-first-history'
 import { configureStore } from "@reduxjs/toolkit"
-import { persistReducer, persistStore } from 'redux-persist'
+import {
+    persistReducer,
+    persistStore,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER,
+} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-// import thunk from 'redux-thunk'
 
 import application from '../reducer'
 import navigationReducer from '../navigation/reducer'
 import authReducer from '../auth/reducer'
 import documentationReducer from '../documentation/reducer'
 
-const persistConfig = {
-    key: 'root',
-    storage,
-    // Add any specific configuration for redux-persist here
-}
-
 const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
     history: createBrowserHistory()
-    //other options if needed
 })
 
 const combinedReducers = combineReducers({
@@ -32,14 +31,21 @@ const combinedReducers = combineReducers({
     router: routerReducer
 })
 
+const persistConfig = {
+    key: 'root',
+    storage
+}
+
 const persistedReducer = persistReducer(persistConfig, combinedReducers)
 
-const preloadedState = {}
 const store = configureStore({
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(routerMiddleware),
     reducer: persistedReducer,
-    preloadedState
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }).concat(routerMiddleware)
 })
 
 const persistor = persistStore(store)

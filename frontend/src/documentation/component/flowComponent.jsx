@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
+import PropTypes from "prop-types"
 import ReactFlow, {
     addEdge,
     MiniMap,
@@ -6,23 +7,31 @@ import ReactFlow, {
     Background,
     useNodesState,
     useEdgesState,
+
 } from 'reactflow'
 
-import 'reactflow/dist/style.css';
-import './overview.css';
+import 'reactflow/dist/style.css'
+import './overview.css'
 
-const minimapStyle = {
-    height: 120,
-}
+import { defaultNodes } from './initial-elements'
 
-const nodeTypes = {}
+export default function FlowComponent(props) {
+    const minimapStyle = {
+        height: 120,
+    }
 
-const onInit = (reactFlowInstance) => console.log('flow loaded:', reactFlowInstance)
-
-const FlowComponent = ({initialNodes,  initialEdges}) => {
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+    const [nodes, setNodes, onNodesChange] = useNodesState(props.nodes)
+    const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges)
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
+
+    // Add an effect to update the state when the props change
+    useEffect(() => {
+        setNodes(props.nodes);
+    }, [props.nodes]);
+
+    useEffect(() => {
+        setEdges(props.edges);
+    }, [props.edges]);
 
     return (
         <ReactFlow
@@ -31,15 +40,18 @@ const FlowComponent = ({initialNodes,  initialEdges}) => {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
-            onInit={onInit}
+            onInit={() => {console.log(nodes)}}
             fitView
             attributionPosition="top-right"
         >
-            {/*<Background color="#aaa" gap={16} />*/}
+            <Background color="#aaa" gap={16} />
             <MiniMap style={minimapStyle} zoomable pannable />
-            {/*<Controls />*/}
+            <Controls />
         </ReactFlow>
     )
 }
 
-export default FlowComponent
+FlowComponent.defaultProps = {
+    nodes: defaultNodes,
+    edges: [],
+}
