@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import FlowComponent from './FlowComponent';
-import map from 'lodash/map';
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import FlowComponent from './FlowComponent'
+import map from 'lodash/map'
+import get from 'lodash/get'
+import flatMap from 'lodash/flatMap'
 
 export default class NodesGridSurface extends Component {
 
@@ -12,17 +14,28 @@ export default class NodesGridSurface extends Component {
     }
 
     render() {
-        console.log('-- this.props.nodes', this.props.nodes)
         return this.renderFlowComponent(
-            this.createFlowNodes(this.props.nodes)
+            this.createFlowNodes(this.props.nodes),
+            this.createFlowEdges(this.props.nodes)
         )
     }
 
-    renderFlowComponent = (nodes) =>
-        <FlowComponent
-            nodes={nodes}
-            edgesDisplayed={[]}
-        />
+    renderFlowComponent = (nodes, edges) => {
+        console.log(nodes)
+        console.log(edges)
+
+        return (
+            <div className="h-full w-full p-2">
+                <FlowComponent
+                    nodes={nodes}
+                    edges={edges}
+                    // className="h-full w-full"
+                    // style={{margin: '0.5rem'}}
+                />
+            </div>
+        )
+    }
+
 
     createFlowNodes = (nodes) =>
         map(nodes, (node) => ({
@@ -30,6 +43,17 @@ export default class NodesGridSurface extends Component {
             data: {
                 label: node.title,
             },
-            position: { x: 250 * node.id, y: 0 },
+            position: { x: 150 * node.id, y: 150 * node.id },
         }))
+
+    createFlowEdges = (nodes) =>
+        flatMap(nodes, (node) =>
+            map(get(node, 'children', []), (child) => ({
+                id: 'e'+node.id+'-'+child.id,
+                source: node.id,
+                target: child.id,
+                type: 'smoothstep',
+                label: 'this is an edge label'
+            }))
+        )
 }

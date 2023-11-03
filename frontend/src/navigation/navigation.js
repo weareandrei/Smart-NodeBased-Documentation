@@ -23,7 +23,7 @@ class Navigation extends React.Component {
         this.props.fullNav ? this.renderFullNavigation() : this.renderMiniNavigation()
 
     renderFullNavigation = () =>
-        <div style={style.navigationContainer}>
+        <div className='fixed'>
             <NavigationTop history={this.props.history} signOut={this.props.signOut}/>
             <NavigationLeft history={this.props.history}/>
         </div>

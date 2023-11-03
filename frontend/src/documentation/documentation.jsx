@@ -25,9 +25,12 @@ class Documentation extends React.Component {
 
     render() {
         return (
-            <Container style={style.gridBackground}>
+            <div className={'h-full w-full'} style={{paddingLeft: '250px'}}>
+
+                {/*Hello World*/}
+                {/*<div style={{background: 'red', width: '100%', height: '100%'}}></div>*/}
                 {!isEmpty(this.props.displayedNodes) && this.renderNodesGrid()}
-            </Container>
+            </div>
         )
     }
 
@@ -36,17 +39,6 @@ class Documentation extends React.Component {
                           selectNode={this.props.selectNode}
                           updateNode={this.props.updateNode}/>
 
-}
-
-const style = {
-    gridBackground: {
-        background: 'white',
-        // backgroundImage: 'radial-gradient(#9C9C9C 1px, transparent 0)',
-        // backgroundSize: '20px 20px',
-        // backgroundPosition: '-19px -19px',
-        height: '100vh',
-        width: '100vw'
-    }
 }
 
 export default connect((state) => ({

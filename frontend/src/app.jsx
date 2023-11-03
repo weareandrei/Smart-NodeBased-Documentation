@@ -11,6 +11,7 @@ import Route from './core/route'
 
 import * as actions from './action'
 import Navigation from "./navigation/navigation"
+import {Container} from "@mui/material";
 
 class App extends React.Component {
 
@@ -38,27 +39,21 @@ class App extends React.Component {
       </Provider>
 
   renderApp = () =>
-      <div>
-        <Head/>
+      <div className={'h-full w-full'}>
+
+          <Head/>
 
           <Navigation fullNav={true} />
 
-        <div style={style.content}>
-          <Route/>
-        </div>
+          <div className={'h-full w-full pl-16 pt-16'}>
+              <Route/>
+          </div>
 
-        <Footer/>
+          {/*<Footer/>*/}
       </div>
 }
 
 // const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-
-const style = {
-    content: {
-        marginLeft: '280px',
-        marginTop: '60px'
-    }
-}
 
 export default connect((state) => ({
 }), actions)(App)

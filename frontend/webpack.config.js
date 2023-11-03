@@ -4,8 +4,13 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 
 const cssModule = {
     test: /\.css$/,
-    use: ['style-loader', 'css-loader']
-}
+    use: [
+        'style-loader',
+        'css-loader',
+        'postcss-loader', // Add postcss-loader here
+    ],
+};
+
 
 const babelLoader = {
     test: /\.jsx?$/,

@@ -13,7 +13,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css'
 import './overview.css'
 
-import { defaultNodes } from './initial-elements'
+// import { defaultNodes } from './initial-elements'
 
 export default function FlowComponent(props) {
     const minimapStyle = {
@@ -26,12 +26,12 @@ export default function FlowComponent(props) {
 
     // Add an effect to update the state when the props change
     useEffect(() => {
-        setNodes(props.nodes);
-    }, [props.nodes]);
+        setNodes(props.nodes)
+    }, [props.nodes])
 
     useEffect(() => {
-        setEdges(props.edges);
-    }, [props.edges]);
+        setEdges(props.edges)
+    }, [props.edges])
 
     return (
         <ReactFlow
@@ -42,7 +42,7 @@ export default function FlowComponent(props) {
             onConnect={onConnect}
             onInit={() => {console.log(nodes)}}
             fitView
-            attributionPosition="top-right"
+            style={{margin: '0.5rem'}}
         >
             <Background color="#aaa" gap={16} />
             <MiniMap style={minimapStyle} zoomable pannable />
@@ -52,6 +52,6 @@ export default function FlowComponent(props) {
 }
 
 FlowComponent.defaultProps = {
-    nodes: defaultNodes,
+    nodes: [],
     edges: [],
 }
