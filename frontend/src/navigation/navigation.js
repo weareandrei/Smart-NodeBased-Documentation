@@ -16,17 +16,27 @@ class Navigation extends React.Component {
     static propTypes = {
         signOut: PropTypes.func.isRequired,
         history: PropTypes.object.isRequired,
-        fullNav: PropTypes.bool.isRequired
+        fullNav: PropTypes.bool.isRequired,
+        documentation: PropTypes.object.isRequired,
+        selectNode: PropTypes.func.isRequired,
+        displayedNodes: PropTypes.array.isRequired
     }
 
     render = () =>
         this.props.fullNav ? this.renderFullNavigation() : this.renderMiniNavigation()
 
-    renderFullNavigation = () =>
-        <div className='fixed'>
-            <NavigationTop history={this.props.history} signOut={this.props.signOut}/>
-            <NavigationLeft history={this.props.history}/>
-        </div>
+    renderFullNavigation = () => {
+        return (
+            <div className='fixed'>
+                <NavigationTop history={this.props.history} signOut={this.props.signOut}/>
+                <NavigationLeft
+                    history={this.props.history}
+                    documentation={this.props.documentation}
+                    selectNode={this.props.selectNode}
+                    displayedNodes={this.props.displayedNodes}/>
+            </div>
+        )
+    }
 
     renderMiniNavigation = () => <NavigationTop/>
 
@@ -39,5 +49,7 @@ const style = {
 }
 
 export default connect((state) => ({
-    isMobile: false
+    isMobile: false,
+    documentation: state.documentation.documentation,
+    displayedNodes: state.documentation.displayedNodes,
 }), actions)(withCookies(withRouter(withMediaQuery(Navigation))))

@@ -20,12 +20,9 @@ class NavigationLeft extends React.Component {
 
     static propTypes = {
         history: PropTypes.object.isRequired,
-        documentation: PropTypes.object,
-        selectNode: PropTypes.func.isRequired
-    }
-
-    static defaultProps = {
-        documentation: null
+        documentation: PropTypes.object.isRequired,
+        selectNode: PropTypes.func.isRequired,
+        displayedNodes: PropTypes.array.isRequired
     }
 
     render() {
@@ -39,7 +36,9 @@ class NavigationLeft extends React.Component {
                 <DocumentationBar
                     selectNode={this.props.selectNode}
                     history={this.props.history}
-                    documentation={this.props.documentation.doc}/> : null}
+                    documentation={this.props.documentation}
+                    displayedNodes={this.props.displayedNodes}
+                /> : null}
         </div>
 
     renderAppBar = () =>
@@ -91,9 +90,9 @@ const style = {
             display: 'flex',
             flexDirection: 'vertical',
             padding: '14px',
-            width: '68px',
+            width: '4rem',
             background: '#788390',
-            zIndex: '1002'
+            zIndex: '10002'
         },
         appsContainer: {
             display: 'flex',
@@ -116,11 +115,10 @@ const style = {
             width: '200px',
             background: '#fff',
             color: '#111',
-            zIndex: '1000'
+            zIndex: '10000'
         }
     }
 }
 
 export default connect((state) => ({
-    documentation: state.application.documentation
 }), actions)(withCookies(withRouter(withMediaQuery(NavigationLeft))))

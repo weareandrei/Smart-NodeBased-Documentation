@@ -42,9 +42,9 @@ export const validateUser = (credentials) => {
             .then((response) => {
                 if (response.ok) {
                     response.json().then((data) => {
-                        console.log('loaded user correctly: ', data);
+                        // console.log('loaded user correctly: ', data);
                         dispatch(userCredentialsCorrect())
-                        dispatch(userDataLoaded(data));
+                        dispatch(userDataLoaded(data))
                     });
                 } else {
                     dispatch(userCredentialsWrong())

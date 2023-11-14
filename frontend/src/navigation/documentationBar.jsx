@@ -3,7 +3,9 @@ import React from 'react'
 import PropTypes from "prop-types"
 import AppBar from "@mui/material/AppBar"
 import Divider from "@mui/material/Divider"
+
 import map from "lodash/map"
+import isEmpty from "lodash/isEmpty"
 
 import List from '@mui/material/List'
 import NavTreeItem from './component/navTreeItem'
@@ -14,32 +16,33 @@ export default class DocumentationBar extends React.Component {
     static propTypes = {
         history: PropTypes.object.isRequired,
         documentation: PropTypes.object.isRequired,
+        displayedNodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired
     }
 
-    state = {
-        currentAvailableNodes: []
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.documentation !== this.props.documentation) {
-            const newNodes = this.props.documentation.children
-            this.setState({
-                currentAvailableNodes: newNodes,
-            })
-        }
-    }
-
-    componentDidMount() {
-        const newNodes = this.props.documentation.children
-
-        this.setState({
-            currentAvailableNodes: newNodes,
-        })
-    }
+    // state = {
+    //     currentAvailableNodes: []
+    // }
+    //
+    // componentDidUpdate(prevProps) {
+    //     if (prevProps.documentation !== this.props.documentation) {
+    //         const newNodes = this.props.documentation.doc
+    //         this.setState({
+    //             currentAvailableNodes: newNodes,
+    //         })
+    //     }
+    // }
+    //
+    // componentDidMount() {
+    //     const newNodes = this.props.documentation.doc
+    //
+    //     this.setState({
+    //         currentAvailableNodes: newNodes,
+    //     })
+    // }
 
     render() {
-        return this.props.documentation && this.renderDocumentationBar()
+        return !isEmpty(this.props.displayedNodes) && this.renderDocumentationBar()
     }
 
     renderDocumentationBar = () =>
@@ -54,14 +57,14 @@ export default class DocumentationBar extends React.Component {
             <Divider orientation="horizontal" sx={{width: '2px', background: '#fff'}}/>
 
             <div>
-                {this.renderDocumentationTree(this.state.currentAvailableNodes)}
+                {this.renderDocumentationTree(this.props.displayedNodes)}
             </div>
         </AppBar>
 
-    renderDocumentationTree = (nodesTree) =>
+    renderDocumentationTree = (nodes) =>
         <div>
             <List
-                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                sx={{ width: '100%', maxWidth: 360, bgColor: 'background.paper' }}
                 component="nav"
                 aria-labelledby="nested-list-subheader"
                 // subheader={
@@ -69,17 +72,20 @@ export default class DocumentationBar extends React.Component {
                 //         Documentation Headers
                 //     </ListSubheader>}
             >
-                {map(nodesTree, (node) => {
-                        console.log('nodeId is ', node.nodeId)
-                        return (<NavTreeItem
-                            key={node.nodeId}
+                {map(nodes, (node) => {
+                    // Create a new object without the 'children' property
+                    const nodeWithoutChildren = { ...node, children: undefined }
+
+                    return (
+                        <NavTreeItem
+                            key={node.id}
                             title={node.title}
                             childDepthLevel={1}
-                            node={node}
+                            node={nodeWithoutChildren}
                             onClick={this.props.selectNode}
-                        />)
-                    }
-                )}
+                        />
+                    )
+                })}
             </List>
         </div>
 
@@ -120,7 +126,7 @@ const style = {
             ...navContainer,
             padding: '15px',
             paddingTop: '60px',
-            left: '68px',
+            left: '4rem',
             width: '250px',
             background: '#fff',
             color: '#111',

@@ -1,12 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {withCookies} from "react-cookie";
-import {withRouter} from "react-router-dom";
-import {withMediaQuery} from "../common/media";
-import {Container} from "@mui/material";
-import PropTypes from "prop-types";
-import * as actions from "./action";
-
+import {withCookies} from "react-cookie"
+import {withRouter} from "react-router-dom"
+import {withMediaQuery} from "../common/media"
+import {Container} from "@mui/material"
+import PropTypes from "prop-types"
+import * as actions from "./action"
 
 class Dashboard extends React.Component {
 
@@ -24,7 +23,6 @@ class Dashboard extends React.Component {
         // if (this.props.documentation === null) {
         //     this.props.loadDocumentation(this.props.user.documentationId)
         // }
-        console.log('user:', this.props.user)
         this.props.loadDocumentation(this.props.user.documentationId)
     }
 
@@ -47,5 +45,5 @@ class Dashboard extends React.Component {
 
 export default connect((state) => ({
     user: state.auth.userData,
-    documentation: state.application.documentation
+    documentation: state.documentation.documentation
 }), actions)(withCookies(withRouter(withMediaQuery(Dashboard))))

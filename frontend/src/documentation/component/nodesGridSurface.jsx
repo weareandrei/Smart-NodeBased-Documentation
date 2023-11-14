@@ -10,10 +10,12 @@ export default class NodesGridSurface extends Component {
     static propTypes = {
         nodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired,
-        updateNode: PropTypes.func.isRequired,
+        nodeModified: PropTypes.func.isRequired,
     }
 
     render() {
+        console.log('createFlowNodes:', this.createFlowNodes(this.props.nodes))
+        console.log('createFlowEdges:', this.createFlowEdges(this.props.nodes))
         return this.renderFlowComponent(
             this.createFlowNodes(this.props.nodes),
             this.createFlowEdges(this.props.nodes)
@@ -21,21 +23,16 @@ export default class NodesGridSurface extends Component {
     }
 
     renderFlowComponent = (nodes, edges) => {
-        console.log(nodes)
-        console.log(edges)
-
         return (
             <div className="h-full w-full p-2">
                 <FlowComponent
                     nodes={nodes}
                     edges={edges}
-                    // className="h-full w-full"
-                    // style={{margin: '0.5rem'}}
+                    nodeModified={this.props.nodeModified}
                 />
             </div>
         )
     }
-
 
     createFlowNodes = (nodes) =>
         map(nodes, (node) => ({
@@ -43,17 +40,20 @@ export default class NodesGridSurface extends Component {
             data: {
                 label: node.title,
             },
-            position: { x: 150 * node.id, y: 150 * node.id },
+            position: node.position,
+            style: {
+                ...node.size
+            }
         }))
 
     createFlowEdges = (nodes) =>
         flatMap(nodes, (node) =>
-            map(get(node, 'children', []), (child) => ({
-                id: 'e'+node.id+'-'+child.id,
+            map(get(node, 'children', []), (childId) => ({
+                id: 'e'+node.id+'-'+childId,
                 source: node.id,
-                target: child.id,
-                type: 'smoothstep',
-                label: 'this is an edge label'
+                target: childId,
+                type: 'smoothstep'
+                // label: 'this is an edge label'
             }))
         )
 }

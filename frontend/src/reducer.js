@@ -13,7 +13,7 @@ import {
 
 const initialState = {
     notifications : [],
-    documentation: null
+
 }
 
 const appReducer = (state = initialState, action) => {
@@ -32,19 +32,6 @@ const appReducer = (state = initialState, action) => {
             return {
                 ...state,
                 notifications: dismissNotification(state.notifications, action.notificationId)
-            }
-        case LOADING_DOCUMENTATION:
-            return {
-                ...state,
-            }
-        case LOADED_DOCUMENTATION:
-            return {
-                ...state,
-                documentation: action.documentation
-            }
-        case LOADED_DOCUMENTATION_FAIL:
-            return {
-                ...state,
             }
         default:
             return state

@@ -6,8 +6,8 @@ import IconButton from "@mui/material/IconButton"
 import Divider from '@mui/material/Divider'
 import Button from '@mui/material/Button'
 import PropTypes from "prop-types"
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
+import Breadcrumbs from '@mui/material/Breadcrumbs'
+import Link from '@mui/material/Link'
 export default class NavigationTop extends React.Component {
 
     static propTypes = {
@@ -64,9 +64,9 @@ const style = {
         display: 'flex',
         flexDirection: 'row',
         width: '100vw',
-        height: '60px',
+        height: '4rem',
         background: '#788390',
-        zIndex: '1001'
+        zIndex: '10001'
     },
     addressContainer: {
         display: 'flex',

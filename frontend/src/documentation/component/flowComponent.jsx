@@ -13,8 +13,6 @@ import ReactFlow, {
 import 'reactflow/dist/style.css'
 import './overview.css'
 
-// import { defaultNodes } from './initial-elements'
-
 export default function FlowComponent(props) {
     const minimapStyle = {
         height: 120,
@@ -23,6 +21,9 @@ export default function FlowComponent(props) {
     const [nodes, setNodes, onNodesChange] = useNodesState(props.nodes)
     const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges)
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
+
+    console.log('rendering FlowComponent for nodes: ', nodes)
+    console.log('. . .and, props.nodes: ', props.nodes)
 
     // Add an effect to update the state when the props change
     useEffect(() => {
@@ -33,14 +34,22 @@ export default function FlowComponent(props) {
         setEdges(props.edges)
     }, [props.edges])
 
+    // useEffect(() => {
+    //     // Call your updateNodes function with the updated nodes whenever nodes change
+    //     props.updateNodes(nodes)
+    // }, [nodes, props.updateNodes])
+
     return (
         <ReactFlow
             nodes={nodes}
             edges={edges}
-            onNodesChange={onNodesChange}
+            onNodesChange={(newNodes) => {
+                onNodesChange(newNodes)
+            }}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
-            onInit={() => {console.log(nodes)}}
+            onNodeDragStop={(mouseEvent, node) => props.nodeModified(node)}
+            // onElementClick={()=>console.log("onElementClick")}
             fitView
             style={{margin: '0.5rem'}}
         >

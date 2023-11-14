@@ -1,5 +1,7 @@
 const { DocumentationModel } = require('./model')
-const {mongoose} = require("mongoose");
+const {mongoose} = require("mongoose")
+const { ObjectId } = require('mongodb');
+const {mapWithThrottle} = require("../util/mapWithThrottle")
 
 const createNewEntity = async (req, res) => {
     const documentationId = req.body.id
@@ -27,12 +29,8 @@ const createNewEntity = async (req, res) => {
     res.json(result)
 }
 
-const updateExistingEntity = async (req, res) => {
-    const documentationId = req.body.id
-    const updatedValue = req.body.updatedValue
-    const valuePath = req.body.valuePath
-    // For example, doc.children[0].children[4].children[1].title
-
+const updateExistingEntity = async (documentationId, updateParams) => {
+    console.log('func -> updateExistingEntity, (params): \n', documentationId, updateParams)
     const mongoString = 'mongodb+srv://weareandrei:Andrews8208@omega.owkrpxa.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp'
 
     mongoose.connect(mongoString, { dbName: "documentation", useNewUrlParser: true, useUnifiedTopology: true })
@@ -43,46 +41,39 @@ const updateExistingEntity = async (req, res) => {
             console.error('Database Connection Error:', error)
         })
 
-    const result = DocumentationModel.update( { _id: documentationId} , {$set: { valuePath : updatedValue  }} )
+    console.log('query :', JSON.stringify([
+        {'_id': documentationId, 'doc.id': updateParams.nodeId},
+        {$set: updateParams.updateValues}]))
+    const result = await DocumentationModel.updateOne(
+        {
+            '_id': documentationId, 'doc.id': updateParams.nodeId
+        },
+        {
+            $set: updateParams.updateValues
+        })
 
-    console.log(result)
+    console.log('result ->', result)
+
+    return result
+}
+
+const updateNodes = async (req, res) => {
+    const documentationId = req.body.documentationId
+    const nodeUpdates = req.body.nodeUpdates
+
+    const result = await mapWithThrottle(nodeUpdates, async (updateParams) => {
+        await updateExistingEntity(documentationId, updateParams)
+    }, 10)
+
+    console.log('result OVERALL ->', result)
 
     res.json(result)
 }
 
-// const updateExistingEntity = async (req, res) => {
-//     const documentationId = req.body.id
-//     const updatedValue = req.body.updatedValue
-//     const valuePath = req.body.valuePath
-//
-//     const mongoString = 'mongodb+srv://weareandrei:Andrews8208@omega.owkrpxa.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp'
-//
-//     try {
-//         await mongoose.connect(mongoString, { dbName: "documentation", useNewUrlParser: true, useUnifiedTopology: true })
-//         console.log('Database Connected')
-//
-//         const filter = { _id: documentationId }
-//         const update = {}
-//
-//         // Use the positional operator ($) to update a specific nested field within an array
-//         update[valuePath] = updatedValue
-//
-//         const result = await DocumentationModel.updateOne(filter, { $set: update })
-//
-//         console.log(result)
-//         res.json(result)
-//     } catch (error) {
-//         console.error('Database Connection Error:', error)
-//         res.status(500).json({ error: 'Database Connection Error' })
-//     }
-// }
-
 module.exports = {
     createNewEntity,
-    updateExistingEntity
+    updateNodes
 }
-
-
 
 /* ----------------------- API USAGE EXAMPLES ----------------------- */
 
