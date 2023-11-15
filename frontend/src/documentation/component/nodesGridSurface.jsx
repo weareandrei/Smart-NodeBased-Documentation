@@ -14,8 +14,6 @@ export default class NodesGridSurface extends Component {
     }
 
     render() {
-        console.log('createFlowNodes:', this.createFlowNodes(this.props.nodes))
-        console.log('createFlowEdges:', this.createFlowEdges(this.props.nodes))
         return this.renderFlowComponent(
             this.createFlowNodes(this.props.nodes),
             this.createFlowEdges(this.props.nodes)

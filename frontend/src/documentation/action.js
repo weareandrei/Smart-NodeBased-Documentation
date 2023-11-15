@@ -3,6 +3,7 @@ import find from "lodash/find"
 
 export const SELECT_NODE = 'SELECT_NODE'
 export const REGISTER_NODE_UPDATE = 'REGISTER_NODE_UPDATE'
+export const REGISTER_NODE_CREATE = 'REGISTER_NODE_UPDATE'
 export const SYNCING_NODES = 'SYNCING_NODES'
 export const SYNCING_NODES_SUCCESS = 'SYNCING_NODES_SUCCESS'
 export const SYNCING_NODES_FAIL = 'SYNCING_NODES_FAIL'
@@ -20,10 +21,13 @@ const findNodeWithIdZero = (nodes) =>
 
 export const registerNodeUpdate = (documentation, node) => ({
     type: REGISTER_NODE_UPDATE,
-    nodeUpdate: prepareNodeUpdate(
-        documentation,
-        node
-    )
+    nodeUpdate: {
+        action: 'update',
+        node: prepareNodeUpdate(
+            documentation,
+            node
+        )
+    }
 })
 
 const prepareNodeUpdate = (documentation, node) => {
@@ -40,6 +44,34 @@ const prepareNodeUpdate = (documentation, node) => {
     }
 
     console.log('----- Prepared Node Update : ', updates)
+    return updates
+}
+
+export const registerNodeCreate = (documentation, node) => ({
+    type: REGISTER_NODE_CREATE,
+    nodeUpdate: {
+        action: 'create',
+        node: prepareNodeCreate(
+            documentation,
+            node
+        )
+    }
+})
+
+const prepareNodeCreate = (documentation, node) => {
+    const updates = {
+        updateValues: {
+            'id': node.id,
+            'title': node.data.label,
+            'size': {
+                width: node.width,
+                height: node.height
+            },
+            'position': node.position
+        }
+    }
+
+    console.log('----- Prepared Node Create : ', updates)
     return updates
 }
 
@@ -94,7 +126,7 @@ export const syncNodes = () => {
             const updates = getState().documentation.nodesSyncQueue
             dispatch(syncingNodes());
 
-            return fetch('http://localhost:8081/updateNodes', {
+            return fetch('http://localhost:8081/syncNodes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -6,6 +6,7 @@ import {withMediaQuery} from "../common/media"
 import * as actions from './action'
 import PropTypes from "prop-types"
 import isEmpty from "lodash/isEmpty"
+import find from "lodash/find"
 
 import NodesGridSurface from './component/nodesGridSurface'
 
@@ -18,6 +19,7 @@ class Documentation extends React.Component {
         selectNode: PropTypes.func.isRequired,
         nodesSyncQueue: PropTypes.array.isRequired,
         registerNodeUpdate: PropTypes.func.isRequired,
+        registerNodeCreate: PropTypes.func.isRequired,
         syncNodes: PropTypes.func.isRequired,
     }
 
@@ -30,7 +32,6 @@ class Documentation extends React.Component {
     }
 
     renderNodesGrid = () => {
-        console.log('this.props.displayedNodes :', this.props.displayedNodes)
         return (
             <NodesGridSurface nodes={this.props.displayedNodes}
                               selectNode={this.props.selectNode}
@@ -39,9 +40,23 @@ class Documentation extends React.Component {
     }
 
     nodeModified = (node) => {
-        this.props.registerNodeUpdate(this.props.documentation, node)
+        this.isNewNode(node) ?
+            this.props.registerNodeCreate(this.props.documentation, node) :
+            this.props.registerNodeUpdate(this.props.documentation, node)
         this.props.syncNodes()
 
+    }
+
+    isNewNode = (thisNode) => {
+        const nodes = this.props.documentation.doc
+        const nodeFound = find(nodes, (node) => node.id === thisNode.id)
+
+        console.log(' -- isNewNode ? ', thisNode.id, '->', nodeFound)
+        if (nodeFound === undefined) {
+            return true
+        }
+
+        return false
     }
 
 }
