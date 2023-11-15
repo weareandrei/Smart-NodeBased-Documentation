@@ -26,13 +26,16 @@ export default function FlowComponent(props) {
     console.log('. . .and, props.nodes: ', props.nodes)
 
     // Add an effect to update the state when the props change
+    // useEffect(() => {
+    //     setNodes(props.nodes)
+    // }, [props.nodes])
     useEffect(() => {
-        setNodes(props.nodes)
-    }, [props.nodes])
+        onNodesChange(props.nodes)
+    }, [props.nodes, onNodesChange])
 
-    useEffect(() => {
-        setEdges(props.edges)
-    }, [props.edges])
+    // useEffect(() => {
+    //     setEdges(props.edges)
+    // }, [props.edges])
 
     // useEffect(() => {
     //     // Call your updateNodes function with the updated nodes whenever nodes change
