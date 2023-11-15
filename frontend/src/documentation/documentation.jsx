@@ -41,7 +41,7 @@ class Documentation extends React.Component {
 
     nodeModified = (node) => {
         this.isNewNode(node) ?
-            this.props.registerNodeCreate(this.props.documentation, node) :
+            this.props.registerNodeCreate(this.props.documentation, node, this.props.selectedNode.id) :
             this.props.registerNodeUpdate(this.props.documentation, node)
         this.props.syncNodes()
 

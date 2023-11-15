@@ -47,10 +47,11 @@ const prepareNodeUpdate = (documentation, node) => {
     return updates
 }
 
-export const registerNodeCreate = (documentation, node) => ({
+export const registerNodeCreate = (documentation, node, parentId) => ({
     type: REGISTER_NODE_CREATE,
     nodeUpdate: {
         action: 'create',
+        parentId: parentId,
         node: prepareNodeCreate(
             documentation,
             node
