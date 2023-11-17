@@ -13,7 +13,13 @@ import ReactFlow, {
 import 'reactflow/dist/style.css'
 import './overview.css'
 import NodeSelector from "./nodeSelector"
+import Node from "./node"
 
+const nodeTypes = {
+    'Page': Node,
+    'Code snippet': Node,
+    'Note': Node
+}
 
 const getNextId = (nodes) => {
     const maxId = Math.max(...nodes.map(node => parseInt(node.id))) || 0
@@ -106,6 +112,7 @@ export default function FlowComponent(props) {
                 onDrop={onDrop}
                 onDragOver={onDragOver}
                 style={{margin: '0.5rem'}}
+                nodeTypes={nodeTypes}
             >
                 <Background color="#aaa" gap={16} />
                 <MiniMap style={minimapStyle} zoomable pannable />

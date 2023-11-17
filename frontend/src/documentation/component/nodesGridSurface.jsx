@@ -37,10 +37,12 @@ export default class NodesGridSurface extends Component {
             id: node.id,
             data: {
                 label: node.title,
+                type: node.type,
             },
+            type: node.type,
             position: node.position,
             style: {
-                ...node.size
+                // ...node.size
             }
         }))
 
