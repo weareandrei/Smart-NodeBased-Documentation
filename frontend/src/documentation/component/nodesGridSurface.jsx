@@ -35,15 +35,15 @@ export default class NodesGridSurface extends Component {
     createFlowNodes = (nodes) =>
         map(nodes, (node) => ({
             id: node.id,
+            type: node.id === nodes[0].id ? 'current page' : node.type,
             data: {
-                label: node.title,
-                type: node.type,
+                ...node
             },
-            type: node.type,
-            position: node.position,
-            style: {
-                // ...node.size
-            }
+            // position: node.position,
+            position: { x: 400, y: 200 },
+            // style: {
+            //     // ...node.size
+            // }
         }))
 
     createFlowEdges = (nodes) =>

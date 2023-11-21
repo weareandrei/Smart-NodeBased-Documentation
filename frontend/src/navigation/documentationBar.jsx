@@ -6,6 +6,7 @@ import Divider from "@mui/material/Divider"
 
 import map from "lodash/map"
 import isEmpty from "lodash/isEmpty"
+import get from "lodash/get"
 
 import List from '@mui/material/List'
 import NavTreeItem from './component/navTreeItem'
@@ -75,16 +76,17 @@ export default class DocumentationBar extends React.Component {
                 {map(nodes, (node) => {
                     // Create a new object without the 'children' property
                     const nodeWithoutChildren = { ...node, children: undefined }
-
-                    return (
-                        <NavTreeItem
-                            key={node.id}
-                            title={node.title}
-                            childDepthLevel={1}
-                            node={nodeWithoutChildren}
-                            onClick={this.props.selectNode}
-                        />
-                    )
+                    if (get(node, 'title', false) !== false) {
+                        return (
+                            <NavTreeItem
+                                key={node.id}
+                                title={node.title}
+                                childDepthLevel={1}
+                                node={nodeWithoutChildren}
+                                onClick={this.props.selectNode}
+                            />
+                        )
+                    }
                 })}
             </List>
         </div>

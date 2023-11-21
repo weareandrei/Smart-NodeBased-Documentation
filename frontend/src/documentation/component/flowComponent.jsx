@@ -16,9 +16,11 @@ import NodeSelector from "./nodeSelector"
 import Node from "./node"
 
 const nodeTypes = {
-    'Page': Node,
-    'Code snippet': Node,
-    'Note': Node
+    'current page': Node,
+    'page': Node,
+    'code snippet': Node,
+    'note': Node,
+    'link': Node
 }
 
 const getNextId = (nodes) => {
