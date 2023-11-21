@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from "prop-types"
-import Button from '@mui/material/Button'
+
 import get from "lodash/get"
 import map from "lodash/map"
 import isEmpty from "lodash/isEmpty"
+
 import { Handle, Position } from 'reactflow'
 
 import ForwardIcon from '@mui/icons-material/Forward'
@@ -13,6 +14,8 @@ import AddTaskIcon from '@mui/icons-material/AddTask'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import DownloadIcon from '@mui/icons-material/Download'
+
+import Button from '@mui/material/Button'
 
 import NodeBody from "./nodeBody"
 
@@ -33,16 +36,16 @@ export default class Node extends React.Component {
 
     renderNode = () =>
         <div style={style.nodeContainer(this.props.data.type)}>
-            <div style={style.nodeHeader}>
+            <div style={style.nodeHeaderContainer}>
 
-                <div style={style.leftPart}>
+                <div style={{...style.leftPart, maxWidth: '75%'}}>
                     {!this.isPage(this.props.data.type) &&
                         this.renderHeaderTitle(this.props.data)}
 
                     {this.renderHeaderButtons(this.props.data.type)}
                 </div>
 
-                <div style={style.rightPart}>
+                <div style={{...style.rightPart, maxWidth: '25%'}}>
                     <div style={style.nodeLabel(this.props.data.type)}>
                         {this.props.data.type}
                     </div>
@@ -50,16 +53,13 @@ export default class Node extends React.Component {
 
             </div>
 
-            {this.isPage && this.displayBodyHeader(this.props.data.title)}
+            {this.isPage(this.props.data.type) && this.displayBodyHeader(this.props.data.title)}
 
-            {get(this.props.data, 'body', false) && this.renderBody(this.props.data.body)}
+            {(get(this.props.data, 'body', false) || this.props.data.type === 'link') &&
+                <NodeBody body={this.props.data.body}
+                          type={this.props.data.type}/>}
 
             {this.props.data.type === 'page' && this.renderOpenArrow()}
-        </div>
-
-    renderBody = (body) =>
-        <div style={style.nodeBody}>
-            <NodeBody body={body}/>
         </div>
 
     isPage = (type) =>
@@ -131,30 +131,33 @@ export default class Node extends React.Component {
     }
 
     displayBodyHeader = (title) =>
-        <div style={style.nodeMainHeader}>
-            <div style={style.nodeMainHeaderLabel}>
+        <Button
+            onClick={() => {
+                alert('clicked')
+            }}
+            style={style.nodeMainHeader}
+        >
+            <div style={style.nodeMainTitle}>
                 {title}
             </div>
             <div style={style.rightPart}>
-                <IconButton>
-                    <ForwardIcon sx={{height: '10px', color:"#000"}}/>
-                </IconButton>
+                <ForwardIcon sx={{height: '10px', width: '10px', color:"#000"}}/>
             </div>
 
-        </div>
+        </Button>
 
     renderOpenArrow = () =>
-        <div>
-            <IconButton sx={{background: '#000'}}>
-                <ArrowBackIosNewIcon sx={{height: '10px', color:"#fff"}}/>
+        <div style={style.openArrowButtonContainer}>
+            <IconButton sx={style.openArrowButton}>
+                <ArrowBackIosNewIcon sx={{height: '5px', width: '5px', color:"#fff"}}/>
             </IconButton>
         </div>
 }
 
-const leftPart = {
-    width: 'fit-content',
+const straightText = {
     overflow: 'hidden',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis'
 }
 
 const style = {
@@ -185,19 +188,22 @@ const style = {
         return {
             background: backgroundColor,
             borderRadius: '10px',
+            // border: backgroundColor+ ' solid',
             display: 'flex',
-            // padding: '2px',
+            padding: '2px',
             flexDirection: 'column',
             minWidth: '200px',
-            maxWidth: '350px',
+            maxWidth: '280px',
         }
     },
-    nodeHeader: {
+    nodeHeaderContainer: {
         // height: 'fit-content',
-        padding: ' 2px 6px',
+        padding: ' 0px 6px 2px 6px',
         display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexFlow: 'row nowrap',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        maxWidth: '100%'
     },
     nodeMainHeader: {
         background: '#fff',
@@ -208,22 +214,18 @@ const style = {
         justifyContent: 'space-between'
     },
     headerTitle: {
+        ...straightText,
+        fontSize: '11px',
         color: '#fff',
-        overflow: 'hidden'
-    },
-    nodeBody: {
-        background: '#fff',
-        height: 'fit-content',
-        padding: ' 8px',
-        borderBottomLeftRadius: '10px',
-        borderBottomRightRadius: '10px'
+        overflow: 'hidden',
+        marginRight: '6px'
     },
 
     functionalButton: {
         height: '9px',
         width:'9px',
         background: '#3284FF',
-        margin: '1px 0px 1px 6px ',
+        margin: '0px 6px 0px 0px',
         borderRadius: '3px'
     },
     nodeLabel: (type) => {
@@ -251,18 +253,22 @@ const style = {
         }
 
         return {
-            ...leftPart,
-            fontSize: '11px',
+            ...straightText,
+            fontSize: '10px',
             background: backgroundColor,
             borderRadius: '10px',
-            padding: '2px 8px',
+            padding: '0px 10px',
+            marginLeft: '6px ',
             color: '#D3D3D3',
         }
     },
-    nodeMainHeaderLabel: {
-        ...leftPart,
+    nodeMainTitle: {
+        ...straightText,
         fontSize: '15px',
-        color: '#000'
+        color: '#000',
+        textTransform: 'none',
+        textAlign: 'left',
+        maxWidth: '85%'
     },
 
     leftPart: {
@@ -276,5 +282,20 @@ const style = {
         flexDirection: 'row',
         justifyContent: 'right',
         // width: 'fit-content'
+    },
+
+
+    openArrowButtonContainer: {
+        position: 'relative',
+    },
+    openArrowButton: {
+        position: 'absolute',
+        left: '50%',
+        width: '10px',
+        height: '30px',
+        borderRadius: '7px',
+        padding: '5px',
+        transform: 'translateX(-50%) translateY(-50%) rotate(-90deg)',
+        background: '#000'
     }
 }

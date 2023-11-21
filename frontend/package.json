@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dhaiwat10/react-link-preview": "^1.15.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@loadable/component": "^5.15.3",
+    "@microlink/react": "^5.5.15",
     "@mui/icons-material": "^5.14.15",
     "@mui/material": "^5.14.15",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@reduxjs/toolkit": "^1.9.7",
     "autoprefixer": "^10.4.16",
+    "axios": "^1.6.2",
     "history": "^4.10.1",
     "lodash": "^4.17.21",
     "postcss": "^8.4.31",
@@ -29,7 +32,8 @@
     "redux": "^4.2.1",
     "redux-first-history": "^5.1.1",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.4.2"
+    "redux-thunk": "^2.4.2",
+    "styled-components": "^5.3.11"
   },
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
