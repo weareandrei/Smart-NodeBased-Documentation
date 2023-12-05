@@ -34,6 +34,7 @@ class Documentation extends React.Component {
     renderNodesGrid = () => {
         return (
             <NodesGridSurface nodes={this.props.displayedNodes}
+                              allNodes = {this.props.documentation.doc}
                               selectNode={this.props.selectNode}
                               nodeModified={this.nodeModified}/>
         )

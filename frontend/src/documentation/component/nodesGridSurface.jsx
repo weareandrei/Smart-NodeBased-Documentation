@@ -4,18 +4,25 @@ import FlowComponent from './FlowComponent'
 import map from 'lodash/map'
 import get from 'lodash/get'
 import flatMap from 'lodash/flatMap'
+import find from 'lodash/find'
+
+import NodesLayout from '../util/nodesLayout'
 
 export default class NodesGridSurface extends Component {
 
     static propTypes = {
         nodes: PropTypes.array.isRequired,
+        allNodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired,
         nodeModified: PropTypes.func.isRequired,
     }
 
     render() {
+        const nodesLayout = new NodesLayout(this.props.nodes[0], this.props.allNodes)
+        nodesLayout.buildLayout()
+        // const nodesPositions = nodesLayout.getPositions()
         return this.renderFlowComponent(
-            this.createFlowNodes(this.props.nodes),
+            this.createFlowNodes(this.props.nodes, nodesLayout),
             this.createFlowEdges(this.props.nodes)
         )
     }
@@ -32,15 +39,15 @@ export default class NodesGridSurface extends Component {
         )
     }
 
-    createFlowNodes = (nodes) =>
+    createFlowNodes = (nodes, nodesLayout) =>
         map(nodes, (node) => ({
             id: node.id,
             type: node.id === nodes[0].id ? 'current page' : node.type,
             data: {
                 ...node
             },
-            // position: node.position,
-            position: { x: 400, y: 200 },
+            position: nodesLayout.getNodeCoordinates(node.id)
+            // position: find(nodesPositions, (nodePosition) => nodePosition.id === node.id),
             // style: {
             //     // ...node.size
             // }

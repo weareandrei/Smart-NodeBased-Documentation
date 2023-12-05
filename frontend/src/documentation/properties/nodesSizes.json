@@ -1,0 +1,77 @@
+{
+
+   "current page": {
+      "small": {
+         "width": 380,
+         "height": 180
+      },
+      "medium": {
+         "width": 380,
+         "height": 180
+      },
+      "large": {
+         "width": 380,
+         "height": 180
+      }
+   },
+
+   "page": {
+      "small": {
+         "width": 250,
+         "height": 130
+      },
+      "medium": {
+         "width": 300,
+         "height": 150
+      },
+      "large": {
+         "width": 300,
+         "height": 150
+      }
+   },
+
+   "note": {
+      "small": {
+         "width": 400,
+         "height": 300
+      },
+      "medium": {
+         "width": 500,
+         "height": 400
+      },
+      "large": {
+         "width": 600,
+         "height": 500
+      }
+   },
+
+   "code snippet": {
+      "small": {
+         "width": 400,
+         "height": 300
+      },
+      "medium": {
+         "width": 500,
+         "height": 400
+      },
+      "large": {
+         "width": 600,
+         "height": 500
+      }
+   },
+
+   "link": {
+      "small": {
+         "width": 280,
+         "height": 210
+      },
+      "medium": {
+         "width": 400,
+         "height": 320
+      },
+      "large": {
+         "width": 500,
+         "height": 400
+      }
+   }
+}
