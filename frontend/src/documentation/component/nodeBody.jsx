@@ -7,7 +7,8 @@ export default class NodeBody extends React.Component {
 
     static propTypes = {
         body: PropTypes.object.isRequired,
-        type: PropTypes.string.isRequired
+        type: PropTypes.string.isRequired,
+        height: PropTypes.any.isRequired
     }
 
     static defaultProps = {
@@ -17,53 +18,61 @@ export default class NodeBody extends React.Component {
     }
 
     render = () => {
-
         switch (this.props.type) {
             case 'code snippet':
-                return this.renderCodeBody(this.props.body)
+                return this.renderCodeBody(this.props.body, this.props.height)
             case 'link':
-                return this.renderLinkBody(this.props.body)
+                return this.renderLinkBody(this.props.body, this.props.height)
             case 'note':
-                return this.renderNoteBody(this.props.body)
+                return this.renderNoteBody(this.props.body, this.props.height)
+            case 'current page':
+                return this.renderPageBody(this.props.body, this.props.height)
+            case 'page':
+                return this.renderPageBody(this.props.body, this.props.height)
         }
     }
 
-    renderCodeBody = (body) =>
-        <code style={style.codeBody}>
+    renderCodeBody = (body, height) =>
+        <code style={style.codeBody(height)}>
             {body.code}
         </code>
 
-    renderLinkBody = (body) =>
-        <div style={style.imageBody}>
+    renderLinkBody = (body, height) =>
+        <div style={style.imageBody(height)}>
             <Microlink url={'https://stripe.com/gb'}/>
         </div>
 
-    renderNoteBody = (body) =>
-        <div style={style.noteBody}>
+    renderNoteBody = (body, height) =>
+        <div style={style.noteBody(height)}>
             {body.text}
+        </div>
+
+    renderPageBody = (body, height) =>
+        <div style={style.imageBody(height)}>
+            attributes here...
         </div>
 }
 
-const nodeBody = {
+const nodeBody = (height) => ({
     background: '#fff',
-    height: 'fit-content',
+    height: height+'px',
     padding: ' 6px',
     borderBottomLeftRadius: '10px',
     borderBottomRightRadius: '10px'
-}
+})
 
 const style = {
-    codeBody: {
-        ...nodeBody,
+    codeBody: (height) => ({
+        ...nodeBody(height),
         background: '#2B2D35',
         color: '#DDDDDD',
         fontSize: '13px'
-    },
-    imageBody: {
-        ...nodeBody,
-    },
-    noteBody: {
-        ...nodeBody,
+    }),
+    imageBody: (height) => ({
+        ...nodeBody(height)
+    }),
+    noteBody: (height) => ({
+        ...nodeBody(height),
         fontSize: '15px'
-    }
+    })
 }

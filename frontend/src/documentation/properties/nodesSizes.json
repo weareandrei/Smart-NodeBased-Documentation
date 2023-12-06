@@ -1,77 +1,56 @@
 {
-
    "current page": {
-      "small": {
-         "width": 380,
-         "height": 180
+      "width": {
+         "normal": 300,
+         "large": 400
       },
-      "medium": {
-         "width": 380,
-         "height": 180
-      },
-      "large": {
-         "width": 380,
-         "height": 180
+      "bodyHeight": {
+         "attributesOff": 0,
+         "attributesOn": 150
       }
    },
-
    "page": {
-      "small": {
-         "width": 250,
-         "height": 130
+      "width": {
+         "normal": 300,
+         "large": 400
       },
-      "medium": {
-         "width": 300,
-         "height": 150
-      },
-      "large": {
-         "width": 300,
-         "height": 150
+      "bodyHeight": {
+         "attributesOff": 0,
+         "attributesOn": 150
       }
    },
-
    "note": {
-      "small": {
-         "width": 400,
-         "height": 300
+      "width": {
+         "small": 400,
+         "medium": 500,
+         "large": 500
       },
-      "medium": {
-         "width": 500,
-         "height": 400
-      },
-      "large": {
-         "width": 600,
-         "height": 500
+      "bodyHeight": {
+         "small": 150,
+         "medium": 250,
+         "large": 400
       }
    },
-
    "code snippet": {
-      "small": {
-         "width": 400,
-         "height": 300
+      "width": {
+         "small": 300,
+         "medium": 400,
+         "large": 500
       },
-      "medium": {
-         "width": 500,
-         "height": 400
-      },
-      "large": {
-         "width": 600,
-         "height": 500
+      "bodyHeight": {
+         "small": 130,
+         "medium": 250,
+         "large": 300
       }
    },
-
    "link": {
-      "small": {
-         "width": 280,
-         "height": 210
+      "width": {
+         "normal": 260,
+         "large": 380
       },
-      "medium": {
-         "width": 400,
-         "height": 320
-      },
-      "large": {
-         "width": 500,
-         "height": 400
+      "bodyHeight": {
+         "imageOff": 0,
+         "imageOn": 137
       }
    }
 }

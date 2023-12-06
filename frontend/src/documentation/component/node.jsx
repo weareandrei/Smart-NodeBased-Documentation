@@ -18,24 +18,30 @@ import DownloadIcon from '@mui/icons-material/Download'
 import Button from '@mui/material/Button'
 
 import NodeBody from "./nodeBody"
+const nodesSizes = require('../properties/nodesSizes.json')
+const {determineNodeSizeAttributes} = require('../util/sizeDeterminer')
 
 export default class Node extends React.Component {
 
     static propTypes = {
         data: PropTypes.object.isRequired,
-        nodeSize: PropTypes.string.isRequired
     }
 
     static defaultProps = {
-        nodeSize: 'normal' // smaller / normal / ... ?
-        // smaller when it's a second level child
     }
 
-    render = () =>
-        this.renderNode()
+    render = () => {
+        const sizeAttributes = determineNodeSizeAttributes(this.props.data)
+        const nodeSize = {
+            bodyHeight: nodesSizes[this.props.data.type].bodyHeight[sizeAttributes.bodyHeight],
+            width: nodesSizes[this.props.data.type].width[sizeAttributes.width]
+        }
+        console.log('renderNode, '+this.props.data.type+', size:', nodeSize)
+        return this.renderNode(nodeSize)
+    }
 
-    renderNode = () =>
-        <div style={style.nodeContainer(this.props.data.type)}>
+    renderNode = (nodeSize) =>
+        <div style={style.nodeContainer(this.props.data.type, nodeSize.width)}>
             <div style={style.nodeHeaderContainer}>
 
                 <div style={{...style.leftPart, maxWidth: '75%'}}>
@@ -55,9 +61,11 @@ export default class Node extends React.Component {
 
             {this.isPage(this.props.data.type) && this.displayBodyHeader(this.props.data.title)}
 
-            {(get(this.props.data, 'body', false) || this.props.data.type === 'link') &&
+            {(get(this.props.data, 'body', false) ||
+                    (this.props.data.type === 'link' ||this.props.data.type === 'page' || this.props.data.type === 'current page')) &&
                 <NodeBody body={this.props.data.body}
-                          type={this.props.data.type}/>}
+                          type={this.props.data.type}
+                          height={nodeSize.bodyHeight}/>}
 
             {this.props.data.type === 'page' && this.renderOpenArrow()}
         </div>
@@ -152,6 +160,13 @@ export default class Node extends React.Component {
                 <ArrowBackIosNewIcon sx={{height: '5px', width: '5px', color:"#fff"}}/>
             </IconButton>
         </div>
+
+    determineSizeFromAttributes = (nodeType, attributes) => {
+        return {
+            bodyHeight: attributes,
+            width: attributes
+        }
+    }
 }
 
 const straightText = {
@@ -161,7 +176,7 @@ const straightText = {
 }
 
 const style = {
-    nodeContainer: (type) => {
+    nodeContainer: (type, width) => {
         let backgroundColor
 
         switch (type) {
@@ -192,8 +207,7 @@ const style = {
             display: 'flex',
             padding: '2px',
             flexDirection: 'column',
-            minWidth: '200px',
-            maxWidth: '280px',
+            width: width+'px'
         }
     },
     nodeHeaderContainer: {
