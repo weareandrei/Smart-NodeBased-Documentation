@@ -11,8 +11,8 @@
    },
    "page": {
       "width": {
-         "normal": 300,
-         "large": 400
+         "normal": 200,
+         "large": 300
       },
       "bodyHeight": {
          "attributesOff": 0,
@@ -21,9 +21,9 @@
    },
    "note": {
       "width": {
-         "small": 400,
-         "medium": 500,
-         "large": 500
+         "small": 200,
+         "medium": 300,
+         "large": 400
       },
       "bodyHeight": {
          "small": 150,
@@ -33,9 +33,9 @@
    },
    "code snippet": {
       "width": {
-         "small": 300,
-         "medium": 400,
-         "large": 500
+         "small": 200,
+         "medium": 300,
+         "large": 400
       },
       "bodyHeight": {
          "small": 130,
@@ -45,8 +45,8 @@
    },
    "link": {
       "width": {
-         "normal": 260,
-         "large": 380
+         "normal": 200,
+         "large": 300
       },
       "bodyHeight": {
          "imageOff": 0,

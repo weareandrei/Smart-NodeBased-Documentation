@@ -1,11 +1,14 @@
 import React from 'react'
 import PropTypes from "prop-types"
 
+import Divider from '@mui/material/Divider';
+
 import get from "lodash/get"
 import map from "lodash/map"
 import isEmpty from "lodash/isEmpty"
 
 import { Handle, Position } from 'reactflow'
+import DescriptionIcon from '@mui/icons-material/Description';
 
 import ForwardIcon from '@mui/icons-material/Forward'
 import IconButton from '@mui/material/IconButton'
@@ -40,35 +43,42 @@ export default class Node extends React.Component {
         return this.renderNode(nodeSize)
     }
 
-    renderNode = (nodeSize) =>
-        <div style={style.nodeContainer(this.props.data.type, nodeSize.width)}>
-            <div style={style.nodeHeaderContainer}>
+    renderNode = (nodeSize) => {
+        const bodyApplied = get(this.props.data, 'body', false) ||
+            (this.props.data.type === 'link' ||
+                this.props.data.type === 'page' ||
+                this.props.data.type === 'current page')
 
-                <div style={{...style.leftPart, maxWidth: '75%'}}>
-                    {!this.isPage(this.props.data.type) &&
-                        this.renderHeaderTitle(this.props.data)}
+        return (
+            <div style={style.nodeContainer(this.props.data.type, nodeSize.width)}>
+                <div style={style.nodeHeaderContainer}>
 
-                    {this.renderHeaderButtons(this.props.data.type)}
-                </div>
+                    <div style={{...style.leftPart, maxWidth: '75%'}}>
+                        {!this.isPage(this.props.data.type) &&
+                            this.renderHeaderTitle(this.props.data)}
 
-                <div style={{...style.rightPart, maxWidth: '25%'}}>
-                    <div style={style.nodeLabel(this.props.data.type)}>
-                        {this.props.data.type}
+                        {this.renderHeaderButtons(this.props.data.type)}
                     </div>
+
+                    <div style={{...style.rightPart, maxWidth: '25%'}}>
+                        <div style={style.nodeLabel(this.props.data.type)}>
+                            {this.props.data.type}
+                        </div>
+                    </div>
+
                 </div>
 
+                {this.isPage(this.props.data.type) && this.displayBodyHeader(this.props.data.title, bodyApplied)}
+                {this.isPage(this.props.data.type) && bodyApplied && <Divider sx={{height: '3px', background: '#E4E4E4', border: 0}}/>}
+
+                { bodyApplied &&
+                    <NodeBody body={this.props.data.body}
+                              type={this.props.data.type}
+                              height={nodeSize.bodyHeight}/> }
+                {this.props.data.type === 'page' && this.renderOpenArrow()}
             </div>
-
-            {this.isPage(this.props.data.type) && this.displayBodyHeader(this.props.data.title)}
-
-            {(get(this.props.data, 'body', false) ||
-                    (this.props.data.type === 'link' ||this.props.data.type === 'page' || this.props.data.type === 'current page')) &&
-                <NodeBody body={this.props.data.body}
-                          type={this.props.data.type}
-                          height={nodeSize.bodyHeight}/>}
-
-            {this.props.data.type === 'page' && this.renderOpenArrow()}
-        </div>
+        )
+    }
 
     isPage = (type) =>
         ['page', 'current page'].includes(type)
@@ -138,20 +148,23 @@ export default class Node extends React.Component {
         }
     }
 
-    displayBodyHeader = (title) =>
+    displayBodyHeader = (title, bodyApplied) =>
         <Button
             onClick={() => {
                 alert('clicked')
             }}
-            style={style.nodeMainHeader}
+            style={{
+                ...style.nodeMainHeader,
+                ...(bodyApplied ? { borderRadius: '10px 10px 0px 0px'} : { borderRadius: '10px', })
+            }}
         >
             <div style={style.nodeMainTitle}>
+                <DescriptionIcon sx={{height: '16px', width: '16px', color:"#000", marginRight: '5px'}}/>
                 {title}
             </div>
             <div style={style.rightPart}>
-                <ForwardIcon sx={{height: '10px', width: '10px', color:"#000"}}/>
+                <ForwardIcon sx={{height: '16px', width: '16px', color:"#000"}}/>
             </div>
-
         </Button>
 
     renderOpenArrow = () =>
