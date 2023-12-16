@@ -44,7 +44,8 @@ export default class NodesGridSurface extends Component {
             id: node.id,
             type: node.id === nodes[0].id ? 'current page' : node.type,
             data: {
-                ...node
+                ...node,
+                type: node.id === nodes[0].id ? 'current page' : node.type
             },
             position: nodesLayout.getNodeCoordinates(node.id)
             // position: find(nodesPositions, (nodePosition) => nodePosition.id === node.id),

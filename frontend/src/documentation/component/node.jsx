@@ -155,7 +155,7 @@ export default class Node extends React.Component {
             }}
             style={{
                 ...style.nodeMainHeader,
-                ...(bodyApplied ? { borderRadius: '10px 10px 0px 0px'} : { borderRadius: '10px', })
+                ...(bodyApplied ? { borderRadius: '0px'} : { borderRadius: '0px 0px 10px 10px'})
             }}
         >
             <div style={style.nodeMainTitle}>
@@ -194,7 +194,7 @@ const style = {
 
         switch (type) {
             case 'page':
-                backgroundColor = '#5B6BBA'
+                backgroundColor = '#94A2EE'
                 break;
             case 'current page':
                 backgroundColor = '#4E4899'
@@ -219,13 +219,14 @@ const style = {
             // border: backgroundColor+ ' solid',
             display: 'flex',
             padding: '2px',
+            paddingTop: '4px',
             flexDirection: 'column',
             width: width+'px'
         }
     },
     nodeHeaderContainer: {
         // height: 'fit-content',
-        padding: ' 0px 6px 2px 6px',
+        padding: ' 0px 8px 4px 8px',
         display: 'flex',
         flexFlow: 'row nowrap',
         justifyContent: 'space-between',
