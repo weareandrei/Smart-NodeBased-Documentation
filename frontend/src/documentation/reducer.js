@@ -19,8 +19,9 @@ import includes from 'lodash/includes'
 
 const initialState = {
     documentation: {},
-    selectedNode: {},
-    displayedNodes: [],
+    allNodes: [],
+    selectedNode: null,
+    selectedNodeChildren: [],
     documentationDepth: 0,
     syncInProgress: false,
     nodesSyncQueue: []
@@ -32,7 +33,7 @@ const documentationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedNode: action.node,
-                displayedNodes: getAllChildren(state.documentation.doc, action.node, 1, MAX_NODE_LEVELS_DISPLAYED)
+                selectedNodeChildren: getAllChildren(state.documentation.doc, 1, MAX_NODE_LEVELS_DISPLAYED, action.node)
             }
         case LOADING_DOCUMENTATION:
             return {
@@ -41,9 +42,9 @@ const documentationReducer = (state = initialState, action) => {
         case LOADED_DOCUMENTATION:
             return {
                 ...state,
-                selectedNode: action.selectedNode,
                 documentation: action.documentation,
-                displayedNodes: getAllChildren(action.documentation.doc, action.selectedNode, 1, MAX_NODE_LEVELS_DISPLAYED)
+                allNodes: action.documentation.doc,
+                selectedNodeChildren: getAllChildren(action.documentation.doc, 1, MAX_NODE_LEVELS_DISPLAYED)
             }
         case LOADED_DOCUMENTATION_FAIL:
             return {
@@ -79,17 +80,11 @@ const documentationReducer = (state = initialState, action) => {
     }
 }
 
-const getAllChildren = (allNodes, currentNode, currentLevel, maxLevel) => {
+const getAllChildren = (allNodes, currentLevel, maxLevel, node=null) => {
     const allChildren = []
-    allChildren.push(currentNode)
 
-    console.log('getAllChildren')
-    console.log(allNodes)
-    console.log(currentNode)
-    console.log('\n\n')
-
-    if (!get(currentNode, 'children', false) || !isEmpty(currentNode.children)) {
-        const currentNodeChildrenIds = currentNode.children
+    if (get(node, 'children', []).length > 0) {
+        const currentNodeChildrenIds = node.children
         const currentNodeChildren = filter(allNodes, (node) => includes(currentNodeChildrenIds, node.id))
 
         if (currentLevel <= maxLevel) {
@@ -100,7 +95,6 @@ const getAllChildren = (allNodes, currentNode, currentLevel, maxLevel) => {
 
     }
 
-    console.log('getAllChildren result: ', allChildren)
     return allChildren
 }
 

@@ -7,38 +7,51 @@ import {withCookies} from 'react-cookie'
 import {withMediaQuery} from '../common/media'
 import {withRouter} from 'react-router-dom'
 
-import NavigationTop from './navigationTop'
-import NavigationLeft from './navigationLeft'
+import NavigationMenu from './navigationMenu'
 import PropTypes from "prop-types"
+import DocumentationNavBar from "./documentation/documentationNavBar"
 
 class Navigation extends React.Component {
 
     static propTypes = {
         signOut: PropTypes.func.isRequired,
         history: PropTypes.object.isRequired,
-        fullNav: PropTypes.bool.isRequired,
-        documentation: PropTypes.object.isRequired,
+
+        // documentation props
+        allNodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired,
-        displayedNodes: PropTypes.array.isRequired
+        selectedNode: PropTypes.object
     }
 
-    render = () =>
-        this.props.fullNav ? this.renderFullNavigation() : this.renderMiniNavigation()
+    static defaultProps = {
+        selectedNode: null
+    }
 
-    renderFullNavigation = () => {
+    render = () => {
         return (
             <div className='fixed'>
-                <NavigationTop history={this.props.history} signOut={this.props.signOut}/>
-                <NavigationLeft
-                    history={this.props.history}
-                    documentation={this.props.documentation}
-                    selectNode={this.props.selectNode}
-                    displayedNodes={this.props.displayedNodes}/>
+                <NavigationMenu history={this.props.history}/>
+                {this.props.history.location.pathname === '/documentation' && this.renderDocumentationNavBar()}
+                {this.props.history.location.pathname === '/tasks' && this.renderTasksNavBar()}
+                {this.props.history.location.pathname === '/assistant' && this.renderAssistantNavBar()}
             </div>
         )
     }
 
-    renderMiniNavigation = () => <NavigationTop/>
+    renderDocumentationNavBar = () =>
+        <DocumentationNavBar
+            allNodes={this.props.allNodes}
+            selectNode={this.props.selectNode}
+            selectedNode={this.props.selectedNode}/>
+
+    renderTasksNavBar = () => {
+
+    }
+
+    renderAssistantNavBar = () => {
+
+    }
+
 
 }
 
@@ -50,6 +63,7 @@ const style = {
 
 export default connect((state) => ({
     isMobile: false,
-    documentation: state.documentation.documentation,
-    displayedNodes: state.documentation.displayedNodes,
+    allNodes: state.documentation.allNodes,
+    selectedNode: state.documentation.selectedNode,
+    selectedChildNodes: state.documentation.selectedChildNodes
 }), actions)(withCookies(withRouter(withMediaQuery(Navigation))))

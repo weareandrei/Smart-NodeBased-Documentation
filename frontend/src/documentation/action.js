@@ -16,9 +16,6 @@ export const selectNode = (node) => ({
     node: node
 })
 
-const findNodeWithIdZero = (nodes) =>
-    find(nodes, (node) => node.id === '0')
-
 export const registerNodeUpdate = (documentation, node) => ({
     type: REGISTER_NODE_UPDATE,
     nodeUpdate: {
@@ -159,10 +156,9 @@ const loadingDocumentation = () => ({
     type: LOADING_DOCUMENTATION
 })
 
-const loadedDocumentation = (response, node) => ({
+const loadedDocumentation = (response) => ({
     type: LOADED_DOCUMENTATION,
-    documentation: response,
-    selectedNode: node
+    documentation: response
 })
 
 const loadedDocumentationFail = () => ({
@@ -183,7 +179,7 @@ export const loadDocumentation = (documentationId) => {
                 if (response.ok) {
                     response.json().then((data) => {
                         // dispatch(selectNode(findNodeWithIdZero(data.doc)))
-                        dispatch(loadedDocumentation(data, findNodeWithIdZero(data.doc)))
+                        dispatch(loadedDocumentation(data))
                     })
                 } else {
                     console.log('error loading documentation, : ', response)

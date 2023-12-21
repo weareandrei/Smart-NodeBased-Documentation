@@ -8,6 +8,7 @@ import {PersistGate} from "redux-persist/integration/react"
 import { Router } from "react-router-dom"
 import {connect, Provider} from 'react-redux'
 import Route from './core/route'
+import './app.css'
 
 import * as actions from './action'
 import Navigation from "./navigation/navigation"
@@ -45,7 +46,7 @@ class App extends React.Component {
 
           <Navigation fullNav={true} />
 
-          <div className={'h-full w-full pl-16 pt-16'}>
+          <div className={'h-full w-full'}>
               <Route/>
           </div>
 

@@ -25,8 +25,8 @@ class Documentation extends React.Component {
 
     render() {
         return (
-            <div className={'h-full w-full'} style={{paddingLeft: '250px'}}>
-                {!isEmpty(this.props.displayedNodes) && this.renderNodesGrid()}
+            <div className={'h-full w-full'} style={{paddingLeft: '300px+77px', background: '#F7F5FA'}}>
+                {/*{!isEmpty(this.props.displayedNodes) && this.renderNodesGrid()}*/}
             </div>
         )
     }
