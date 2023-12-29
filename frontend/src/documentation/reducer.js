@@ -1,5 +1,6 @@
 import {
     SELECT_NODE,
+    SELECT_PARENT_NODE,
     REGISTER_NODE_UPDATE,
     SYNCING_NODES,
     SYNCING_NODES_SUCCESS,
@@ -13,13 +14,13 @@ const MAX_NODE_LEVELS_DISPLAYED = 3
 
 import flatMap from 'lodash/flatMap'
 import filter from 'lodash/filter'
-import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
+import find from "lodash/find"
 
 const initialState = {
     documentation: {},
-    allNodes: [],
+    selectedProject: {},
     selectedNode: null,
     selectedNodeChildren: [],
     documentationDepth: 0,
@@ -33,7 +34,14 @@ const documentationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedNode: action.node,
-                selectedNodeChildren: getAllChildren(state.documentation.doc, 1, MAX_NODE_LEVELS_DISPLAYED, action.node)
+                selectedNodeChildren: getAllChildren(state.documentation.nodes, action.node)
+            }
+        case SELECT_PARENT_NODE:
+            const parentNode = findParentNode(state.documentation.nodes, state.selectedNode)
+            return {
+                ...state,
+                selectedNode: parentNode,
+                selectedNodeChildren: getAllChildren(state.documentation.nodes, parentNode)
             }
         case LOADING_DOCUMENTATION:
             return {
@@ -43,8 +51,8 @@ const documentationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 documentation: action.documentation,
-                allNodes: action.documentation.doc,
-                selectedNodeChildren: getAllChildren(action.documentation.doc, 1, MAX_NODE_LEVELS_DISPLAYED)
+                selectedProject: action.documentation.projects[0],
+                selectedNodeChildren: action.documentation.nodes
             }
         case LOADED_DOCUMENTATION_FAIL:
             return {
@@ -80,22 +88,31 @@ const documentationReducer = (state = initialState, action) => {
     }
 }
 
-const getAllChildren = (allNodes, currentLevel, maxLevel, node=null) => {
+const findParentNode = (allNodes, node) => {
+    const nodeId = node.id
+
+    return find(allNodes, (node) => {
+        const nodesChildren = get(node, 'children', [])
+        if (nodesChildren.includes(nodeId)) {
+            // then this is not an initial node
+            return true
+        }
+    })
+}
+
+const getAllChildren = (allNodes, node=null) => {
     const allChildren = []
 
     if (get(node, 'children', []).length > 0) {
         const currentNodeChildrenIds = node.children
         const currentNodeChildren = filter(allNodes, (node) => includes(currentNodeChildrenIds, node.id))
 
-        if (currentLevel <= maxLevel) {
-            allChildren.push(...flatMap(currentNodeChildren, (nodeChild) => getAllChildren(allNodes, nodeChild, currentLevel + 1, maxLevel)))
-        } else {
-            allChildren.push(currentNodeChildren)
-        }
-
+        allChildren.push(node)
+        allChildren.push(...flatMap(currentNodeChildren, (nodeChild) => getAllChildren(allNodes, nodeChild)))
+        return allChildren
     }
 
-    return allChildren
+    return node
 }
 
 export default documentationReducer

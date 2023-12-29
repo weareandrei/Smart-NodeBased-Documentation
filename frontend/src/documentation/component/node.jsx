@@ -8,7 +8,7 @@ import map from "lodash/map"
 import isEmpty from "lodash/isEmpty"
 
 import { Handle, Position } from 'reactflow'
-import DescriptionIcon from '@mui/icons-material/Description';
+import DescriptionIcon from '@mui/icons-material/Description'
 
 import ForwardIcon from '@mui/icons-material/Forward'
 import IconButton from '@mui/material/IconButton'
@@ -17,13 +17,22 @@ import AddTaskIcon from '@mui/icons-material/AddTask'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import DownloadIcon from '@mui/icons-material/Download'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+
+// Header icons
+import NotesIcon from '@mui/icons-material/Notes'
+import LayersIcon from '@mui/icons-material/Layers'
+import DataObjectIcon from '@mui/icons-material/DataObject'
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
 
 import Button from '@mui/material/Button'
+import { LinkPreview } from '@dhaiwat10/react-link-preview';
+import Microlink from "@microlink/react"
+import styled from 'styled-components'
 
-import NodeBody from "./nodeBody"
-const nodesSizes = require('../properties/nodesSizes.json')
-const {determineNodeSizeAttributes} = require('../util/sizeDeterminer')
-
+import {calculateNodeSize, NODE_CONST_WIDTH} from "../util/sizeDeterminer"
+import NodeIcon from "./nodeIcon";
+  
 export default class Node extends React.Component {
 
     static propTypes = {
@@ -31,53 +40,107 @@ export default class Node extends React.Component {
     }
 
     static defaultProps = {
+
     }
 
     render = () => {
-        const sizeAttributes = determineNodeSizeAttributes(this.props.data)
         const nodeSize = {
-            bodyHeight: nodesSizes[this.props.data.type].bodyHeight[sizeAttributes.bodyHeight],
-            width: nodesSizes[this.props.data.type].width[sizeAttributes.width]
+            partsHeight: calculateNodeSize(this.props.data),
+            width: NODE_CONST_WIDTH
         }
-        console.log('renderNode, '+this.props.data.type+', size:', nodeSize)
         return this.renderNode(nodeSize)
     }
 
     renderNode = (nodeSize) => {
-        const bodyApplied = get(this.props.data, 'body', false) ||
-            (this.props.data.type === 'link' ||
-                this.props.data.type === 'page' ||
-                this.props.data.type === 'current page')
-
         return (
-            <div style={style.nodeContainer(this.props.data.type, nodeSize.width)}>
-                <div style={style.nodeHeaderContainer}>
-
-                    <div style={{...style.leftPart, maxWidth: '75%'}}>
-                        {!this.isPage(this.props.data.type) &&
-                            this.renderHeaderTitle(this.props.data)}
-
-                        {this.renderHeaderButtons(this.props.data.type)}
-                    </div>
-
-                    <div style={{...style.rightPart, maxWidth: '25%'}}>
-                        <div style={style.nodeLabel(this.props.data.type)}>
-                            {this.props.data.type}
-                        </div>
-                    </div>
-
-                </div>
-
-                {this.isPage(this.props.data.type) && this.displayBodyHeader(this.props.data.title, bodyApplied)}
-                {this.isPage(this.props.data.type) && bodyApplied && <Divider sx={{height: '3px', background: '#E4E4E4', border: 0}}/>}
-
-                { bodyApplied &&
-                    <NodeBody body={this.props.data.body}
-                              type={this.props.data.type}
-                              height={nodeSize.bodyHeight}/> }
-                {this.props.data.type === 'page' && this.renderOpenArrow()}
+            <div style={style.nodeContainer}>
+                {
+                    this.renderNodeHeader(
+                        this.props.data.type,
+                        (this.props.data.type === 'page' || this.props.data.type === 'current page'),
+                        nodeSize.width)
+                }
+                {
+                    this.renderNodeAttributes(nodeSize.width)
+                }
+                {
+                    get(this.props.data, 'body', null) !== null ?
+                    this.renderNodeBody(this.props.data.type, this.props.data.body, nodeSize) : null
+                }
             </div>
         )
+    }
+
+    renderNodeHeader = (nodeType, isPage, width) =>
+        <div style={style.nodeHeader(isPage, width)}>
+            <NodeIcon nodeType={nodeType} type={'main'}/>
+            {this.props.data.title}
+            <MoreVertIcon style={{marginLeft: 'auto'}}/>
+        </div>
+
+    renderNodeAttributes = (width) => {
+        return (
+            <div style={{position: 'relative'}}>
+                {Object.keys(get(this.props.data, 'attributes', {})).map(
+                    (attribute, index) => (
+                        <div key={index} style={style.nodeAttribute(width, index)}>
+                            {attribute}
+                        </div>
+                    ))}
+            </div>
+        )
+    }
+
+    customFetcher = async (url) => {
+        const response = await fetch(`https://rlp-proxy.herokuapp.com/v2?url=${url}`)
+        const json = await response.json()
+        return json.metadata
+    }
+
+    renderNodeBody = (nodeType, body, nodeSize) => {
+        // separate case
+        if (nodeType === 'link') {
+            // return <LinkPreview
+            //     url={body.url}
+            //     width={NODE_CONST_WIDTH}
+            //     height={nodeSize.bodyHeight}
+            //     fetcher={this.customFetcher}
+            //     fallback={<div>Fallback</div>}
+            // />
+            return (
+                <div style={style.nodeBody(nodeSize)}>
+                    <Microlink
+                        url={'https://stripe.com/gb'}
+                        // contrast
+                        fetchData
+                        size="large"
+                        loop={false}
+                        media="logo"
+                        autoPlay={false}
+                    />
+                </div>
+                )
+        }
+
+        // otherwise
+        const content = this.getBodyContent(nodeType, body)
+
+        return (
+            <div style={style.nodeBody(nodeSize)}>
+                {content}
+            </div>
+        )
+    }
+
+    getBodyContent = (nodeType, body) => {
+        switch (nodeType) {
+            case 'note':
+                return body.text
+            case 'code snippet':
+                return body.code
+            case 'link':
+                return body.url
+        }
     }
 
     isPage = (type) =>
@@ -180,6 +243,7 @@ export default class Node extends React.Component {
             width: attributes
         }
     }
+
 }
 
 const straightText = {
@@ -189,50 +253,51 @@ const straightText = {
 }
 
 const style = {
-    nodeContainer: (type, width) => {
-        let backgroundColor
-
-        switch (type) {
-            case 'page':
-                backgroundColor = '#94A2EE'
-                break;
-            case 'current page':
-                backgroundColor = '#4E4899'
-                break;
-            case 'note':
-                backgroundColor = '#595F67'
-                break;
-            case 'link':
-                backgroundColor = '#2F80BA'
-                break;
-            case 'code snippet':
-                backgroundColor = '#3B7F5E'
-                break;
-            default:
-                backgroundColor = '#000'
-                break;
-        }
-
+    nodeContainer: {
+        position: 'relative',
+        borderRadius: '15px',
+    },
+    nodeHeader: (isPage, width) => {
+        const borderDefined =  isPage ? '1px' : '0px'
         return {
-            background: backgroundColor,
-            borderRadius: '10px',
-            // border: backgroundColor+ ' solid',
+            position: 'absolute',
+            zIndex: 1500,
+            borderRadius: '15px',
+            boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.1)',
+            height: '50px',
+            width: width + 'px',
+            padding: '13px 18px',
+            background: '#fff',
             display: 'flex',
-            padding: '2px',
-            paddingTop: '4px',
-            flexDirection: 'column',
-            width: width+'px'
+            flexDirection: 'row',
+            fontWeight: 500,
+            border: borderDefined + '#552CF6 solid'
         }
     },
-    nodeHeaderContainer: {
-        // height: 'fit-content',
-        padding: ' 0px 8px 4px 8px',
-        display: 'flex',
-        flexFlow: 'row nowrap',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        maxWidth: '100%'
-    },
+    nodeAttribute: (width, yOffset) => ({
+        position: 'relative',
+        zIndex: 1500 - yOffset-1,
+        top: yOffset * 50,
+        height: '94px',
+        width: width + 'px',
+        padding: '63px 18px 13px 18px',
+        borderRadius: '15px',
+        boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.1)',
+        background: '#fff',
+        color: '#938EA6',
+        fontSize: '14px'
+    }),
+    nodeBody: (nodeSize) => ({
+        position: 'relative',
+        zIndex: 1450,
+        top: '-25px',
+        height: nodeSize.bodyHeight + 25 + 'px',
+        width: nodeSize.width + 'px',
+        padding: '38px 18px 13px 18px',
+        borderRadius: '15px',
+        boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.1)',
+        background: '#fff',
+    }),
     nodeMainHeader: {
         background: '#fff',
         height: 'fit-content',

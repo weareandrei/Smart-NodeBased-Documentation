@@ -4,7 +4,7 @@ import FlowComponent from './FlowComponent'
 import map from 'lodash/map'
 import get from 'lodash/get'
 import flatMap from 'lodash/flatMap'
-import find from 'lodash/find'
+import isEqual from 'lodash/isEqual'
 
 import NodesLayout from '../util/nodesLayout'
 
@@ -12,15 +12,24 @@ export default class NodesGridSurface extends Component {
 
     static propTypes = {
         nodes: PropTypes.array.isRequired,
-        allNodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired,
         nodeModified: PropTypes.func.isRequired,
     }
+    static defaultProps = {
+        selectedNode: null
+    }
+
+    // state = {
+    //     // reload: false,
+    //     nodesDisplayed: []
+    // }
 
     render() {
-        const nodesLayout = new NodesLayout(this.props.nodes[0], this.props.allNodes)
+        // this.updateDisplayedNodes(this.props.nodes)
+
+        const nodesLayout = new NodesLayout(this.props.nodes)
         nodesLayout.buildLayout()
-        // const nodesPositions = nodesLayout.getPositions()
+
         return this.renderFlowComponent(
             this.createFlowNodes(this.props.nodes, nodesLayout),
             this.createFlowEdges(this.props.nodes)
@@ -64,4 +73,23 @@ export default class NodesGridSurface extends Component {
                 // label: 'this is an edge label'
             }))
         )
+
+    // updateDisplayedNodes = (nodes) => {
+    //     const nodesIds = map(nodes, (node) => node.id)
+    //
+    //     console.log('updateDisplayedNodes')
+    //     console.log('nodesIds', nodesIds)
+    //     console.log('this.state.nodesDisplayed', this.state.nodesDisplayed)
+    //     console.log('--------------------')
+    //     if (!isEqual(nodesIds, this.state.nodesDisplayed)) {
+    //         this.setState({nodesDisplayed: nodesIds})
+    //     }
+    // }
+    //
+    // refreshPage = () => {
+    //     this.setState(
+    //         {reload: true},
+    //         () => this.setState({reload: false})
+    //     )
+    // }
 }

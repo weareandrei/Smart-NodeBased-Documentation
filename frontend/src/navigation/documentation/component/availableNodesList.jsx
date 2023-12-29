@@ -13,6 +13,9 @@ import map from "lodash/map"
 import get from "lodash/get"
 import Typography from "@mui/material/Typography"
 import {ListItem} from "@mui/material"
+import NodeIcon from "../../../documentation/component/nodeIcon"
+import IconButton from "@mui/material/IconButton"
+import {selectParentNode} from "../../../documentation/action";
 
 const MAX_NODES_LEVEL = 3
 
@@ -20,8 +23,10 @@ export default class AvailableNodesList extends React.Component {
 
     static propTypes = {
         allNodes: PropTypes.array.isRequired,
+        selectedNodeChildren: PropTypes.array.isRequired,
         selectedNode: PropTypes.object,
-        selectNode: PropTypes.func.isRequired
+        selectNode: PropTypes.func.isRequired,
+        selectParentNode: PropTypes.func.isRequired
     }
 
     static defaultProps = {
@@ -33,13 +38,19 @@ export default class AvailableNodesList extends React.Component {
     }
 
     render = () => {
+        const pageNodes = filter(this.props.selectedNodeChildren, (node) => (node.type === 'page' || node.type === 'current page'))
+        const initialPageNodes = this.findInitialNodes(pageNodes)
+        const previousParent = this.findGlobalParent(get(initialPageNodes, '[0].id', 'id non-existent')) // check if parent exists out of given bounds of selectedNodeChildren
+
         return (
             <div style={style.mainContainer}>
                 <Typography style={{color: '#938EA6', fontSize: '16px', fontWeight: 500}}>Available</Typography>
                 <div style={{marginTop: '10px'}}>
-                    {this.props.selectedNode == null ?
-                        this.displayNodesTree(this.findNodesFromIdsThatArePages(map(this.findInitialNodes(this.props.allNodes), (node) => node.id)), 0) :
-                        this.displayNodesTree(this.findNodesFromIdsThatArePages(this.props.selectedNode.id), 0)}
+                    {previousParent && this.displayBackButton(previousParent)}
+                    {/*{this.props.selectedNode == null ?*/}
+                    {/*    this.displayNodesTree(this.findNodesFromIdsThatArePages(map(this.findInitialNodes(this.props.allNodes), (node) => node.id)), 0) :*/}
+                    {/*    this.displayNodesTree(this.findNodesFromIdsThatArePages(this.props.selectedNode.id), 0)}*/}
+                    {this.displayNodesTree(initialPageNodes, 0)}
                 </div>
             </div>
         )
@@ -60,7 +71,9 @@ export default class AvailableNodesList extends React.Component {
             return (
                 <ListItem style={style.nodesListItem}>
                     <MaxNodeNav label={node.title}
+                                nodeType={node.type}
                                 nodeId={node.id}
+                                onExpanded={this.nodeExpanded}
                                 onClick={this.nodeClicked}
                                 isParent={true}/>
                     <Collapse in={this.isNodeExpanded(node.id)}
@@ -70,13 +83,14 @@ export default class AvailableNodesList extends React.Component {
                         {this.displayNodesTree(nodesChildrenPages, level+1)}
                     </Collapse>
                 </ListItem>
-
             )
         } else {
             return (
                 <ListItem style={style.nodesListItem}>
                     <MaxNodeNav label={node.title}
+                                nodeType={node.type}
                                 nodeId={node.id}
+                                onExpanded={this.nodeExpanded}
                                 onClick={this.nodeClicked}/>
                 </ListItem>
 
@@ -85,11 +99,27 @@ export default class AvailableNodesList extends React.Component {
 
     }
 
+    displayBackButton = (previousParent) =>
+        <MaxNodeNav label={previousParent.title}
+                    nodeType={'backButton'}
+                    nodeId={previousParent.id}
+                    onClick={this.backButtonClicked}/>
+
+    backButtonClicked = () => {
+        console.log('back button clicked')
+        this.props.selectParentNode()
+    }
+
     isNodeExpanded = (consideredNodeId) => {
         return find(this.state.expandedNodesList, (nodeId) => nodeId === consideredNodeId) !== undefined
     }
 
-    nodeClicked = (nodeId, expanded) => {
+    nodeClicked = (nodeId) => {
+        const node = find(this.props.allNodes, (node) => node.id === nodeId)
+        this.props.selectNode(node)
+    }
+
+    nodeExpanded = (nodeId, expanded) => {
         if (expanded) {
             // Add nodeId to the expandedNodesList
             this.setState(prevState => ({
@@ -109,12 +139,12 @@ export default class AvailableNodesList extends React.Component {
         return pages
     }
 
-    findInitialNodes = () =>
-        filter(this.props.allNodes, (node) => {
+    findInitialNodes = (givenNodes) =>
+        filter(givenNodes, (node) => {
             const nodeId = node.id
 
             // find its parent
-            const parent = find(this.props.allNodes, (node) => {
+            const parent = find(givenNodes, (node) => {
                 const nodesChildren = get(node, 'children', [])
                 if (nodesChildren.includes(nodeId)) {
                     // then this is not an initial node
@@ -126,6 +156,15 @@ export default class AvailableNodesList extends React.Component {
                 return true
             }
             return false
+        })
+
+    findGlobalParent = (nodeId) =>
+        find(this.props.allNodes, (node) => {
+            const nodesChildren = get(node, 'children', [])
+            if (nodesChildren.includes(nodeId)) {
+                // then this is not an initial node
+                return true
+            }
         })
 
 }

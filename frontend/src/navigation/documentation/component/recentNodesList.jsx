@@ -13,9 +13,9 @@ export default class RecentNodesList extends React.Component {
         <div style={style.mainContainer}>
             <Typography style={{color: '#938EA6', fontSize: '16px', fontWeight: 500}}>Recent</Typography>
             <div style={style.miniNodesContainer}>
-                <MinNodeNav/>
-                <MinNodeNav/>
-                <MinNodeNav/>
+                <MinNodeNav nodeType={'page'}/>
+                <MinNodeNav nodeType={'note'}/>
+                <MinNodeNav nodeType={'code snippet'}/>
             </div>
         </div>
 

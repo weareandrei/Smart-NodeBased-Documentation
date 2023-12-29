@@ -36,8 +36,14 @@ export default function FlowComponent(props) {
     const [nodes, setNodes, onNodesChange] = useNodesState(props.nodes)
     const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges)
     const [reactFlowInstance, setReactFlowInstance] = useState(null)
+
+    useEffect(() => {
+        setNodes(props.nodes);
+    }, [props.nodes]);
+
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
 
+    console.log('FlowComponent nodes(props): ', props.nodes)
     console.log('FlowComponent nodes: ', nodes)
 
     // Add an effect to update the state when the props change
