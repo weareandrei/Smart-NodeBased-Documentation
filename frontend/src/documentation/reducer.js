@@ -7,7 +7,7 @@ import {
     SYNCING_NODES_FAIL,
     LOADING_DOCUMENTATION,
     LOADED_DOCUMENTATION,
-    LOADED_DOCUMENTATION_FAIL
+    LOADED_DOCUMENTATION_FAIL, SELECT_PROJECT
 } from './action'
 
 const MAX_NODE_LEVELS_DISPLAYED = 3
@@ -43,6 +43,13 @@ const documentationReducer = (state = initialState, action) => {
                 selectedNode: parentNode,
                 selectedNodeChildren: getAllChildren(state.documentation.nodes, parentNode)
             }
+        case SELECT_PROJECT:
+            return {
+                ...state,
+                selectedProject: find(state.documentation.projects, (project) => project.id === action.projectId),
+                selectedNode: null,
+                selectedNodeChildren: getProjectNodes(state.documentation.nodes, action.projectId)
+            }
         case LOADING_DOCUMENTATION:
             return {
                 ...state,
@@ -51,8 +58,7 @@ const documentationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 documentation: action.documentation,
-                selectedProject: action.documentation.projects[0],
-                selectedNodeChildren: action.documentation.nodes
+                selectedProject: action.documentation.projects[0]
             }
         case LOADED_DOCUMENTATION_FAIL:
             return {
@@ -114,5 +120,8 @@ const getAllChildren = (allNodes, node=null) => {
 
     return node
 }
+
+const getProjectNodes = (allNodes, projectId) =>
+    filter(allNodes, (node) => node.projectId === projectId)
 
 export default documentationReducer

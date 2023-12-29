@@ -22,6 +22,7 @@ class Navigation extends React.Component {
         allProjects: PropTypes.array.isRequired,
         selectedProject: PropTypes.object.isRequired,
         selectNode: PropTypes.func.isRequired,
+        selectProject: PropTypes.func.isRequired,
         selectParentNode: PropTypes.func.isRequired,
         selectedNode: PropTypes.object,
         selectedNodeChildren: PropTypes.array.isRequired
@@ -48,6 +49,7 @@ class Navigation extends React.Component {
             allProjects={this.props.allProjects}
             project={this.props.selectedProject}
             selectedNode={this.props.selectedNode}
+            selectProject={this.props.selectProject}
             selectParentNode={this.props.selectParentNode}
             selectedNodeChildren={this.props.selectedNodeChildren}
             selectNode={this.props.selectNode}/>

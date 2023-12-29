@@ -16,6 +16,7 @@ export default class DocumentationNavBar extends React.Component {
         project: PropTypes.object.isRequired,
         selectedNode: PropTypes.object,
         selectNode: PropTypes.func.isRequired,
+        selectProject: PropTypes.func.isRequired,
         selectParentNode: PropTypes.func.isRequired,
         selectedNodeChildren: PropTypes.array.isRequired
     }
@@ -30,8 +31,9 @@ export default class DocumentationNavBar extends React.Component {
                                       project={this.props.project}
                                       selectedNode={this.props.selectedNode}
                                       selectNode={this.props.selectNode}/>
-            <ProjectSelect /*{allProjects={this.props.allProjects}
-                           projectSelected={this.props.project}}*//>
+            <ProjectSelect allProjects={this.props.allProjects}
+                           selectedProject={this.props.project}
+                           selectProject={this.props.selectProject}/>
             <DocumentationSearch/>
             <RecentNodesList/>
             <AvailableNodesList

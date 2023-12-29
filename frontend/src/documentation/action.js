@@ -3,6 +3,7 @@ import find from "lodash/find"
 
 export const SELECT_NODE = 'SELECT_NODE'
 export const SELECT_PARENT_NODE = 'SELECT_PARENT_NODE'
+export const SELECT_PROJECT = 'SELECT_PROJECT'
 export const REGISTER_NODE_UPDATE = 'REGISTER_NODE_UPDATE'
 export const REGISTER_NODE_CREATE = 'REGISTER_NODE_UPDATE'
 export const SYNCING_NODES = 'SYNCING_NODES'
@@ -19,6 +20,11 @@ export const selectNode = (node) => ({
 
 export const selectParentNode = () => ({
     type: SELECT_PARENT_NODE
+})
+
+export const selectProject = (projectId) => ({
+    type: SELECT_PROJECT,
+    projectId: projectId
 })
 
 export const registerNodeUpdate = (documentation, node) => ({
