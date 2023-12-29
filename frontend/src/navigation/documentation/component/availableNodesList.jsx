@@ -46,10 +46,7 @@ export default class AvailableNodesList extends React.Component {
             <div style={style.mainContainer}>
                 <Typography style={{color: '#938EA6', fontSize: '16px', fontWeight: 500}}>Available</Typography>
                 <div style={{marginTop: '10px'}}>
-                    {previousParent && this.displayBackButton(previousParent)}
-                    {/*{this.props.selectedNode == null ?*/}
-                    {/*    this.displayNodesTree(this.findNodesFromIdsThatArePages(map(this.findInitialNodes(this.props.allNodes), (node) => node.id)), 0) :*/}
-                    {/*    this.displayNodesTree(this.findNodesFromIdsThatArePages(this.props.selectedNode.id), 0)}*/}
+                    {this.props.selectedNode !== null && this.displayBackButton(previousParent)}
                     {this.displayNodesTree(initialPageNodes, 0)}
                 </div>
             </div>
@@ -99,14 +96,26 @@ export default class AvailableNodesList extends React.Component {
 
     }
 
-    displayBackButton = (previousParent) =>
-        <MaxNodeNav label={previousParent.title}
-                    nodeType={'backButton'}
-                    nodeId={previousParent.id}
-                    onClick={this.backButtonClicked}/>
+    displayBackButton = (previousParent) => {
+        if (previousParent === undefined) {
+            return (
+                <MaxNodeNav label={'Return to origin'}
+                            nodeType={'backButton'}
+                            nodeId={'root'}
+                            onClick={this.backButtonClicked}/>
+            )
+        }
+
+        return (
+            <MaxNodeNav label={previousParent.title}
+                        nodeType={'backButton'}
+                        nodeId={previousParent.id}
+                        onClick={this.backButtonClicked}/>
+        )
+    }
+
 
     backButtonClicked = () => {
-        console.log('back button clicked')
         this.props.selectParentNode()
     }
 

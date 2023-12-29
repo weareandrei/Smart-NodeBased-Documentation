@@ -38,10 +38,14 @@ const documentationReducer = (state = initialState, action) => {
             }
         case SELECT_PARENT_NODE:
             const parentNode = findParentNode(state.documentation.nodes, state.selectedNode)
-            return {
+            return parentNode === undefined ? {
                 ...state,
-                selectedNode: parentNode,
-                selectedNodeChildren: getAllChildren(state.documentation.nodes, parentNode)
+                selectedNode: null,
+                selectedNodeChildren: getProjectNodes(state.documentation.nodes, state.selectedProject.id)
+            } : {
+               ...state,
+               selectedNode: parentNode,
+               selectedNodeChildren: getAllChildren(state.documentation.nodes, parentNode)
             }
         case SELECT_PROJECT:
             return {

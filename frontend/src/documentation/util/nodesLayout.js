@@ -19,13 +19,17 @@ class NodesLayout {
     constructor(nodes) {
         this.nodes = nodes
         this.unpackedNodes = this.unpackNodes(nodes)
+        console.log('----- unpackedNodes', this.unpackedNodes)
         // For now, all nodes have same width. Just different heights
     }
 
     buildLayout = () => {
         this.splitNodesIntoTree()
+        console.log('----- nodesTree', this.nodesTree)
         this.putNodesIntoColumns()
+        console.log('----- nodesColumns 1', this.nodesColumns)
         this.nodesColumns = map(this.nodesColumns, (column) => flatten(column))
+        console.log('----- nodesColumns 2', this.nodesColumns)
         this.calculateNodesCoordinates()
 
     }
@@ -132,6 +136,7 @@ class NodesLayout {
 
     putNodesIntoColumns = () => {
         map(this.nodesTree, (rootNode) => {
+            console.log('putIntoNewColumn, rootNode - ', rootNode)
             this.putIntoNewColumn(rootNode, 0, false)
         })
     }
@@ -144,7 +149,7 @@ class NodesLayout {
         newColumn.push(node.id)
 
         if (node.childrenNormal.length === 0 && node.childrenPages.length === 0) {
-            this.nodesColumns.push(node.id)
+            this.nodesColumns.push([node.id])
         }
 
         if (node.childrenNormal.length > 0) {
