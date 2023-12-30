@@ -13,28 +13,29 @@ import NodesGridSurface from './component/nodesGridSurface'
 class Documentation extends React.Component {
 
     static propTypes = {
-        documentation: PropTypes.object.isRequired,
-        selectedNode: PropTypes.object.isRequired,
-        displayedNodes: PropTypes.array.isRequired,
-        selectNode: PropTypes.func.isRequired,
         nodesSyncQueue: PropTypes.array.isRequired,
         registerNodeUpdate: PropTypes.func.isRequired,
         registerNodeCreate: PropTypes.func.isRequired,
         syncNodes: PropTypes.func.isRequired,
+
+        // documentation props
+        documentation: PropTypes.object.isRequired,
+        selectNode: PropTypes.func.isRequired,
+        selectedNode: PropTypes.object,
+        selectedNodeChildren: PropTypes.array.isRequired
     }
 
     render() {
         return (
-            <div className={'h-full w-full'} style={{paddingLeft: '300px+77px', background: '#F7F5FA'}}>
-                {/*{!isEmpty(this.props.displayedNodes) && this.renderNodesGrid()}*/}
+            <div style={{height: '100vh', paddingLeft: '300px', background: '#F7F5FA'}}>
+                {this.renderNodesGridSurface()}
             </div>
         )
     }
 
-    renderNodesGrid = () => {
+    renderNodesGridSurface = () => {
         return (
-            <NodesGridSurface nodes={this.props.displayedNodes}
-                              allNodes = {this.props.documentation.doc}
+            <NodesGridSurface nodes={this.props.selectedNodeChildren}
                               selectNode={this.props.selectNode}
                               nodeModified={this.nodeModified}/>
         )
@@ -63,8 +64,11 @@ class Documentation extends React.Component {
 }
 
 export default connect((state) => ({
+    nodesSyncQueue: state.documentation.nodesSyncQueue,
+
+    // documentation
     documentation: state.documentation.documentation,
     selectedNode: state.documentation.selectedNode,
-    displayedNodes: state.documentation.displayedNodes,
-    nodesSyncQueue: state.documentation.nodesSyncQueue
+    selectNode: PropTypes.func.isRequired,
+    selectedNodeChildren: state.documentation.selectedNodeChildren
 }), actions)(withCookies(withRouter(withMediaQuery(Documentation))))

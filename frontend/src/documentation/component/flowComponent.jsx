@@ -36,27 +36,21 @@ export default function FlowComponent(props) {
     const [nodes, setNodes, onNodesChange] = useNodesState(props.nodes)
     const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges)
     const [reactFlowInstance, setReactFlowInstance] = useState(null)
-    const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
-
-    console.log('FlowComponent nodes: ', nodes)
-
-    // Add an effect to update the state when the props change
-    // useEffect(() => {
-    //     setNodes(props.nodes)
-    // }, [props.nodes])
 
     useEffect(() => {
-        onNodesChange(props.nodes)
-    }, [props.nodes, onNodesChange])
+        setNodes(props.nodes)
+    }, [props.nodes])
 
-    // useEffect(() => {
-    //     setEdges(props.edges)
-    // }, [props.edges])
+    useEffect(() => {
+        if (reactFlowInstance) {
+            reactFlowInstance.fitView();
+        }
+    }, [nodes, reactFlowInstance]);
 
-    // useEffect(() => {
-    //     // Call your updateNodes function with the updated nodes whenever nodes change
-    //     props.updateNodes(nodes)
-    // }, [nodes, props.updateNodes])
+    const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
+
+    console.log('FlowComponent nodes(props): ', props.nodes)
+    console.log('FlowComponent nodes: ', nodes)
 
     const onDragOver = useCallback((event) => {
         event.preventDefault();

@@ -1,207 +1,177 @@
-const flatMap = require("lodash/flatMap")
 const map = require("lodash/map")
 const find = require("lodash/find")
-const maxBy = require("lodash/maxBy")
-const reduce = require("lodash/reduce")
+const get = require("lodash/get")
+const filter = require("lodash/filter")
+const flatten = require("lodash/flatten")
 
-const MAX_NODE_LEVELS_DISPLAYED = 3
-const CELL_SIZE_PX = 25
-const MAX_NODE_GRID_DEPTH = 2
-const DISTANCE_BETWEEN_NODES_VERTICAL = 18
-const DISTANCE_BETWEEN_NODES_HORIZONTAL = 18
-
-// those sizes are in relative units. Each unit is multiplied by a given number in nodesLayout.js
-// for example width = 5 means 5 cells occupied. And 5 cells can be 25px each.
-const nodesSizes = require('../properties/nodesSizes.json')
 const FlexibleGrid = require('./flexibleGrid.js')
-const {determineNodeSizeAttributes} = require('../util/sizeDeterminer')
+const {calculateNodeSize, NODE_CONST_WIDTH} = require("./sizeDeterminer")
 
 class NodesLayout {
 
-    allNodes = []
-    nodeStructure = []
-    layoutGrid = new FlexibleGrid()
-    nodeCoordinates = {}
+    nodes = []
+    unpackedNodes = []
+    nodesTree = []
+    // layoutGrid = new FlexibleGrid()
+    nodesColumns = []
+    nodesCoordinates = {}
 
-    constructor(currentNode, allNodes) {
-        this.allNodes = allNodes
-        this.nodeStructure = this.unpackNode(currentNode, 1)
+    constructor(nodes) {
+        this.nodes = nodes
+        this.unpackedNodes = this.unpackNodes(nodes)
+        console.log('----- unpackedNodes', this.unpackedNodes)
+        // For now, all nodes have same width. Just different heights
     }
 
     buildLayout = () => {
-        this.produceLayout()
+        this.splitNodesIntoTree()
+        console.log('----- nodesTree', this.nodesTree)
+        this.putNodesIntoColumns()
+        console.log('----- nodesColumns 1', this.nodesColumns)
+        this.nodesColumns = map(this.nodesColumns, (column) => flatten(column))
+        console.log('----- nodesColumns 2', this.nodesColumns)
+        this.calculateNodesCoordinates()
+
     }
 
-    unpackNode = (node, currentLevel) => {
-        const result = {
-            id: node.id,
-            size: this.findCorrespondingNodeSize(node/*, currentLevel*/),
-            open: false,
-            childrenNormal: [],
-            childrenPages: []
-        }
+    // All nodes have children arrays, but they might be empty
+    unpackNodes = (nodes) =>
+        map(nodes, (node) => {
+            if (node.type === 'page' && get(node, 'children', []).length > 0) {
+                const children = this.unpackChildrenNodes(node)
+                return {
+                    id: node.id,
+                    childrenNormal: map(children.childrenNormal, (child) => child.id),
+                    childrenPages: map(children.childrenPages, (child) => child.id)
+                }
+            }
 
-        if (node.type !== 'page') {
-            return result
-        }
-
-        result.childrenNormal = flatMap(node.children, (childId) => {
-            const unpackedChild = this.findNodeById(childId)
-            if (unpackedChild.type !== 'page') {
-                return {id: unpackedChild.id, size: this.findCorrespondingNodeSize(unpackedChild), open: false}
-            } return[]
+            return {
+                id: node.id,
+                childrenNormal: [],
+                childrenPages: []
+            }
         })
 
-        result.childrenPages = flatMap(node.children, (childId) => {
-            const unpackedChild = this.findNodeById(childId)
-            if (unpackedChild.type === 'page') {
-                return this.unpackNode(unpackedChild, currentLevel+1)
-            } return[]
+    unpackChildrenNodes = (node) => {
+        const nodeChildren = map(node.children, (childId) => this.findNodeById(childId, false))
+
+        const childrenNormal = filter(nodeChildren, (child) => {
+            if (child.type !== 'page') {
+                return true
+            }
         })
 
+        const childrenPages = filter(nodeChildren, (child) => {
+            if (child.type === 'page') {
+                return true
+            }
+        })
+
+        return {childrenNormal: childrenNormal, childrenPages: childrenPages}
+    }
+
+    findNodeById = (id, unpacked = false) => {
+        return unpacked ? find(this.unpackedNodes, (node) => node.id.toString() === id.toString()) :
+            find(this.nodes, (node) => node.id.toString() === id.toString())
+    }
+
+    calculateNodesCoordinates = () => {
+        for (let colCount = 0; colCount < this.nodesColumns.length; colCount++) {
+            this.calculateColumnCoordinates(this.nodesColumns[colCount], colCount * NODE_CONST_WIDTH + (colCount * 50), colCount)
+        }
+    }
+
+    calculateColumnCoordinates = (columnNodes, xOffset, columnNumber) => {
+        let yReached = 0
+        for (let i = 0; i < columnNodes.length; i++) {
+            if (columnNodes[i] == '') {
+                yReached = this.calculateColumnEmptySpaceHeight(columnNumber, i) + 50
+                continue
+            }
+            const node = this.findNodeById(columnNodes[i])
+            const nodeHeights = calculateNodeSize(node)
+            const nodeTotalHeight = nodeHeights.headerHeight + nodeHeights.attributesHeight + nodeHeights.bodyHeight
+            this.nodesCoordinates[node.id.toString()] = {x: xOffset, y: yReached}
+            yReached = yReached + nodeTotalHeight + 50
+        }
+    }
+
+    calculateColumnEmptySpaceHeight = (columnNumber, nodeNumber) => {
+        const node = this.findNodeById(this.nodesColumns[columnNumber-1][nodeNumber])
+        const nodeHeights = calculateNodeSize(node)
+        return nodeHeights.headerHeight + nodeHeights.attributesHeight + nodeHeights.bodyHeight
+    }
+
+    splitNodesIntoTree = () => {
+        const initialUnpackedNodes = this.findInitialUnpackedNodes()
+        this.nodesTree = map(initialUnpackedNodes, (node) => this.growTreeFromNode(node))
+    }
+
+    growTreeFromNode = (node) => {
+        const result = node
+        result.childrenNormal = map(node.childrenNormal, (nodeId) => this.findNodeById(nodeId))
+        result.childrenPages = map(node.childrenPages, (nodeId) => this.growTreeFromNode(this.findNodeById(nodeId, true)))
         return result
     }
 
-    findNodeById = (id) =>
-        find(this.allNodes, (node) => node.id === id)
+    findInitialUnpackedNodes = () =>
+        filter(this.unpackedNodes, (node) => {
+            const nodeId = node.id
 
-    findCorrespondingNodeSize = (node) => {
-        const sizeAttributes = determineNodeSizeAttributes(node)
-        return {
-            bodyHeight: nodesSizes[node.type].bodyHeight[sizeAttributes.bodyHeight],
-            width: nodesSizes[node.type].width[sizeAttributes.width]
-        }
-    }
+            // find its parent
+            const parent = find(this.nodes, (node) => {
+                const nodesChildren = get(node, 'children', [])
+                if (nodesChildren.includes(nodeId)) {
+                    // then this is not an initial node
+                    return true
+                }
+            })
 
-    produceLayout = () => {
-        this.positionNodeColumn(0, 0, this.nodeStructure, 0)
-    }
-
-    positionNodeColumn = (initialX, initialY, node, depth) => {
-        this.placeNodeOnCell({x:initialX,y:initialY}, node)
-        initialY = initialY + node.size.bodyHeight + 55
-
-        const columnWidth = this.findColumnWidth(node.childrenNormal)
-        // Put everything in one column for now and wind max width of a node.
-        this.placeChildNodesInColumn(node.childrenNormal, initialX, initialY)
-
-        map(node.childrenPages, (childPage) => {
-            if (depth < MAX_NODE_GRID_DEPTH) {
-                this.positionNodeColumn(initialX+columnWidth+DISTANCE_BETWEEN_NODES_HORIZONTAL, initialY + DISTANCE_BETWEEN_NODES_VERTICAL, childPage, depth+1)
+            if (!parent) {
+                return true
             }
-            this.placeNodeOnCell({x: initialX+columnWidth+DISTANCE_BETWEEN_NODES_HORIZONTAL, y: initialY + DISTANCE_BETWEEN_NODES_VERTICAL}, childPage)
+            return false
+        })
+
+    putNodesIntoColumns = () => {
+        map(this.nodesTree, (rootNode) => {
+            console.log('putIntoNewColumn, rootNode - ', rootNode)
+            this.putIntoNewColumn(rootNode, 0, false)
         })
     }
 
-    // find widest node (from child nodes, not page nodes)
-    findColumnWidth = (nodes) => {
-        const nodeWithMaxWidth = maxBy(nodes, (node) => node.size.width)
-        return nodeWithMaxWidth.size.width
-    }
+    putIntoNewColumn = (node, level, useLastExistingColumn) => {
+        const newColumn = []
+        for (let i = 0; i < level; i++) {
+            newColumn.push("")
+        }
+        newColumn.push(node.id)
 
-    placeChildNodesInColumn = (nodes, initialX, initialY) =>
-        reduce(nodes, (accumulator, childNode) => {
-            console.log('placeNodeOnCell node', childNode)
-            console.log('placeNodeOnCell node BodyHeight', childNode.size.bodyHeight)
+        if (node.childrenNormal.length === 0 && node.childrenPages.length === 0) {
+            this.nodesColumns.push([node.id])
+        }
 
-            this.placeNodeOnCell({x: accumulator.coordinateReached.x, y: accumulator.coordinateReached.y+DISTANCE_BETWEEN_NODES_VERTICAL}, childNode)
-            return {
-                coordinateReached: {
-                    x: accumulator.coordinateReached.x, // Will use later
-                    y: accumulator.coordinateReached.y + childNode.size.bodyHeight + 55
-                }
+        if (node.childrenNormal.length > 0) {
+            const childrenToAdd = map(node.childrenNormal, (childNormal) => childNormal.id)
+
+            if (useLastExistingColumn) {
+                this.nodesColumns[this.nodesColumns.length-1].push(node.id)
+                this.nodesColumns[this.nodesColumns.length-1].push(childrenToAdd)
+            } else {
+                newColumn.push(childrenToAdd)
+                this.nodesColumns.push(newColumn)
             }
-        }, {coordinateReached: {x: initialX, y: initialY}})
 
-    placeNodeOnCell = (pos, node) => {
-        const untilCell = {
-            x: node.size.width/CELL_SIZE_PX,
-            y: node.size.bodyHeight/CELL_SIZE_PX
-        }
-        this.nodeCoordinates[node.id] = {x: pos.x, y: pos.y}
-        this.layoutGrid.setCells(pos, untilCell, node.id)
-    }
-
-    getNodeCoordinates = (nodeId) =>
-        this.nodeCoordinates[nodeId]
-
-    countColumns = (nodes) => {
-        if (nodes.length < 5) {
-            return 1
-        } return 2
-        //
-        // const countNodes = (node) => {
-        //     const total = [1 + get(node, 'childrenNormal', []).length + get(node, 'childrenPages', []).length]
-        //     if (get(node, 'childrenPages', []).length !== 0) {
-        //         total.push(flatMap(node.childrenPages, (page) => countNodes(page)))
-        //     }
-        //     return total
-        // }
-        //
-        // const columns = countNodes(nodes)
-        //
-        // return flatMap(columns)
-    }
-
-    positionNodeBelowParent = (parentPos, nodeSize) => {
-        if (/* this columns has too many nodes */ true) {
-            // start new column
+            map(node.childrenPages, (childPage) => this.putIntoNewColumn(childPage, level+1, false))
+        } else {
+            map(node.childrenPages, (childPage) => this.putIntoNewColumn(childPage, level, true))
         }
     }
 
-    positionNodeAsParent = (parentPos, nodeSize) => {
+    getNodeCoordinates = (id) =>
+        this.nodesCoordinates[id]
 
-    }
-
-    // findEmptyPositionTopLeft(size, parent) {
-    //     for (let row = 0; row < this.positions.length; row++) {
-    //         for (let col = 0; col < this.positions[row].length; col++) {
-    //             if (this.isPositionEmpty(row, col, size)) {
-    //                 return { row, col }
-    //             }
-    //         }
-    //     }
-    //
-    //     const newRow = this.positions.length
-    //     const newCol = 0
-    //     this.positions.push([false])
-    //     return { row: newRow, col: newCol }
-    // }
-    //
-    // isPositionEmpty(row, col, size) {
-    //     for (let i = row; i < row + size; i++) {
-    //         if (!this.positions[i]) return false
-    //         for (let j = col; j < col + size; j++) {
-    //             if (this.positions[i][j] === true) {
-    //                 return false
-    //             }
-    //         }
-    //     }
-    //     return true
-    // }
-    //
-    // placeNodeOnGrid(node, position) {
-    //     for (let i = position.row; i < position.row + node.size; i++) {
-    //         if (!this.positions[i]) this.positions[i] = []
-    //         for (let j = position.col; j < position.col + node.size; j++) {
-    //             this.positions[i][j] = true
-    //         }
-    //     }
-    //
-    //     node.position = position
-    // }
-    //
-    // getNodePosition(nodeId) {
-    //     const node = this.nodes.find((n) => n.id === nodeId)
-    //     return node ? node.position : null
-    // }
-    //
-    // getAllNodePositions() {
-    //     return this.nodes.map((node) => ({
-    //         id: node.id,
-    //         position: node.position
-    //     }))
-    // }
 }
 
 module.exports = NodesLayout

@@ -19,8 +19,13 @@ class Navigation extends React.Component {
 
         // documentation props
         allNodes: PropTypes.array.isRequired,
+        allProjects: PropTypes.array.isRequired,
+        selectedProject: PropTypes.object.isRequired,
         selectNode: PropTypes.func.isRequired,
-        selectedNode: PropTypes.object
+        selectProject: PropTypes.func.isRequired,
+        selectParentNode: PropTypes.func.isRequired,
+        selectedNode: PropTypes.object,
+        selectedNodeChildren: PropTypes.array.isRequired
     }
 
     static defaultProps = {
@@ -41,8 +46,13 @@ class Navigation extends React.Component {
     renderDocumentationNavBar = () =>
         <DocumentationNavBar
             allNodes={this.props.allNodes}
-            selectNode={this.props.selectNode}
-            selectedNode={this.props.selectedNode}/>
+            allProjects={this.props.allProjects}
+            project={this.props.selectedProject}
+            selectedNode={this.props.selectedNode}
+            selectProject={this.props.selectProject}
+            selectParentNode={this.props.selectParentNode}
+            selectedNodeChildren={this.props.selectedNodeChildren}
+            selectNode={this.props.selectNode}/>
 
     renderTasksNavBar = () => {
 
@@ -63,7 +73,9 @@ const style = {
 
 export default connect((state) => ({
     isMobile: false,
-    allNodes: state.documentation.allNodes,
+    allNodes: state.documentation.documentation.nodes,
+    allProjects: state.documentation.documentation.projects,
+    selectedProject: state.documentation.selectedProject,
     selectedNode: state.documentation.selectedNode,
-    selectedChildNodes: state.documentation.selectedChildNodes
+    selectedNodeChildren: state.documentation.selectedNodeChildren
 }), actions)(withCookies(withRouter(withMediaQuery(Navigation))))

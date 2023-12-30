@@ -2,6 +2,8 @@ import {NAVIGATE_TO_NODE} from "../navigation/action"
 import find from "lodash/find"
 
 export const SELECT_NODE = 'SELECT_NODE'
+export const SELECT_PARENT_NODE = 'SELECT_PARENT_NODE'
+export const SELECT_PROJECT = 'SELECT_PROJECT'
 export const REGISTER_NODE_UPDATE = 'REGISTER_NODE_UPDATE'
 export const REGISTER_NODE_CREATE = 'REGISTER_NODE_UPDATE'
 export const SYNCING_NODES = 'SYNCING_NODES'
@@ -14,6 +16,15 @@ export const LOADED_DOCUMENTATION_FAIL = 'LOADED_DOCUMENTATION_FAIL'
 export const selectNode = (node) => ({
     type: SELECT_NODE,
     node: node
+})
+
+export const selectParentNode = () => ({
+    type: SELECT_PARENT_NODE
+})
+
+export const selectProject = (projectId) => ({
+    type: SELECT_PROJECT,
+    projectId: projectId
 })
 
 export const registerNodeUpdate = (documentation, node) => ({
@@ -31,12 +42,12 @@ const prepareNodeUpdate = (documentation, node) => {
     const updates = {
         nodeId: node.id,
         updateValues: {
-            'doc.$.title': node.data.label,
-            'doc.$.size': {
+            'nodes.$.title': node.data.label,
+            'nodes.$.size': {
                 width: node.width,
                 height: node.height
             },
-            'doc.$.position': node.position
+            'nodes.$.position': node.position
         }
     }
 

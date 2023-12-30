@@ -46,7 +46,7 @@ class App extends React.Component {
 
           <Navigation fullNav={true} />
 
-          <div className={'h-full w-full'}>
+          <div style={{width: '100%', paddingLeft: '77px'}}>
               <Route/>
           </div>
 

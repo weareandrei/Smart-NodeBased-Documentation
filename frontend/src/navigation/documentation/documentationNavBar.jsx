@@ -12,8 +12,13 @@ export default class DocumentationNavBar extends React.Component {
 
     static propTypes = {
         allNodes: PropTypes.array.isRequired,
+        allProjects: PropTypes.array.isRequired,
+        project: PropTypes.object.isRequired,
         selectedNode: PropTypes.object,
-        selectNode: PropTypes.func.isRequired
+        selectNode: PropTypes.func.isRequired,
+        selectProject: PropTypes.func.isRequired,
+        selectParentNode: PropTypes.func.isRequired,
+        selectedNodeChildren: PropTypes.array.isRequired
     }
 
     static defaultProps = {
@@ -22,14 +27,21 @@ export default class DocumentationNavBar extends React.Component {
 
     render = () =>
         <div style={style.documentationNavBar}>
-            <DocumentationBreadcrumbs/>
-            <ProjectSelect/>
+            <DocumentationBreadcrumbs allNodes={this.props.allNodes}
+                                      project={this.props.project}
+                                      selectedNode={this.props.selectedNode}
+                                      selectNode={this.props.selectNode}/>
+            <ProjectSelect allProjects={this.props.allProjects}
+                           selectedProject={this.props.project}
+                           selectProject={this.props.selectProject}/>
             <DocumentationSearch/>
             <RecentNodesList/>
             <AvailableNodesList
                 allNodes={this.props.allNodes}
+                selectedNodeChildren={this.props.selectedNodeChildren}
                 selectedNode={this.props.selectedNode}
                 selectNode={this.props.selectNode}
+                selectParentNode={this.props.selectParentNode}
             />
         </div>
 

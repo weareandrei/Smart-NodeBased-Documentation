@@ -3,15 +3,17 @@ import React from 'react'
 import PropTypes from "prop-types"
 import IconButton from "@mui/material/IconButton"
 
-import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import {ExpandLess, ExpandMore} from "@mui/icons-material"
-import Typography from "@mui/material/Typography";
+import Typography from "@mui/material/Typography"
+import NodeIcon from "../../../documentation/component/nodeIcon";
 
 export default class MaxNodeNav extends React.Component {
 
     static propTypes = {
         label: PropTypes.string.isRequired,
         nodeId: PropTypes.string.isRequired,
+        nodeType: PropTypes.string.isRequired,
+        onExpanded: PropTypes.func,
         onClick: PropTypes.func.isRequired,
         isParent: PropTypes.bool
     }
@@ -21,45 +23,64 @@ export default class MaxNodeNav extends React.Component {
     }
 
     state = {
-        isOpen: false
+        isExpanded: false,
+        expandClicked: false
     }
 
     render = () => {
         return (
-            <IconButton
-                style={style.iconButton}
-                onClick={this.nodeClicked}
-            >
-                <AccountTreeIcon style={style.icon}/>
-                <Typography style={style.buttonLabel}>{this.props.label}</Typography>
-                {this.props.isParent && this.renderExpandIcon()}
-            </IconButton>
+            <React.Fragment>
+                <IconButton
+                    style={style.iconButton(this.props.nodeType)}
+                    onClick={this.selectClicked}
+                >
+                    <NodeIcon nodeType={this.props.nodeType} type={'nav'} sx={{flexShrink: 0}}/>
+                    <Typography style={style.buttonLabel(this.props.nodeType)}>{this.props.label}</Typography>
+                    {this.props.isParent && this.renderExpandIcon()}
+                </IconButton>
+
+            </React.Fragment>
         )
     }
 
     renderExpandIcon = () =>
-        this.state.isOpen ? <ExpandLess sx={{marginLeft: 'auto'}}/> : <ExpandMore sx={{marginLeft: 'auto'}}/>
+        this.state.isExpanded ?
+            <ExpandLess style={style.expandIconButton}
+                        onClick={this.nodeExpandButtonClicked}/>
+                :
+            <ExpandMore style={style.expandIconButton}
+                        onClick={this.nodeExpandButtonClicked}/>
 
-    nodeClicked = () => {
-        this.state.isOpen ?
-            this.nodeCollapsed() : this.nodeExpanded()
+    selectClicked = () => {
+        this.props.onClick(this.props.nodeId)
     }
 
-    nodeExpanded = () => {
-        this.setState({isOpen: true})
-        this.props.onClick(this.props.nodeId, true)
+    nodeExpandButtonClicked = (event) => {
+        // Stop event propagation to prevent
+        //   the parent IconButton click
+        event.stopPropagation()
+
+        this.state.isExpanded ?
+            this.nodeExpandOff() :
+            this.nodeExpandOn()
     }
 
-    nodeCollapsed = () => {
-        this.setState({isOpen: false})
-        this.props.onClick(this.props.nodeId, false)
+
+    nodeExpandOn = () => {
+        this.setState({isExpanded: true})
+        this.props.onExpanded(this.props.nodeId, true)
+    }
+
+    nodeExpandOff = () => {
+        this.setState({isExpanded: false})
+        this.props.onExpanded(this.props.nodeId, false)
     }
 }
 
 const style = {
-    iconButton: {
+    iconButton: (nodeType) => ({
         width: '100%',
-        height: '45px',
+        height: nodeType === 'backButton' ? '30px' : '45px',
         marginBottom: '10px',
         display: 'flex',
         flexDirection: 'row',
@@ -67,19 +88,17 @@ const style = {
         alignItems: 'center',
         borderRadius: '8px',
         border: '1px #DFDFDF solid'
-    },
-    icon: {
-        height: '25px',
-        color: '#552CF6',
-        flexShrink: 0,
-    },
-    buttonLabel: {
+    }),
+    buttonLabel: (nodeType) => ({
         fontSize: '13px',
         fontWeight: '400',
-        color: '#000',
+        color: nodeType === 'backButton' ? '#938EA6' : '#000',
         marginLeft: '10px',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis'
+    }),
+    expandIconButton: {
+        marginLeft: 'auto'
     }
 }
