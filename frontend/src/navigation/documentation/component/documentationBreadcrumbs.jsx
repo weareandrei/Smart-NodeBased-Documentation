@@ -19,7 +19,7 @@ export default class DocumentationBreadcrumbs extends React.Component {
 
     render = () => {
         const selectedNodePath = this.findNodeParentChain(get(this.props, 'selectedNode.id', ''))
-        console.log('BREADCRUMBS', selectedNodePath)
+        // console.log('BREADCRUMBS', selectedNodePath)
         return (
             <div style={style.mainContainer}>
                 <Breadcrumbs aria-label="breadcrumb" style={style.breadcrumbsContainer}>
@@ -54,14 +54,17 @@ export default class DocumentationBreadcrumbs extends React.Component {
         const nodeParent = this.findNodeParent(nodeId)
 
         if (!nodeParent) {
-            return []
+            return [this.findNodeNode(nodeId)]
         } else {
-            return flatten([nodeParent, this.findNodeParentChain(nodeParent.id)])
+            return flatten([nodeParent, this.findNodeParentChain(nodeParent.id), this.findNodeNode(nodeId)])
         }
     }
 
     findNodeParent = (nodeId) =>
         find(this.props.allNodes, (node) => get(node, 'children', []).includes(nodeId))
+
+    findNodeNode = (nodeId) =>
+        find(this.props.allNodes, (node) => node.id === nodeId)
 
 }
 

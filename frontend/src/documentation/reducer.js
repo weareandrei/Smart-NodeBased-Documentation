@@ -34,7 +34,7 @@ const documentationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedNode: action.node,
-                selectedNodeChildren: getAllChildren(state.documentation.nodes, action.node)
+                selectedNodeChildren: getAllChildren(state.documentation.nodes, action.node, true)
             }
         case SELECT_PARENT_NODE:
             const parentNode = findParentNode(state.documentation.nodes, state.selectedNode)
@@ -45,7 +45,7 @@ const documentationReducer = (state = initialState, action) => {
             } : {
                ...state,
                selectedNode: parentNode,
-               selectedNodeChildren: getAllChildren(state.documentation.nodes, parentNode)
+               selectedNodeChildren: getAllChildren(state.documentation.nodes, parentNode, true)
             }
         case SELECT_PROJECT:
             return {
@@ -110,18 +110,27 @@ const findParentNode = (allNodes, node) => {
     })
 }
 
-const getAllChildren = (allNodes, node=null) => {
+const getAllChildren = (allNodes, node=null, initial=false) => {
     const allChildren = []
 
     if (get(node, 'children', []).length > 0) {
         const currentNodeChildrenIds = node.children
         const currentNodeChildren = filter(allNodes, (node) => includes(currentNodeChildrenIds, node.id))
 
-        allChildren.push(node)
+        if (!initial) {
+            console.log('is not initial, pushing', node.id)
+            allChildren.push(node)
+        }
+
         allChildren.push(...flatMap(currentNodeChildren, (nodeChild) => getAllChildren(allNodes, nodeChild)))
         return allChildren
     }
 
+    if (initial) {
+        return []
+    }
+
+    console.log('is not initial, pushing', node.id)
     return node
 }
 
