@@ -41,16 +41,17 @@ export default function FlowComponent(props) {
         setNodes(props.nodes)
     }, [props.nodes])
 
-    useEffect(() => {
-        if (reactFlowInstance) {
-            reactFlowInstance.fitView();
-        }
-    }, [nodes, reactFlowInstance]);
+    // useEffect(() => {
+    //     if (reactFlowInstance) {
+    //         reactFlowInstance.fitView();
+    //     }
+    // }, [nodes, reactFlowInstance]);
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
 
     console.log('FlowComponent nodes(props): ', props.nodes)
-    console.log('FlowComponent nodes: ', nodes)
+    console.log('FlowComponent edges(props): ', props.edges)
+    // console.log('FlowComponent nodes: ', nodes)
 
     const onDragOver = useCallback((event) => {
         event.preventDefault();
@@ -101,7 +102,7 @@ export default function FlowComponent(props) {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 onNodeDragStop={(mouseEvent, node) => props.nodeModified(node)}
-                // onElementClick={()=>console.log("onElementClick")}
+                onElementClick={()=>console.log("onElementClick")}
                 fitView
                 onInit={setReactFlowInstance}
                 onDrop={onDrop}

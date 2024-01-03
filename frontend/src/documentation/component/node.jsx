@@ -12,12 +12,13 @@ import DescriptionIcon from '@mui/icons-material/Description'
 
 import ForwardIcon from '@mui/icons-material/Forward'
 import IconButton from '@mui/material/IconButton'
-import BugReportIcon from '@mui/icons-material/BugReport'
 import AddTaskIcon from '@mui/icons-material/AddTask'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import DownloadIcon from '@mui/icons-material/Download'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
+import CreateIcon from '@mui/icons-material/Create'
+import BugReportIcon from '@mui/icons-material/BugReport'
 
 // Header icons
 import NotesIcon from '@mui/icons-material/Notes'
@@ -32,6 +33,8 @@ import styled from 'styled-components'
 
 import {calculateNodeSize, NODE_CONST_WIDTH} from "../util/sizeDeterminer"
 import NodeIcon from "./nodeIcon";
+import MenuItem from "@mui/material/MenuItem";
+import {Menu} from "@mui/material";
   
 export default class Node extends React.Component {
 
@@ -43,6 +46,11 @@ export default class Node extends React.Component {
 
     }
 
+    state = {
+        anchorEl: null,
+        menuOpened: false
+    }
+
     render = () => {
         const nodeSize = {
             partsHeight: calculateNodeSize(this.props.data),
@@ -52,8 +60,12 @@ export default class Node extends React.Component {
     }
 
     renderNode = (nodeSize) => {
+        // console.log('this.props.data', this.props.data)
         return (
             <div style={style.nodeContainer}>
+                {
+                    this.props.data.isChild ? <Handle type="target" position={Position.Top} id={this.props.data.id} style={style.nodeHandle} /> : null
+                }
                 {
                     this.renderNodeHeader(
                         this.props.data.type,
@@ -67,6 +79,9 @@ export default class Node extends React.Component {
                     get(this.props.data, 'body', null) !== null ?
                     this.renderNodeBody(this.props.data.type, this.props.data.body, nodeSize) : null
                 }
+                {
+                    this.props.data.isParent ? <Handle type="source" position={Position.Bottom} id={this.props.data.id} style={style.nodeHandle} /> : null
+                }
             </div>
         )
     }
@@ -75,8 +90,43 @@ export default class Node extends React.Component {
         <div style={style.nodeHeader(isPage, width)}>
             <NodeIcon nodeType={nodeType} type={'main'}/>
             {this.props.data.title}
-            <MoreVertIcon style={{marginLeft: 'auto'}}/>
+
+            <IconButton className="nodrag"
+                        style={{marginLeft: 'auto', width: '27px', borderRadius: '5px'}}
+                        onClick={this.openMenuButton}>
+                <MoreVertIcon/>
+            </IconButton>
+
+            <Menu
+                anchorEl={this.state.anchorEl}
+                keepMounted
+                open={Boolean(this.state.anchorEl)}
+                onClose={this.closeMenuButton}
+            >
+                <MenuItem key={'op1'} onClick={this.handleNodeMenuButton}>
+                    <CreateIcon style={{marginRight: '12px', color: '#552CF6'}}
+                    /> Create new task
+                </MenuItem>
+                <MenuItem key={'op2'} onClick={this.handleNodeMenuButton}>
+                    <BugReportIcon style={{marginRight: '12px', color: '#552CF6'}}
+                    /> Report bug
+                </MenuItem>
+            </Menu>
         </div>
+
+    openMenuButton = (event) => {
+        this.setState({anchorEl: event.currentTarget})
+        // this.setState({ menuOpened: !this.state.menuOpened })
+    }
+
+    closeMenuButton = (event) => {
+        this.setState({anchorEl: null})
+        // this.setState({ menuOpened: !this.state.menuOpened })
+    }
+
+    handleNodeMenuButton = (context) => {
+        console.log('context', context)
+    }
 
     renderNodeAttributes = (width) => {
         return (
@@ -142,9 +192,6 @@ export default class Node extends React.Component {
                 return body.url
         }
     }
-
-    isPage = (type) =>
-        ['page', 'current page'].includes(type)
 
     renderHeaderTitle = (data) => {
         if (data.type === 'link') {
@@ -377,6 +424,13 @@ const style = {
         // width: 'fit-content'
     },
 
+    nodeHandle: {
+        width: '8px',
+        height: '8px',
+        boxShadow: '0px 2px 2px 0px rgba(0, 0, 0, 0.15)',
+        background: '#fff',
+        zIndex: '4000'
+    },
 
     openArrowButtonContainer: {
         position: 'relative',

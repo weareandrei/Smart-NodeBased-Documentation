@@ -7,6 +7,7 @@ import flatMap from 'lodash/flatMap'
 import isEqual from 'lodash/isEqual'
 
 import NodesLayout from '../util/nodesLayout'
+import find from "lodash/find";
 
 export default class NodesGridSurface extends Component {
 
@@ -54,7 +55,9 @@ export default class NodesGridSurface extends Component {
             type: node.id === nodes[0].id ? 'current page' : node.type,
             data: {
                 ...node,
-                type: node.id === nodes[0].id ? 'current page' : node.type
+                type: node.id === nodes[0].id ? 'current page' : node.type,
+                isChild: this.isChild(node),
+                isParent: this.isParent(node)
             },
             position: nodesLayout.getNodeCoordinates(node.id)
             // position: find(nodesPositions, (nodePosition) => nodePosition.id === node.id),
@@ -69,27 +72,26 @@ export default class NodesGridSurface extends Component {
                 id: 'e'+node.id+'-'+childId,
                 source: node.id,
                 target: childId,
-                type: 'smoothstep'
+                type: 'smoothstep',
+                style:{strokeWidth:3}
                 // label: 'this is an edge label'
             }))
         )
 
-    // updateDisplayedNodes = (nodes) => {
-    //     const nodesIds = map(nodes, (node) => node.id)
-    //
-    //     console.log('updateDisplayedNodes')
-    //     console.log('nodesIds', nodesIds)
-    //     console.log('this.state.nodesDisplayed', this.state.nodesDisplayed)
-    //     console.log('--------------------')
-    //     if (!isEqual(nodesIds, this.state.nodesDisplayed)) {
-    //         this.setState({nodesDisplayed: nodesIds})
-    //     }
-    // }
-    //
-    // refreshPage = () => {
-    //     this.setState(
-    //         {reload: true},
-    //         () => this.setState({reload: false})
-    //     )
-    // }
+    isParent = (node) => {
+        const childrenFound = get(node, 'children', undefined)
+        if (childrenFound === undefined) {
+            return false
+        } return true
+    }
+
+
+    isChild = (node) => {
+        const nodeId = node.id
+        const parentFound = find(this.props.nodes, (node) => get(node, 'children', []).includes(nodeId))
+        if (parentFound === undefined) {
+            return false
+        } return true
+    }
+
 }
