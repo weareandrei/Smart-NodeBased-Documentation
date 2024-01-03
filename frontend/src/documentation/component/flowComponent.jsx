@@ -39,7 +39,8 @@ export default function FlowComponent(props) {
 
     useEffect(() => {
         setNodes(props.nodes)
-    }, [props.nodes])
+        setEdges(props.edges)
+    }, [props.nodes, props.edges])
 
     // useEffect(() => {
     //     if (reactFlowInstance) {
