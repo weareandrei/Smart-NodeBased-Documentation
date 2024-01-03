@@ -17,6 +17,7 @@ import filter from 'lodash/filter'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import find from "lodash/find"
+import map from "lodash/map";
 
 const initialState = {
     documentation: {},
@@ -34,7 +35,7 @@ const documentationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedNode: action.node,
-                selectedNodeChildren: getAllChildren(state.documentation.nodes, action.node, true)
+                selectedNodeChildren: getSelectedNodeChildren(state.documentation.nodes, action.node, true)
             }
         case SELECT_PARENT_NODE:
             const parentNode = findParentNode(state.documentation.nodes, state.selectedNode)
@@ -45,7 +46,7 @@ const documentationReducer = (state = initialState, action) => {
             } : {
                ...state,
                selectedNode: parentNode,
-               selectedNodeChildren: getAllChildren(state.documentation.nodes, parentNode, true)
+               selectedNodeChildren: getSelectedNodeChildren(state.documentation.nodes, parentNode, true)
             }
         case SELECT_PROJECT:
             return {
@@ -61,7 +62,10 @@ const documentationReducer = (state = initialState, action) => {
         case LOADED_DOCUMENTATION:
             return {
                 ...state,
-                documentation: action.documentation,
+                documentation: {
+                    ...action.documentation,
+                    nodes: addParentData(action.documentation.nodes)
+                },
                 selectedProject: action.documentation.projects[0]
             }
         case LOADED_DOCUMENTATION_FAIL:
@@ -110,7 +114,7 @@ const findParentNode = (allNodes, node) => {
     })
 }
 
-const getAllChildren = (allNodes, node=null, initial=false) => {
+const getSelectedNodeChildren = (allNodes, node=null, initial=false) => {
     const allChildren = []
 
     if (get(node, 'children', []).length > 0) {
@@ -118,11 +122,10 @@ const getAllChildren = (allNodes, node=null, initial=false) => {
         const currentNodeChildren = filter(allNodes, (node) => includes(currentNodeChildrenIds, node.id))
 
         if (!initial) {
-            console.log('is not initial, pushing', node.id)
             allChildren.push(node)
         }
 
-        allChildren.push(...flatMap(currentNodeChildren, (nodeChild) => getAllChildren(allNodes, nodeChild)))
+        allChildren.push(...flatMap(currentNodeChildren, (nodeChild) => getSelectedNodeChildren(allNodes, nodeChild)))
         return allChildren
     }
 
@@ -130,11 +133,19 @@ const getAllChildren = (allNodes, node=null, initial=false) => {
         return []
     }
 
-    console.log('is not initial, pushing', node.id)
-    return node
+    return {...node, parent: findParentNode(allNodes, node).id}
 }
 
 const getProjectNodes = (allNodes, projectId) =>
     filter(allNodes, (node) => node.projectId === projectId)
+
+const addParentData = (nodes) =>
+    map(nodes, (node) => {
+        const parentNode = findParentNode(nodes, node)
+        if (parentNode === undefined) {
+            return {...node, parent: null}
+        }
+        return {...node, parent: parentNode.id}
+    })
 
 export default documentationReducer

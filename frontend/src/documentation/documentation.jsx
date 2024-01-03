@@ -42,7 +42,7 @@ class Documentation extends React.Component {
     }
 
     nodeModified = (node) => {
-        console.log('nodeModified: ',node)
+        // console.log('nodeModified: ',node)
         this.isNewNode(node) ?
             this.props.registerNodeCreate(this.props.documentation, node, this.props.selectedNode.id) :
             this.props.registerNodeUpdate(this.props.documentation, node)
@@ -54,7 +54,7 @@ class Documentation extends React.Component {
         const nodes = this.props.documentation.nodes
         const nodeFound = find(nodes, (node) => node.id === thisNode.id)
 
-        console.log(' -- isNewNode ? ', thisNode.id, '->', nodeFound)
+        // console.log(' -- isNewNode ? ', thisNode.id, '->', nodeFound)
         if (nodeFound === undefined) {
             return true
         }

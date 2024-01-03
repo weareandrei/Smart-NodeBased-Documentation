@@ -51,7 +51,7 @@ export default function FlowComponent(props) {
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
 
     console.log('FlowComponent nodes(props): ', props.nodes)
-    console.log('FlowComponent edges(props): ', props.edges)
+    // console.log('FlowComponent edges(props): ', props.edges)
     // console.log('FlowComponent nodes: ', nodes)
 
     const onDragOver = useCallback((event) => {

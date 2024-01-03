@@ -4,34 +4,34 @@ const get = require("lodash/get")
 const filter = require("lodash/filter")
 const flatten = require("lodash/flatten")
 
-const FlexibleGrid = require('./flexibleGrid.js')
 const {calculateNodeSize, NODE_CONST_WIDTH} = require("./sizeDeterminer")
 
 class NodesLayout {
 
-    nodes = []
+    nodes = [] // nodes also have information about parent
     unpackedNodes = []
     nodesTree = []
-    // layoutGrid = new FlexibleGrid()
     nodesColumns = []
     nodesCoordinates = {}
 
     constructor(nodes) {
+        console.log('\n\n\n\n\n')
         this.nodes = nodes
+        console.log('----- nodes received', this.nodes)
         this.unpackedNodes = this.unpackNodes(nodes)
-        // console.log('----- unpackedNodes', this.unpackedNodes)
+        console.log('----- unpackedNodes', this.unpackedNodes)
         // For now, all nodes have same width. Just different heights
     }
 
     buildLayout = () => {
         this.splitNodesIntoTree()
-        // console.log('----- nodesTree', this.nodesTree)
+        console.log('----- nodesTree', this.nodesTree)
         this.putNodesIntoColumns()
-        // console.log('----- nodesColumns 1', this.nodesColumns)
+        console.log('----- nodesColumns 1', this.nodesColumns)
         this.nodesColumns = map(this.nodesColumns, (column) => flatten(column))
-        // console.log('----- nodesColumns 2', this.nodesColumns)
+        console.log('----- nodesColumns 2', this.nodesColumns)
         this.calculateNodesCoordinates()
-
+        console.log('\n\n\n\n\n')
     }
 
     // All nodes have children arrays, but they might be empty
@@ -42,14 +42,18 @@ class NodesLayout {
                 return {
                     id: node.id,
                     childrenNormal: map(children.childrenNormal, (child) => child.id),
-                    childrenPages: map(children.childrenPages, (child) => child.id)
+                    childrenPages: map(children.childrenPages, (child) => child.id),
+                    parent: node.parent,
+                    type: node.type
                 }
             }
 
             return {
                 id: node.id,
                 childrenNormal: [],
-                childrenPages: []
+                childrenPages: [],
+                parent: node.parent,
+                type: node.type
             }
         })
 
@@ -135,10 +139,34 @@ class NodesLayout {
         })
 
     putNodesIntoColumns = () => {
+        const parentLessNode = find(this.nodesTree, (node) => !this.parentExists(node.parent) && node.type !== 'page')
+        if (parentLessNode !== undefined) {
+            console.log('found parentLessNode', parentLessNode)
+            this.nodesColumns[0] = []
+        }
+
         map(this.nodesTree, (rootNode) => {
+            // console.log('checking for parent for', rootNode)
+            // console.log('this.parentExists(rootNode.parent)', this.parentExists(rootNode.parent))
+            if (!this.parentExists(rootNode.parent) && rootNode.type !== 'page') {
+                this.nodesColumns[0].push(rootNode.id)
+                return
+            }
             // console.log('putIntoNewColumn, rootNode - ', rootNode)
             this.putIntoNewColumn(rootNode, 0, false)
         })
+    }
+
+    parentExists = (parentId) => {
+        if (parentId === null) {
+            return false
+        }
+
+        const parent = find(this.nodes, (node) => node.id === parentId)
+        if (parent === undefined) {
+            return false
+        }
+        return true
     }
 
     putIntoNewColumn = (node, level, useLastExistingColumn) => {

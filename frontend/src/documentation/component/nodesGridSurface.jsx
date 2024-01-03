@@ -26,8 +26,6 @@ export default class NodesGridSurface extends Component {
     // }
 
     render() {
-        // this.updateDisplayedNodes(this.props.nodes)
-
         const nodesLayout = new NodesLayout(this.props.nodes)
         nodesLayout.buildLayout()
 
@@ -52,10 +50,10 @@ export default class NodesGridSurface extends Component {
     createFlowNodes = (nodes, nodesLayout) =>
         map(nodes, (node) => ({
             id: node.id,
-            type: node.id === nodes[0].id ? 'current page' : node.type,
+            type: /*node.id === nodes[0].id ? 'current page' :*/ node.type,
             data: {
                 ...node,
-                type: node.id === nodes[0].id ? 'current page' : node.type,
+                type: /*node.id === nodes[0].id ? 'current page' :*/ node.type,
                 isChild: this.isChild(node),
                 isParent: this.isParent(node)
             },
@@ -92,6 +90,10 @@ export default class NodesGridSurface extends Component {
         if (parentFound === undefined) {
             return false
         } return true
+    }
+
+    addParentData = (nodes) => {
+
     }
 
 }
