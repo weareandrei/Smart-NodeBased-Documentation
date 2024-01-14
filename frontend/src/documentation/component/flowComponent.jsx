@@ -14,9 +14,11 @@ import 'reactflow/dist/style.css'
 import './overview.css'
 import NodeSelector from "./nodeSelector"
 import Node from "./node"
+import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
+import LockIcon from "@mui/icons-material/Lock";
+import IconButton from "@mui/material/IconButton";
 
 const nodeTypes = {
-    'current page': Node,
     'page': Node,
     'code snippet': Node,
     'note': Node,
@@ -50,18 +52,18 @@ export default function FlowComponent(props) {
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
 
-    console.log('FlowComponent nodes(props): ', props.nodes)
+    // console.log('FlowComponent nodes(props): ', props.nodes)
     // console.log('FlowComponent edges(props): ', props.edges)
     // console.log('FlowComponent nodes: ', nodes)
 
     const onDragOver = useCallback((event) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move'
-    }, []);
+    }, [])
 
     const onDrop = useCallback(
         (event) => {
-            event.preventDefault();
+            event.preventDefault()
 
             const type = event.dataTransfer.getData('application/reactflow')
 
@@ -73,7 +75,7 @@ export default function FlowComponent(props) {
             const position = reactFlowInstance.screenToFlowPosition({
                 x: event.clientX,
                 y: event.clientY,
-            });
+            })
             const newNode = {
                 id: getNextId(nodes),
                 type,
@@ -87,7 +89,7 @@ export default function FlowComponent(props) {
 
             setNodes((nds) => nds.concat(newNode))
 
-            props.nodeModified(newNode)
+            // props.registerNodeUpdate(newNode)
         },
         [reactFlowInstance],
     )
@@ -97,17 +99,36 @@ export default function FlowComponent(props) {
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
-                onNodesChange={(newNodes) => {
-                    onNodesChange(newNodes)
+
+                    // Whenever we do anything to a node, drag, or click or else...
+                onNodesChange={(event) => {
+                    onNodesChange(event) // DON'T TOUCH
+                    props.registerNodeUpdate(event[0])
                 }}
+                // panOnDrag={true}
+
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
-                onNodeDragStop={(mouseEvent, node) => props.nodeModified(node)}
-                onElementClick={()=>console.log("onElementClick")}
+
+                //     // Whenever we stop dragging node and release mouse button
+                // onNodeDragStop={(mouseEvent, node) => {
+                //     // console.log('onNodeDragStop, node:', node)
+                //     // We can see all the data about the node.
+                //     //   We are not given the update specifically
+                //     // props.registerNodeUpdate(node)
+                // }}
+
+                // onElementClick={()=>console.log("onElementClick")}
                 fitView
                 onInit={setReactFlowInstance}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
+                // onDrop={(event) => {
+                //     console.log('onDrop')
+                //     onDrop(event)
+                // }}
+                // onDragOver={(event) => {
+                //     console.log('onDragOver')
+                //     onDragOver(event)
+                // }}
                 style={{margin: '0.5rem'}}
                 nodeTypes={nodeTypes}
             >
@@ -115,7 +136,13 @@ export default function FlowComponent(props) {
                 <MiniMap style={minimapStyle} zoomable pannable />
                 <Controls />
             </ReactFlow>
-            <NodeSelector/>
+            {/*<NodeSelector/>*/}
+            <IconButton
+                style={{ boxShadow: '0 0 2px 1px rgba(0, 0, 0, 0.08)', left: '23px', bottom: '175px', width: '27px', borderRadius: '3px', padding: '0px', background: '#fff'}}
+                onClick={props.autoLayoutActivated}
+                >
+                <AutoAwesomeMosaicIcon style={{ width: '18px', color: '#000'}} />
+            </IconButton>
         </ReactFlowProvider>
     )
 }
@@ -123,4 +150,5 @@ export default function FlowComponent(props) {
 FlowComponent.defaultProps = {
     nodes: [],
     edges: [],
+    registerNodeUpdate: null
 }

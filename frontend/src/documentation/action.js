@@ -5,7 +5,7 @@ export const SELECT_NODE = 'SELECT_NODE'
 export const SELECT_PARENT_NODE = 'SELECT_PARENT_NODE'
 export const SELECT_PROJECT = 'SELECT_PROJECT'
 export const REGISTER_NODE_UPDATE = 'REGISTER_NODE_UPDATE'
-export const REGISTER_NODE_CREATE = 'REGISTER_NODE_UPDATE'
+export const REGISTER_NODE_CREATE = 'REGISTER_NODE_CREATE'
 export const SYNCING_NODES = 'SYNCING_NODES'
 export const SYNCING_NODES_SUCCESS = 'SYNCING_NODES_SUCCESS'
 export const SYNCING_NODES_FAIL = 'SYNCING_NODES_FAIL'
@@ -27,33 +27,28 @@ export const selectProject = (projectId) => ({
     projectId: projectId
 })
 
-export const registerNodeUpdate = (documentation, node) => ({
+export const registerNodeUpdate = (event) => ({
     type: REGISTER_NODE_UPDATE,
-    nodeUpdate: {
-        action: 'update',
-        node: prepareNodeUpdate(
-            documentation,
-            node
-        )
-    }
+    id: event.id,
+    update: event.update
 })
 
-const prepareNodeUpdate = (documentation, node) => {
-    const updates = {
-        nodeId: node.id,
-        updateValues: {
-            'nodes.$.title': node.data.label,
-            'nodes.$.size': {
-                width: node.width,
-                height: node.height
-            },
-            'nodes.$.position': node.position
-        }
-    }
-
-    console.log('----- Prepared Node Update : ', updates)
-    return updates
-}
+// const prepareNodeUpdate = (node) => {
+//     const updates = {
+//         nodeId: node.id,
+//         updateValues: {
+//             'nodes.$.title': node.data.label,
+//             'nodes.$.size': {
+//                 width: node.width,
+//                 height: node.height
+//             },
+//             'nodes.$.position': node.position
+//         }
+//     }
+//
+//     console.log('----- Prepared Node Update : ', updates)
+//     return updates
+// }
 
 export const registerNodeCreate = (documentation, node, parentId) => ({
     type: REGISTER_NODE_CREATE,
@@ -124,16 +119,16 @@ export const syncNodes = () => {
             return new Promise((resolve) => {
                 const checkSync = () => {
                     if (!getState().documentation.syncInProgress) {
-                        resolve();
+                        resolve()
                     } else {
-                        setTimeout(checkSync, 100); // Check again after a short delay
+                        setTimeout(checkSync, 100) // Check again after a short delay
                     }
-                };
-                checkSync();
+                }
+                checkSync()
             })
         } else {
-            const updates = getState().documentation.nodesSyncQueue
-            dispatch(syncingNodes());
+            const changes = getState().documentation.nodesSyncQueue
+            dispatch(syncingNodes())
 
             return fetch('http://localhost:8081/syncNodes', {
                 method: 'POST',
@@ -141,8 +136,8 @@ export const syncNodes = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    documentationId: '6523592fd730e1f9120fbef6',
-                    nodeUpdates: updates
+                    documentationId: getState().documentation.documentation._id,
+                    documentationChanges: changes
                 }),
             })
                 .then((response) => {
@@ -189,7 +184,6 @@ export const loadDocumentation = (documentationId) => {
             .then((response) => {
                 if (response.ok) {
                     response.json().then((data) => {
-                        // dispatch(selectNode(findNodeWithIdZero(data.doc)))
                         dispatch(loadedDocumentation(data))
                     })
                 } else {

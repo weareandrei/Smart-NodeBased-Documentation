@@ -5,7 +5,6 @@ import {withRouter} from "react-router-dom"
 import {withMediaQuery} from "../common/media"
 import * as actions from './action'
 import PropTypes from "prop-types"
-import isEmpty from "lodash/isEmpty"
 import find from "lodash/find"
 
 import NodesGridSurface from './component/nodesGridSurface'
@@ -37,17 +36,64 @@ class Documentation extends React.Component {
         return (
             <NodesGridSurface nodes={this.props.selectedNodeChildren}
                               selectNode={this.props.selectNode}
-                              nodeModified={this.nodeModified}/>
+                              registerNodeUpdate={this.registerNodeUpdate}/>
         )
     }
 
-    nodeModified = (node) => {
-        // console.log('nodeModified: ',node)
-        this.isNewNode(node) ?
-            this.props.registerNodeCreate(this.props.documentation, node, this.props.selectedNode.id) :
-            this.props.registerNodeUpdate(this.props.documentation, node)
-        this.props.syncNodes()
+    registerNodeUpdate = (update) => {
+        console.log('registering node update', update)
 
+        switch (update.type) {
+            case 'position':
+                if (update.dragging === true || update.autoLayout === true) {
+                    this.props.registerNodeUpdate(
+                        {
+                            id: update.id,
+                            update: {
+                                type: 'position',
+                                value: update.position
+                            }
+                        }
+                    )
+                    this.props.syncNodes()
+                }
+                break
+            case 'lock':
+                this.props.registerNodeUpdate(
+                    {
+                        id: update.id,
+                        update: {
+                            type: 'lock',
+                            value: true
+                        }
+                    }
+                )
+                this.props.syncNodes()
+                break
+            case 'unlock':
+                this.props.registerNodeUpdate(
+                    {
+                        id: update.id,
+                        update: {
+                            type: 'lock',
+                            value: false
+                        }
+                    }
+                )
+                this.props.syncNodes()
+                break
+            default:
+                break
+        }
+
+        // add updated node id and its type to reducer.
+        //   Then we will push all updates at once when command received
+
+        // console.log('nodeModified: ',node)
+        // this.isNewNode(node) ?
+        //     this.props.registerNodeCreate(this.props.documentation, node, this.props.selectedNode.id) :
+        //     this.props.registerNodeUpdate(this.props.documentation, node)
+        // this.props.syncNodes()
     }
 
     isNewNode = (thisNode) => {

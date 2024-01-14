@@ -7,23 +7,30 @@ import flatMap from 'lodash/flatMap'
 import isEqual from 'lodash/isEqual'
 
 import NodesLayout from '../util/nodesLayout'
-import find from "lodash/find";
+import find from "lodash/find"
 
 export default class NodesGridSurface extends Component {
 
     static propTypes = {
         nodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired,
-        nodeModified: PropTypes.func.isRequired,
+        registerNodeUpdate: PropTypes.func.isRequired,
+        autoLayoutActivated: PropTypes.func.isRequired
     }
     static defaultProps = {
         selectedNode: null
     }
 
-    // state = {
-    //     // reload: false,
-    //     nodesDisplayed: []
-    // }
+    state = {
+        autoLayoutActivated: false
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.autoLayoutActivated && this.state.autoLayoutActivated) {
+            console.log('\n ------- autoLayoutActivated: false')
+            this.setState({ autoLayoutActivated: false })
+        }
+    }
 
     render() {
         const nodesLayout = new NodesLayout(this.props.nodes)
@@ -41,10 +48,17 @@ export default class NodesGridSurface extends Component {
                 <FlowComponent
                     nodes={nodes}
                     edges={edges}
-                    nodeModified={this.props.nodeModified}
+                    registerNodeUpdate={this.props.registerNodeUpdate}
+                    autoLayoutActivated={this.autoLayoutActivated}
                 />
             </div>
         )
+    }
+
+    autoLayoutActivated = () => {
+        console.log('\n\n')
+        console.log('Layout activated')
+        this.setState({ autoLayoutActivated: true })
     }
 
     createFlowNodes = (nodes, nodesLayout) =>
@@ -53,12 +67,12 @@ export default class NodesGridSurface extends Component {
             type: /*node.id === nodes[0].id ? 'current page' :*/ node.type,
             data: {
                 ...node,
-                type: /*node.id === nodes[0].id ? 'current page' :*/ node.type,
                 isChild: this.isChild(node),
-                isParent: this.isParent(node)
+                isParent: this.isParent(node),
+                registerNodeUpdate: this.props.registerNodeUpdate
             },
-            position: nodesLayout.getNodeCoordinates(node.id)
-            // position: find(nodesPositions, (nodePosition) => nodePosition.id === node.id),
+            position: this.getNodePosition(node, nodesLayout),
+            draggable: !get(node, 'layoutAttributes.locked', false)
             // style: {
             //     // ...node.size
             // }
@@ -76,6 +90,31 @@ export default class NodesGridSurface extends Component {
             }))
         )
 
+    getNodePosition = (thisNode, nodesLayout) => {
+        console.log('\n')
+        console.log('thisNode.id =', thisNode.id)
+        if (this.state.autoLayoutActivated) {
+            // If node's movement is not locked then give it auto-layout
+            if (!get(thisNode, 'layoutAttributes.locked', false)) {
+                console.log('-- auto + not locked')
+                const nodeCoordinates = nodesLayout.getNodeCoordinates(thisNode.id)
+                this.props.registerNodeUpdate({id: thisNode.id, type: 'position', autoLayout: true, position: nodeCoordinates})
+                return nodeCoordinates
+            }
+        }
+
+        // In all the other case do : if position given - use position, otherwise auto
+        if (get(thisNode, 'layoutAttributes.position', false)) {
+            console.log('-- existing position')
+            return thisNode.layoutAttributes.position
+        }
+
+        const nodeCoordinates = nodesLayout.getNodeCoordinates(thisNode.id)
+        console.log('-- auto + non-existent position')
+        this.props.registerNodeUpdate({id: thisNode.id, type: 'position', autoLayout: true, position: nodeCoordinates})
+        return nodeCoordinates
+    }
+
     isParent = (node) => {
         const childrenFound = get(node, 'children', undefined)
         if (childrenFound === undefined) {
@@ -90,10 +129,6 @@ export default class NodesGridSurface extends Component {
         if (parentFound === undefined) {
             return false
         } return true
-    }
-
-    addParentData = (nodes) => {
-
     }
 
 }

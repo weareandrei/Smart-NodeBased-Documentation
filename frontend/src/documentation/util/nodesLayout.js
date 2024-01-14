@@ -15,23 +15,23 @@ class NodesLayout {
     nodesCoordinates = {}
 
     constructor(nodes) {
-        console.log('\n\n\n\n\n')
+        // console.log('\n\n\n\n\n')
         this.nodes = nodes
-        console.log('----- nodes received', this.nodes)
+        // console.log('----- nodes received', this.nodes)
         this.unpackedNodes = this.unpackNodes(nodes)
-        console.log('----- unpackedNodes', this.unpackedNodes)
+        // console.log('----- unpackedNodes', this.unpackedNodes)
         // For now, all nodes have same width. Just different heights
     }
 
     buildLayout = () => {
         this.splitNodesIntoTree()
-        console.log('----- nodesTree', this.nodesTree)
+        // console.log('----- nodesTree', this.nodesTree)
         this.putNodesIntoColumns()
-        console.log('----- nodesColumns 1', this.nodesColumns)
+        // console.log('----- nodesColumns 1', this.nodesColumns)
         this.nodesColumns = map(this.nodesColumns, (column) => flatten(column))
-        console.log('----- nodesColumns 2', this.nodesColumns)
+        // console.log('----- nodesColumns 2', this.nodesColumns)
         this.calculateNodesCoordinates()
-        console.log('\n\n\n\n\n')
+        // console.log('\n\n\n\n\n')
     }
 
     // All nodes have children arrays, but they might be empty
@@ -141,7 +141,7 @@ class NodesLayout {
     putNodesIntoColumns = () => {
         const parentLessNode = find(this.nodesTree, (node) => !this.parentExists(node.parent) && node.type !== 'page')
         if (parentLessNode !== undefined) {
-            console.log('found parentLessNode', parentLessNode)
+            // console.log('found parentLessNode', parentLessNode)
             this.nodesColumns[0] = []
         }
 
