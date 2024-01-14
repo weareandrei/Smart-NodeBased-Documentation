@@ -1,11 +1,27 @@
-const {mongoose} = require('mongoose');
+const {mongoose} = require('mongoose')
 
 const Schema = mongoose.Schema
 
 const DocumentationModelSchema = new Schema({
-    doc: {
-        type: Object
-    }
+    projects: [{
+        id: String,
+        title: String
+    }],
+    nodes: [{
+        id: String,
+        projectId: String,
+        type: {type: String},
+        title: String,
+        attributes: Object,
+        body: Object,
+        layoutAttributes: {
+            locked: Boolean,
+            position: {
+                x: Number,
+                y: Number
+            },
+        }
+    }]
 })
 
 const UserModelSchema = new Schema({

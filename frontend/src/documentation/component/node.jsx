@@ -19,6 +19,8 @@ import DownloadIcon from '@mui/icons-material/Download'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import CreateIcon from '@mui/icons-material/Create'
 import BugReportIcon from '@mui/icons-material/BugReport'
+import LockOpenIcon from '@mui/icons-material/LockOpen'
+import LockIcon from '@mui/icons-material/Lock'
 
 // Header icons
 import NotesIcon from '@mui/icons-material/Notes'
@@ -47,6 +49,7 @@ export default class Node extends React.Component {
     }
 
     state = {
+        lockShown: false,
         anchorEl: null,
         menuOpened: false
     }
@@ -56,13 +59,16 @@ export default class Node extends React.Component {
             partsHeight: calculateNodeSize(this.props.data),
             width: NODE_CONST_WIDTH
         }
+
         return this.renderNode(nodeSize)
     }
 
     renderNode = (nodeSize) => {
         // console.log('this.props.data', this.props.data)
         return (
-            <div style={style.nodeContainer}>
+            <div style={style.nodeContainer}
+                 onMouseEnter={() => this.setState({lockShown: true})}
+                 onMouseLeave={() => this.setState({lockShown: false})}>
                 {
                     this.props.data.isChild ? <Handle type="target" position={Position.Top} id={this.props.data.id} style={style.nodeHandle} /> : null
                 }
@@ -91,11 +97,7 @@ export default class Node extends React.Component {
             <NodeIcon nodeType={nodeType} type={'main'}/>
             {this.props.data.title}
 
-            <IconButton className="nodrag"
-                        style={{marginLeft: 'auto', width: '27px', borderRadius: '5px'}}
-                        onClick={this.openMenuButton}>
-                <MoreVertIcon/>
-            </IconButton>
+            {this.renderNodeMenuIcons(get(this.props.data, 'layoutAttributes.locked', false))}
 
             <Menu
                 anchorEl={this.state.anchorEl}
@@ -113,6 +115,51 @@ export default class Node extends React.Component {
                 </MenuItem>
             </Menu>
         </div>
+
+    renderNodeMenuIcons = (locked) => {
+        const islockShown = this.state.lockShown || locked
+
+        return (
+            <div style={{ marginLeft: 'auto' }}>
+                {islockShown ? this.renderLockIcon(locked) : null}
+
+                <IconButton
+                    className="nodrag"
+                    style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
+                    onClick={this.openMenuButton}>
+                    <MoreVertIcon />
+                </IconButton>
+            </div>
+        )
+    }
+
+    renderLockIcon = (locked) => {
+        if (locked) {
+            return (
+                <IconButton
+                    className="nodrag"
+                    style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
+                    onClick={() => this.props.data.registerNodeUpdate({
+                        id: this.props.data.id,
+                        type: 'unlock'
+                    })}>
+                    <LockIcon style={{ width: '20px' }} />
+                </IconButton>
+            )
+        } else {
+            return (
+                <IconButton
+                    className="nodrag"
+                    style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
+                    onClick={() => this.props.data.registerNodeUpdate({
+                        id: this.props.data.id,
+                        type: 'lock'
+                    })}>
+                    <LockOpenIcon style={{ width: '20px' }} />
+                </IconButton>
+            )
+        }
+    }
 
     openMenuButton = (event) => {
         this.setState({anchorEl: event.currentTarget})

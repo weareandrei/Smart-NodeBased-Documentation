@@ -39,9 +39,9 @@ export default class AvailableNodesList extends React.Component {
 
     render = () => {
         const pageNodes = filter(this.props.selectedNodeChildren, (node) => (node.type === 'page' || node.type === 'current page'))
-        console.log('this.props.selectedNode', this.props.selectedNode)
-        console.log('this.props.selectedNodeChildren', this.props.selectedNodeChildren)
-        console.log('pageNodes', pageNodes)
+        // console.log('this.props.selectedNode', this.props.selectedNode)
+        // console.log('this.props.selectedNodeChildren', this.props.selectedNodeChildren)
+        // console.log('pageNodes', pageNodes)
         const initialPageNodes = this.findInitialNodes(pageNodes)
         const previousParent = this.findGlobalParent(get(initialPageNodes, '[0].id', 'id non-existent')) // check if parent exists out of given bounds of selectedNodeChildren
 
