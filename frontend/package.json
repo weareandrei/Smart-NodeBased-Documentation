@@ -22,6 +22,7 @@
     "@tiptap/starter-kit": "^2.1.16",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.2",
+    "clsx": "^2.1.0",
     "history": "^4.10.1",
     "lodash": "^4.17.21",
     "postcss": "^8.4.31",
@@ -41,7 +42,8 @@
     "redux-first-history": "^5.1.1",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
-    "styled-components": "^5.3.11"
+    "styled-components": "^5.3.11",
+    "tailwind-merge": "^2.2.0"
   },
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
