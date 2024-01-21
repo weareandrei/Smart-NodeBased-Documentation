@@ -1,3 +1,9 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+
+/* This removes border on focus in TipTap editing */
+.ProseMirror:focus {
+    outline: none;
+}

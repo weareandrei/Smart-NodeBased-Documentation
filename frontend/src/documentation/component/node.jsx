@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from "prop-types"
 
-import Divider from '@mui/material/Divider';
+import Divider from '@mui/material/Divider'
 
 import get from "lodash/get"
 import map from "lodash/map"
@@ -26,17 +26,18 @@ import LockIcon from '@mui/icons-material/Lock'
 import NotesIcon from '@mui/icons-material/Notes'
 import LayersIcon from '@mui/icons-material/Layers'
 import DataObjectIcon from '@mui/icons-material/DataObject'
-import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import InsertLinkIcon from '@mui/icons-material/InsertLink'
 
 import Button from '@mui/material/Button'
-import { LinkPreview } from '@dhaiwat10/react-link-preview';
+import { LinkPreview } from '@dhaiwat10/react-link-preview'
 import Microlink from "@microlink/react"
 import styled from 'styled-components'
 
 import {calculateNodeSize, NODE_CONST_WIDTH} from "../util/sizeDeterminer"
-import NodeIcon from "./nodeIcon";
-import MenuItem from "@mui/material/MenuItem";
-import {Menu} from "@mui/material";
+import NodeIcon from "./nodeIcon"
+import MenuItem from "@mui/material/MenuItem"
+import {Menu} from "@mui/material"
+import BlockTextEditor from "./editor/blockTextEditor"
   
 export default class Node extends React.Component {
 
@@ -195,6 +196,13 @@ export default class Node extends React.Component {
     }
 
     renderNodeBody = (nodeType, body, nodeSize) => {
+
+        return (
+            <div style={style.nodeBody(nodeSize)} className="nodrag">
+                <BlockTextEditor content={this.getBodyContent(nodeType, body)}/>
+            </div>
+        )
+
         // separate case
         if (nodeType === 'link') {
             // return <LinkPreview
