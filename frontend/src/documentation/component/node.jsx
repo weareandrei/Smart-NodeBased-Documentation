@@ -65,7 +65,7 @@ export default class Node extends React.Component {
     }
 
     renderNode = (nodeSize) => {
-        // console.log('this.props.data', this.props.data)
+        console.log('this.props.data', this.props.data)
         return (
             <div style={style.nodeContainer}
                  onMouseEnter={() => this.setState({lockShown: true})}
@@ -84,7 +84,7 @@ export default class Node extends React.Component {
                 }
                 {
                     get(this.props.data, 'body', null) !== null ?
-                    this.renderNodeBody(this.props.data.type, this.props.data.body, nodeSize) : null
+                    this.renderNodeBody(this.props.data.type, this.props.id, this.props.data.content, nodeSize, this.props.data.registerNodeUpdate) : null
                 }
                 {
                     this.props.data.isParent ? <Handle type="source" position={Position.Bottom} id={this.props.data.id} style={style.nodeHandle} /> : null
@@ -195,11 +195,14 @@ export default class Node extends React.Component {
         return json.metadata
     }
 
-    renderNodeBody = (nodeType, body, nodeSize) => {
-
+    renderNodeBody = (nodeType, nodeId, content, nodeSize, registerNodeUpdate) => {
+    console.log('content: ', content)
         return (
             <div style={style.nodeBody(nodeSize)} className="nodrag">
-                <BlockTextEditor content={this.getBodyContent(nodeType, body)}/>
+                {/*<BlockTextEditor content={this.getBodyContent(nodeType, content)}*/}
+                <BlockTextEditor content={content}
+                                 nodeId={nodeId}
+                                 registerNodeUpdate={registerNodeUpdate}/>
             </div>
         )
 
@@ -227,14 +230,14 @@ export default class Node extends React.Component {
                 )
         }
 
-        // otherwise
-        const content = this.getBodyContent(nodeType, body)
-
-        return (
-            <div style={style.nodeBody(nodeSize)}>
-                {content}
-            </div>
-        )
+        // // otherwise
+        // const content = this.getBodyContent(nodeType, body)
+        //
+        // return (
+        //     <div style={style.nodeBody(nodeSize)}>
+        //         {content}
+        //     </div>
+        // )
     }
 
     getBodyContent = (nodeType, body) => {

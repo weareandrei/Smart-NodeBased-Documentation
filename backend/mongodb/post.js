@@ -94,6 +94,12 @@ const prepareUpdateObject = (record) => {
                     'nodes.$.layoutAttributes.locked': record.value
                 }
             }
+        case 'content':
+            return {
+                $set: {
+                    'nodes.$.content': record.value
+                }
+            }
         // Add other cases for different update types if needed
     }
 }

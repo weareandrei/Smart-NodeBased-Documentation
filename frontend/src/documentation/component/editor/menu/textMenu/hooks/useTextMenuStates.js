@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import {isCustomNodeSelected, isTextSelected} from "../../../lib/utils"
 
-export const useTextmenuStates = (editor) => {
+export const useTextMenuStates = (editor) => {
     const shouldShow = useCallback(
         ({ view, from }) => {
             if (!view) {

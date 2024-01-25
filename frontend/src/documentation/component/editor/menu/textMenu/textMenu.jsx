@@ -1,44 +1,80 @@
 import React from 'react'
-
-// import { Icon } from '@/components/ui/Icon'
-// import { Toolbar } from '@/components/ui/Toolbar'
-import { useTextmenuCommands } from './hooks/useTextmenuCommands'
-import { useTextmenuStates } from './hooks/useTextmenuStates'
+import {useTextMenuCommands} from './hooks/useTextMenuCommands'
+import {useTextMenuStates} from './hooks/useTextMenuStates'
 import { BubbleMenu } from '@tiptap/react'
-// import { memo } from 'react'
-// import * as Popover from '@radix-ui/react-popover'
-// import { Surface } from '@/components/ui/Surface'
-// import { ColorPicker } from '@/components/panels'
-// import { FontFamilyPicker } from './components/fontFamilyPicker'
-// import { FontSizePicker } from './components/fontSizePicker'
-import { useTextmenuContentTypes } from './hooks/useTextmenuContentTypes'
-// import { ContentTypePicker } from './components/contentTypePicker'
-// import { AIDropdown } from './components/AIDropdown'
-// import { EditLinkPopover } from './components/editLinkPopover'
+import { useTextMenuContentTypes } from './hooks/useTextMenuContentTypes'
+import IconButton from "@mui/material/IconButton"
 
-// We memorize the button so each button is not rerendered
-// on every editor state change
-// const MemoButton = memo(Toolbar.Button)
-// const MemoColorPicker = memo(ColorPicker)
-// const MemoFontFamilyPicker = memo(FontFamilyPicker)
-// const MemoFontSizePicker = memo(FontSizePicker)
-// const MemoContentTypePicker = memo(ContentTypePicker)
+import FormatBoldIcon from '@mui/icons-material/FormatBold'
+import FormatItalicIcon from '@mui/icons-material/FormatItalic'
+import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
+import {Paper, Popper} from "@mui/material"
 
 export const TextMenu = ({ editor }) => {
-  const commands = useTextmenuCommands(editor)
-  const states = useTextmenuStates(editor)
-  const blockOptions = useTextmenuContentTypes(editor)
+    const commands = useTextMenuCommands(editor)
+    const states = useTextMenuStates(editor)
 
-  return (
-    <BubbleMenu
-      tippyOptions={{ popperOptions: { placement: 'top-start' } }}
-      editor={editor}
-      pluginKey="textMenu"
-      shouldShow={states.shouldShow}
-      updateDelay={100}
-    >
-      <div>button 1</div>
-      <div>button 2</div>
-    </BubbleMenu>
-  )
+    return (
+        <BubbleMenu
+              tippyOptions={{ popperOptions: {
+                  strategy: 'fixed',
+                  modifiers: [
+                    {
+                      name: 'flip',
+                      enabled: true
+                    },
+                    {
+                      name: 'preventOverflow',
+                      options: {
+                        altAxis: true,
+                        tether: false,
+                      },
+                    },
+                  ]
+                },
+                  interactive: true,
+                  // appendTo: () => "parent"
+              }}
+              editor={editor}
+              pluginKey="textMenu"
+              shouldShow={states.shouldShow}>
+
+              <Paper style={style.toolBarWrapper}>
+                  <IconButton style={style.iconButton}
+                              active={states.isBold}
+                              onClick={commands.onBold}>
+                      <FormatBoldIcon/>
+                  </IconButton>
+                  <IconButton style={style.iconButton}
+                              active={states.isItalic}
+                              onClick={commands.onItalic}>
+                      <FormatItalicIcon />
+                  </IconButton>
+                  <IconButton style={style.iconButton}
+                              active={states.isUnderline}
+                              onClick={commands.onUnderline}>
+                      <FormatUnderlinedIcon />
+                  </IconButton>
+              </Paper>
+          </BubbleMenu>
+    )
+}
+
+const style = {
+  toolBarWrapper: {
+    display: 'flex',
+    justifyContent: 'start',
+    background: '#fff',
+    height: 'auto',
+    width: 'auto',
+    padding: '5px',
+    // boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.1)',
+    border: '1px #DFDFDF solid',
+    borderRadius: '15px'
+  },
+  iconButton: {
+    width: '27px',
+    borderRadius: '5px',
+    padding: '0px'
+  }
 }

@@ -27,7 +27,7 @@ export default class NodesGridSurface extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.autoLayoutActivated && this.state.autoLayoutActivated) {
-            console.log('\n ------- autoLayoutActivated: false')
+            // console.log('\n ------- autoLayoutActivated: false')
             this.setState({ autoLayoutActivated: false })
         }
     }
@@ -56,8 +56,8 @@ export default class NodesGridSurface extends Component {
     }
 
     autoLayoutActivated = () => {
-        console.log('\n\n')
-        console.log('Layout activated')
+        // console.log('\n\n')
+        // console.log('Layout activated')
         this.setState({ autoLayoutActivated: true })
     }
 
@@ -91,8 +91,8 @@ export default class NodesGridSurface extends Component {
         )
 
     getNodePosition = (thisNode, nodesLayout) => {
-        console.log('\n')
-        console.log('thisNode.id =', thisNode.id)
+        // console.log('\n')
+        // console.log('thisNode.id =', thisNode.id)
         if (this.state.autoLayoutActivated) {
             // If node's movement is not locked then give it auto-layout
             if (!get(thisNode, 'layoutAttributes.locked', false)) {
@@ -105,12 +105,12 @@ export default class NodesGridSurface extends Component {
 
         // In all the other case do : if position given - use position, otherwise auto
         if (get(thisNode, 'layoutAttributes.position', false)) {
-            console.log('-- existing position')
+            // console.log('-- existing position')
             return thisNode.layoutAttributes.position
         }
 
         const nodeCoordinates = nodesLayout.getNodeCoordinates(thisNode.id)
-        console.log('-- auto + non-existent position')
+        // console.log('-- auto + non-existent position')
         this.props.registerNodeUpdate({id: thisNode.id, type: 'position', autoLayout: true, position: nodeCoordinates})
         return nodeCoordinates
     }

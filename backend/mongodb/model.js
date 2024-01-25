@@ -14,6 +14,7 @@ const DocumentationModelSchema = new Schema({
         title: String,
         attributes: Object,
         body: Object,
+        content: String,
         layoutAttributes: {
             locked: Boolean,
             position: {

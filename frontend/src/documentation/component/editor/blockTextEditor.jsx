@@ -4,10 +4,12 @@ import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import TextStyle from '@tiptap/extension-text-style'
 import {EditorContent, EditorProvider, PureEditorContent, useCurrentEditor} from '@tiptap/react'
+import { Extension } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import {useBlockEditor} from "./useBlockEditor"
 // import {ContentItemMenu} from "./menu/containerMenu/contentItemMenu"
 import {TextMenu} from "./menu/textMenu/textMenu"
+import Button from "@mui/material/Button";
 
 // const extensions = [
 //     Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -24,23 +26,26 @@ import {TextMenu} from "./menu/textMenu/textMenu"
 //     }),
 // ]
 
-const BlockTextEditor = ({content}) => {
+const createStoreChangesExtention = (nodeId, registerNodeUpdate) => Extension.create({
+    onUpdate({ editor }) {
+        const content = editor.getHTML()
+        registerNodeUpdate({id: nodeId, type: 'content', content: content})
+    }
+})
+
+const BlockTextEditor = ({content, nodeId, registerNodeUpdate}) => {
 
     const menuContainerRef = useRef(null)
     const editorRef = useRef<PureEditorContent | null>(null)
 
-    console.log('beginning to creating useBlockEditor()')
-    const { editor, characterCount } = useBlockEditor({content})
-
-    console.log('finished creating useBlockEditor()')
+    const storeChangesExtention = createStoreChangesExtention(nodeId, registerNodeUpdate)
+    const { editor, characterCount } = useBlockEditor({content, storeChangesExtention})
 
     // const displayedUsers = users.slice(0, 3)
 
     if (!editor) {
         return null
     }
-
-    console.log('editor', editor)
 
     return (
         <>

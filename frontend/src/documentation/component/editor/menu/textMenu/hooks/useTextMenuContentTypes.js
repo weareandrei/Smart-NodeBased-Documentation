@@ -1,7 +1,7 @@
 import { Editor } from '@tiptap/react';
 import { useMemo } from 'react';
 
-export const useTextmenuContentTypes = (editor) => {
+export const useTextMenuContentTypes = (editor) => {
   const options = useMemo(() => {
     return [
       {

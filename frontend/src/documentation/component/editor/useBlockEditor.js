@@ -9,7 +9,7 @@ import {ExtensionKit} from "./extensions/extentionKit";
 // import { userColors, userNames } from '../lib/constants'
 // import { randomElement } from '../lib/utils'
 
-export const useBlockEditor = ({content}) => {
+export const useBlockEditor = ({content, storeChangesExtention}) => {
     const editor = useEditor(
         {
             content: content,
@@ -19,6 +19,7 @@ export const useBlockEditor = ({content}) => {
             // },
             extensions: [
                 StarterKit,
+                storeChangesExtention,
                 ...ExtensionKit({}),
             ],
             editorProps: {

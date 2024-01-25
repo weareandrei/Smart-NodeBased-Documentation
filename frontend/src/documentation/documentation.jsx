@@ -82,6 +82,18 @@ class Documentation extends React.Component {
                 )
                 this.props.syncNodes()
                 break
+            case 'content':
+                this.props.registerNodeUpdate(
+                    {
+                        id: update.id,
+                        update: {
+                            type: 'content',
+                            value: update.content
+                        }
+                    }
+                )
+                this.props.syncNodes()
+                break
             default:
                 break
         }

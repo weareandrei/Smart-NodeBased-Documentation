@@ -70,6 +70,16 @@ const applyNodeUpdate = (nodes, id, update) => {
                 }
                 return node
             })
+        case 'content':
+            return map(nodes, (node) => {
+                if (node.id === id) {
+                    return {
+                        ...node,
+                        content: update.value
+                    }
+                }
+                return node
+            })
         default:
             return nodes
     }
