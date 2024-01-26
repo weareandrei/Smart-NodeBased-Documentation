@@ -15,8 +15,9 @@ export default class NodesGridSurface extends Component {
         nodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired,
         registerNodeUpdate: PropTypes.func.isRequired,
-        autoLayoutActivated: PropTypes.func.isRequired
+        // autoLayoutActivated: PropTypes.func.isRequired
     }
+
     static defaultProps = {
         selectedNode: null
     }
@@ -56,8 +57,6 @@ export default class NodesGridSurface extends Component {
     }
 
     autoLayoutActivated = () => {
-        // console.log('\n\n')
-        // console.log('Layout activated')
         this.setState({ autoLayoutActivated: true })
     }
 
@@ -69,7 +68,8 @@ export default class NodesGridSurface extends Component {
                 ...node,
                 isChild: this.isChild(node),
                 isParent: this.isParent(node),
-                registerNodeUpdate: this.props.registerNodeUpdate
+                registerNodeUpdate: this.props.registerNodeUpdate,
+                createNewNode: this.createNewNode
             },
             position: this.getNodePosition(node, nodesLayout),
             draggable: !get(node, 'layoutAttributes.locked', false)
@@ -77,6 +77,10 @@ export default class NodesGridSurface extends Component {
             //     // ...node.size
             // }
         }))
+
+    createNewNode = (fromNode) => {
+
+    }
 
     createFlowEdges = (nodes) =>
         flatMap(nodes, (node) =>

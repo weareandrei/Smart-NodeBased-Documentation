@@ -1,13 +1,9 @@
-import React from 'react'
-import PropTypes from "prop-types"
-
-import Divider from '@mui/material/Divider'
+import React, {useRef, useState} from 'react'
+import PropTypes from 'prop-types'
 
 import get from "lodash/get"
-import map from "lodash/map"
-import isEmpty from "lodash/isEmpty"
 
-import { Handle, Position } from 'reactflow'
+import { Handle, Position, useKeyPress } from 'reactflow'
 import DescriptionIcon from '@mui/icons-material/Description'
 
 import ForwardIcon from '@mui/icons-material/Forward'
@@ -22,333 +18,283 @@ import BugReportIcon from '@mui/icons-material/BugReport'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 import LockIcon from '@mui/icons-material/Lock'
 
-// Header icons
-import NotesIcon from '@mui/icons-material/Notes'
-import LayersIcon from '@mui/icons-material/Layers'
-import DataObjectIcon from '@mui/icons-material/DataObject'
-import InsertLinkIcon from '@mui/icons-material/InsertLink'
-
 import Button from '@mui/material/Button'
 import { LinkPreview } from '@dhaiwat10/react-link-preview'
 import Microlink from "@microlink/react"
-import styled from 'styled-components'
 
 import {calculateNodeSize, NODE_CONST_WIDTH} from "../util/sizeDeterminer"
 import NodeIcon from "./nodeIcon"
-import MenuItem from "@mui/material/MenuItem"
-import {Menu} from "@mui/material"
 import BlockTextEditor from "./editor/blockTextEditor"
+import NodeMoreMenu from "./NodeMoreMenu"
   
-export default class Node extends React.Component {
+const Node = ({data}) => {
+    const [state, setState] = useState({
+        lockShown: false
+    })
 
-    static propTypes = {
-        data: PropTypes.object.isRequired,
+    const nodeSize = {
+        partsHeight: calculateNodeSize(data),
+        width: NODE_CONST_WIDTH
     }
 
-    static defaultProps = {
+    return (
+        <div style={style.nodeContainer}
+             onMouseEnter={() => setState({...state, lockShown: true})}
+             onMouseLeave={() => setState({...state, lockShown: false})}>
+            {
+                data.isChild ? <Handle type="target" position={Position.Top} id={data.id} style={style.nodeHandle} /> : null
+            }
+            {
+                renderNodeHeader(data.id, data.type, data.title, nodeSize.width, get(data, 'layoutAttributes', {}), data.registerNodeUpdate, state)
+            }
+            {
+                renderNodeAttributes(nodeSize.width, get(data, 'attributes', {}))
+            }
+            {
+                get(data, 'body', null) !== null ?
+                    renderNodeBody(data, nodeSize) : null
+            }
+            {
+                data.isParent ? <Handle type="source" position={Position.Bottom} id={data.id} style={style.nodeHandle} /> : null
+            }
+        </div>
+    )
 
-    }
+}
 
-    state = {
-        lockShown: false,
-        anchorEl: null,
-        menuOpened: false
-    }
+const renderNodeHeader = (id, nodeType, title, width, layoutAttributes, registerNodeUpdate, state) => {
+    const isPage = nodeType === 'page' || nodeType === 'current page'
+    const islockShown = state.lockShown || get(layoutAttributes, 'locked', false)
 
-    render = () => {
-        const nodeSize = {
-            partsHeight: calculateNodeSize(this.props.data),
-            width: NODE_CONST_WIDTH
-        }
-
-        return this.renderNode(nodeSize)
-    }
-
-    renderNode = (nodeSize) => {
-        console.log('this.props.data', this.props.data)
-        return (
-            <div style={style.nodeContainer}
-                 onMouseEnter={() => this.setState({lockShown: true})}
-                 onMouseLeave={() => this.setState({lockShown: false})}>
-                {
-                    this.props.data.isChild ? <Handle type="target" position={Position.Top} id={this.props.data.id} style={style.nodeHandle} /> : null
-                }
-                {
-                    this.renderNodeHeader(
-                        this.props.data.type,
-                        (this.props.data.type === 'page' || this.props.data.type === 'current page'),
-                        nodeSize.width)
-                }
-                {
-                    this.renderNodeAttributes(nodeSize.width)
-                }
-                {
-                    get(this.props.data, 'body', null) !== null ?
-                    this.renderNodeBody(this.props.data.type, this.props.id, this.props.data.content, nodeSize, this.props.data.registerNodeUpdate) : null
-                }
-                {
-                    this.props.data.isParent ? <Handle type="source" position={Position.Bottom} id={this.props.data.id} style={style.nodeHandle} /> : null
-                }
-            </div>
-        )
-    }
-
-    renderNodeHeader = (nodeType, isPage, width) =>
+    return (
         <div style={style.nodeHeader(isPage, width)}>
             <NodeIcon nodeType={nodeType} type={'main'}/>
-            {this.props.data.title}
+            {title}
 
-            {this.renderNodeMenuIcons(get(this.props.data, 'layoutAttributes.locked', false))}
-
-            <Menu
-                anchorEl={this.state.anchorEl}
-                keepMounted
-                open={Boolean(this.state.anchorEl)}
-                onClose={this.closeMenuButton}
-            >
-                <MenuItem key={'op1'} onClick={this.handleNodeMenuButton}>
-                    <CreateIcon style={{marginRight: '12px', color: '#552CF6'}}
-                    /> Create new task
-                </MenuItem>
-                <MenuItem key={'op2'} onClick={this.handleNodeMenuButton}>
-                    <BugReportIcon style={{marginRight: '12px', color: '#552CF6'}}
-                    /> Report bug
-                </MenuItem>
-            </Menu>
+            <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'row'}}>
+                {islockShown ? renderLockIcon(id, get(layoutAttributes, 'locked', false), registerNodeUpdate) : null}
+                <NodeMoreMenu/>
+            </div>
         </div>
+    )
+}
 
-    renderNodeMenuIcons = (locked) => {
-        const islockShown = this.state.lockShown || locked
-
+const renderLockIcon = (id, locked, registerNodeUpdate) => {
+    console.log('registerNodeUpdate func: ', registerNodeUpdate)
+    if (locked) {
         return (
-            <div style={{ marginLeft: 'auto' }}>
-                {islockShown ? this.renderLockIcon(locked) : null}
-
-                <IconButton
-                    className="nodrag"
-                    style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
-                    onClick={this.openMenuButton}>
-                    <MoreVertIcon />
-                </IconButton>
-            </div>
-        )
-    }
-
-    renderLockIcon = (locked) => {
-        if (locked) {
-            return (
-                <IconButton
-                    className="nodrag"
-                    style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
-                    onClick={() => this.props.data.registerNodeUpdate({
-                        id: this.props.data.id,
-                        type: 'unlock'
-                    })}>
-                    <LockIcon style={{ width: '20px' }} />
-                </IconButton>
-            )
-        } else {
-            return (
-                <IconButton
-                    className="nodrag"
-                    style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
-                    onClick={() => this.props.data.registerNodeUpdate({
-                        id: this.props.data.id,
-                        type: 'lock'
-                    })}>
-                    <LockOpenIcon style={{ width: '20px' }} />
-                </IconButton>
-            )
-        }
-    }
-
-    openMenuButton = (event) => {
-        this.setState({anchorEl: event.currentTarget})
-        // this.setState({ menuOpened: !this.state.menuOpened })
-    }
-
-    closeMenuButton = (event) => {
-        this.setState({anchorEl: null})
-        // this.setState({ menuOpened: !this.state.menuOpened })
-    }
-
-    handleNodeMenuButton = (context) => {
-        console.log('context', context)
-    }
-
-    renderNodeAttributes = (width) => {
-        return (
-            <div style={{position: 'relative'}}>
-                {Object.keys(get(this.props.data, 'attributes', {})).map(
-                    (attribute, index) => (
-                        <div key={index} style={style.nodeAttribute(width, index)}>
-                            {attribute}
-                        </div>
-                    ))}
-            </div>
-        )
-    }
-
-    customFetcher = async (url) => {
-        const response = await fetch(`https://rlp-proxy.herokuapp.com/v2?url=${url}`)
-        const json = await response.json()
-        return json.metadata
-    }
-
-    renderNodeBody = (nodeType, nodeId, content, nodeSize, registerNodeUpdate) => {
-    console.log('content: ', content)
-        return (
-            <div style={style.nodeBody(nodeSize)} className="nodrag">
-                {/*<BlockTextEditor content={this.getBodyContent(nodeType, content)}*/}
-                <BlockTextEditor content={content}
-                                 nodeId={nodeId}
-                                 registerNodeUpdate={registerNodeUpdate}/>
-            </div>
-        )
-
-        // separate case
-        if (nodeType === 'link') {
-            // return <LinkPreview
-            //     url={body.url}
-            //     width={NODE_CONST_WIDTH}
-            //     height={nodeSize.bodyHeight}
-            //     fetcher={this.customFetcher}
-            //     fallback={<div>Fallback</div>}
-            // />
-            return (
-                <div style={style.nodeBody(nodeSize)}>
-                    <Microlink
-                        url={'https://stripe.com/gb'}
-                        // contrast
-                        fetchData
-                        size="large"
-                        loop={false}
-                        media="logo"
-                        autoPlay={false}
-                    />
-                </div>
-                )
-        }
-
-        // // otherwise
-        // const content = this.getBodyContent(nodeType, body)
-        //
-        // return (
-        //     <div style={style.nodeBody(nodeSize)}>
-        //         {content}
-        //     </div>
-        // )
-    }
-
-    getBodyContent = (nodeType, body) => {
-        switch (nodeType) {
-            case 'note':
-                return body.text
-            case 'code snippet':
-                return body.code
-            case 'link':
-                return body.url
-        }
-    }
-
-    renderHeaderTitle = (data) => {
-        if (data.type === 'link') {
-            return (<div style={style.headerTitle}>{data.linkURL}</div>)
-        } else {
-            return (<div style={style.headerTitle}>{data.title}</div>)
-        }
-    }
-
-
-    renderHeaderButtons = (type) => {
-        switch (type) {
-            case 'page':
-                return (
-                    <div style={style.leftPart}>
-                        <IconButton sx={style.functionalButton}>
-                            <AddTaskIcon sx={{height: '12px', color:"#fff"}}/>
-                        </IconButton>
-                        <IconButton sx={{...style.functionalButton, background: '#FF4332'}}>
-                            <BugReportIcon sx={{height: '12px', color:"#fff"}}/>
-                        </IconButton>
-                    </div>
-                )
-
-            case 'current page':
-                return (
-                    <div style={style.leftPart}>
-                        <IconButton sx={style.functionalButton}>
-                            <AddTaskIcon sx={{height: '12px', color:"#fff"}}/>
-                        </IconButton>
-                        <IconButton sx={{...style.functionalButton, background: '#FF4332'}}>
-                            <BugReportIcon sx={{height: '12px', color:"#fff"}}/>
-                        </IconButton>
-                    </div>
-                )
-
-            case 'link':
-                return (
-                    <div style={style.leftPart}>
-                        <IconButton sx={{...style.functionalButton, background: '#379AE2'}}>
-                            <OpenInNewIcon sx={{height: '12px', color:"#D3D3D3"}}/>
-                        </IconButton>
-                    </div>
-                )
-
-            case 'code snippet':
-                return (
-                    <div style={style.leftPart}>
-                        <IconButton sx={{...style.functionalButton, background: '#3284FF'}}>
-                            <DownloadIcon sx={{height: '12px', color:"#fff"}}/>
-                        </IconButton>
-                        <IconButton sx={{...style.functionalButton, background: '#FF4332'}}>
-                            <BugReportIcon sx={{height: '12px', color:"#fff"}}/>
-                        </IconButton>
-                    </div>
-                )
-
-            default:
-                return (
-                    <div style={style.leftPart}>
-
-                    </div>
-                )
-        }
-    }
-
-    displayBodyHeader = (title, bodyApplied) =>
-        <Button
-            onClick={() => {
-                alert('clicked')
-            }}
-            style={{
-                ...style.nodeMainHeader,
-                ...(bodyApplied ? { borderRadius: '0px'} : { borderRadius: '0px 0px 10px 10px'})
-            }}
-        >
-            <div style={style.nodeMainTitle}>
-                <DescriptionIcon sx={{height: '16px', width: '16px', color:"#000", marginRight: '5px'}}/>
-                {title}
-            </div>
-            <div style={style.rightPart}>
-                <ForwardIcon sx={{height: '16px', width: '16px', color:"#000"}}/>
-            </div>
-        </Button>
-
-    renderOpenArrow = () =>
-        <div style={style.openArrowButtonContainer}>
-            <IconButton sx={style.openArrowButton}>
-                <ArrowBackIosNewIcon sx={{height: '5px', width: '5px', color:"#fff"}}/>
+            <IconButton
+                className="nodrag"
+                style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
+                onClick={() => registerNodeUpdate({
+                    id: id,
+                    type: 'unlock'
+                })}>
+                <LockIcon style={{ width: '20px' }} />
             </IconButton>
-        </div>
+        )
+    } else {
+        return (
+            <IconButton
+                className="nodrag"
+                style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
+                onClick={() => registerNodeUpdate({
+                    id: id,
+                    type: 'lock'
+                })}>
+                <LockOpenIcon style={{ width: '20px' }} />
+            </IconButton>
+        )
+    }
+}
 
-    determineSizeFromAttributes = (nodeType, attributes) => {
-        return {
-            bodyHeight: attributes,
-            width: attributes
-        }
+const openMenuButton = (event) => {
+    this.setState({anchorEl: event.currentTarget})
+    // this.setState({ menuOpened: !this.state.menuOpened })
+}
+
+const closeMenuButton = (event) => {
+    this.setState({anchorEl: null})
+    // this.setState({ menuOpened: !this.state.menuOpened })
+}
+
+const handleNodeMenuButton = (context) => {
+    console.log('context', context)
+}
+
+const renderNodeAttributes = (width, attributes) => {
+    return (
+        <div style={{position: 'relative'}}>
+            {Object.keys(attributes).map(
+                (attribute, index) => (
+                    <div key={index} style={style.nodeAttribute(width, index)}>
+                        {attribute}
+                    </div>
+                ))}
+        </div>
+    )
+}
+
+const customFetcher = async (url) => {
+    const response = await fetch(`https://rlp-proxy.herokuapp.com/v2?url=${url}`)
+    const json = await response.json()
+    return json.metadata
+}
+
+const renderNodeBody = (props, nodeSize) => {
+    console.log('content: ', props.content)
+
+    return (
+        <div style={style.nodeBody(nodeSize)} className="nodrag">
+            {/*<BlockTextEditor content={this.getBodyContent(nodeType, content)}*/}
+            <BlockTextEditor content={props.content}
+                             nodeId={props.id}
+                             registerNodeUpdate={props.registerNodeUpdate}
+                             createNewNode={props.createNewNode}/>
+        </div>
+    )
+
+    // separate case
+    if (props.type === 'link') {
+        // return <LinkPreview
+        //     url={body.url}
+        //     width={NODE_CONST_WIDTH}
+        //     height={nodeSize.bodyHeight}
+        //     fetcher={this.customFetcher}
+        //     fallback={<div>Fallback</div>}
+        // />
+        return (
+            <div style={style.nodeBody(nodeSize)}>
+                <Microlink
+                    url={'https://stripe.com/gb'}
+                    // contrast
+                    fetchData
+                    size="large"
+                    loop={false}
+                    media="logo"
+                    autoPlay={false}
+                />
+            </div>
+            )
     }
 
+    // // otherwise
+    // const content = this.getBodyContent(nodeType, body)
+    //
+    // return (
+    //     <div style={style.nodeBody(nodeSize)}>
+    //         {content}
+    //     </div>
+    // )
+}
+
+const getBodyContent = (nodeType, body) => {
+    switch (nodeType) {
+        case 'note':
+            return body.text
+        case 'code snippet':
+            return body.code
+        case 'link':
+            return body.url
+    }
+}
+
+const renderHeaderTitle = (data) => {
+    if (data.type === 'link') {
+        return (<div style={style.headerTitle}>{data.linkURL}</div>)
+    } else {
+        return (<div style={style.headerTitle}>{data.title}</div>)
+    }
+}
+
+
+const renderHeaderButtons = (type) => {
+    switch (type) {
+        case 'page':
+            return (
+                <div style={style.leftPart}>
+                    <IconButton sx={style.functionalButton}>
+                        <AddTaskIcon sx={{height: '12px', color:"#fff"}}/>
+                    </IconButton>
+                    <IconButton sx={{...style.functionalButton, background: '#FF4332'}}>
+                        <BugReportIcon sx={{height: '12px', color:"#fff"}}/>
+                    </IconButton>
+                </div>
+            )
+
+        case 'current page':
+            return (
+                <div style={style.leftPart}>
+                    <IconButton sx={style.functionalButton}>
+                        <AddTaskIcon sx={{height: '12px', color:"#fff"}}/>
+                    </IconButton>
+                    <IconButton sx={{...style.functionalButton, background: '#FF4332'}}>
+                        <BugReportIcon sx={{height: '12px', color:"#fff"}}/>
+                    </IconButton>
+                </div>
+            )
+
+        case 'link':
+            return (
+                <div style={style.leftPart}>
+                    <IconButton sx={{...style.functionalButton, background: '#379AE2'}}>
+                        <OpenInNewIcon sx={{height: '12px', color:"#D3D3D3"}}/>
+                    </IconButton>
+                </div>
+            )
+
+        case 'code snippet':
+            return (
+                <div style={style.leftPart}>
+                    <IconButton sx={{...style.functionalButton, background: '#3284FF'}}>
+                        <DownloadIcon sx={{height: '12px', color:"#fff"}}/>
+                    </IconButton>
+                    <IconButton sx={{...style.functionalButton, background: '#FF4332'}}>
+                        <BugReportIcon sx={{height: '12px', color:"#fff"}}/>
+                    </IconButton>
+                </div>
+            )
+
+        default:
+            return (
+                <div style={style.leftPart}>
+
+                </div>
+            )
+    }
+}
+
+const displayBodyHeader = (title, bodyApplied) =>
+    <Button
+        onClick={() => {
+            alert('clicked')
+        }}
+        style={{
+            ...style.nodeMainHeader,
+            ...(bodyApplied ? { borderRadius: '0px'} : { borderRadius: '0px 0px 10px 10px'})
+        }}
+    >
+        <div style={style.nodeMainTitle}>
+            <DescriptionIcon sx={{height: '16px', width: '16px', color:"#000", marginRight: '5px'}}/>
+            {title}
+        </div>
+        <div style={style.rightPart}>
+            <ForwardIcon sx={{height: '16px', width: '16px', color:"#000"}}/>
+        </div>
+    </Button>
+
+const renderOpenArrow = () =>
+    <div style={style.openArrowButtonContainer}>
+        <IconButton sx={style.openArrowButton}>
+            <ArrowBackIosNewIcon sx={{height: '5px', width: '5px', color:"#fff"}}/>
+        </IconButton>
+    </div>
+
+const determineSizeFromAttributes = (nodeType, attributes) => {
+    return {
+        bodyHeight: attributes,
+        width: attributes
+    }
 }
 
 const straightText = {
@@ -504,3 +450,5 @@ const style = {
         background: '#000'
     }
 }
+
+export default Node

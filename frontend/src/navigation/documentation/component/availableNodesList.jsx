@@ -69,7 +69,7 @@ export default class AvailableNodesList extends React.Component {
         const nodesChildrenPages = this.findNodesFromIdsThatArePages(get(node, 'children', []))
         if (nodesChildrenPages.length > 0 && level <= MAX_NODES_LEVEL) {
             return (
-                <ListItem style={style.nodesListItem}>
+                <ListItem style={style.nodesListItem} key={node.id}>
                     <MaxNodeNav label={node.title}
                                 nodeType={node.type}
                                 nodeId={node.id}
@@ -86,7 +86,7 @@ export default class AvailableNodesList extends React.Component {
             )
         } else {
             return (
-                <ListItem style={style.nodesListItem}>
+                <ListItem style={style.nodesListItem} key={node.id}>
                     <MaxNodeNav label={node.title}
                                 nodeType={node.type}
                                 nodeId={node.id}

@@ -30,11 +30,7 @@ const getNextId = (nodes) => {
     return (maxId + 1).toString()
 }
 
-export default function FlowComponent(props) {
-    const minimapStyle = {
-        height: 120,
-    }
-
+const FlowComponent = (props) => {
     const [nodes, setNodes, onNodesChange] = useNodesState(props.nodes)
     const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges)
     const [reactFlowInstance, setReactFlowInstance] = useState(null)
@@ -43,12 +39,6 @@ export default function FlowComponent(props) {
         setNodes(props.nodes)
         setEdges(props.edges)
     }, [props.nodes, props.edges])
-
-    // useEffect(() => {
-    //     if (reactFlowInstance) {
-    //         reactFlowInstance.fitView();
-    //     }
-    // }, [nodes, reactFlowInstance]);
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
 
@@ -61,7 +51,7 @@ export default function FlowComponent(props) {
         event.dataTransfer.dropEffect = 'move'
     }, [])
 
-    const onDrop = useCallback(
+    const onDrop = useCallback (
         (event) => {
             event.preventDefault()
 
@@ -133,7 +123,7 @@ export default function FlowComponent(props) {
                 nodeTypes={nodeTypes}
             >
                 <Background color="#aaa" gap={16} />
-                <MiniMap style={minimapStyle} zoomable pannable />
+                <MiniMap style={{height: 120}} zoomable pannable />
                 <Controls />
             </ReactFlow>
             {/*<NodeSelector/>*/}
@@ -150,5 +140,8 @@ export default function FlowComponent(props) {
 FlowComponent.defaultProps = {
     nodes: [],
     edges: [],
-    registerNodeUpdate: null
+    registerNodeUpdate: null,
+    autoLayoutActivated: null
 }
+
+export default FlowComponent

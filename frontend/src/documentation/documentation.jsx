@@ -12,7 +12,7 @@ import NodesGridSurface from './component/nodesGridSurface'
 class Documentation extends React.Component {
 
     static propTypes = {
-        nodesSyncQueue: PropTypes.array.isRequired,
+        nodesSyncQueue: PropTypes.object.isRequired,
         registerNodeUpdate: PropTypes.func.isRequired,
         registerNodeCreate: PropTypes.func.isRequired,
         syncNodes: PropTypes.func.isRequired,
@@ -36,7 +36,8 @@ class Documentation extends React.Component {
         return (
             <NodesGridSurface nodes={this.props.selectedNodeChildren}
                               selectNode={this.props.selectNode}
-                              registerNodeUpdate={this.registerNodeUpdate}/>
+                              registerNodeUpdate={this.registerNodeUpdate}
+                              registerNodeCreate={this.registerNodeCreate}/>
         )
     }
 
@@ -97,15 +98,10 @@ class Documentation extends React.Component {
             default:
                 break
         }
+    }
 
-        // add updated node id and its type to reducer.
-        //   Then we will push all updates at once when command received
-
-        // console.log('nodeModified: ',node)
-        // this.isNewNode(node) ?
-        //     this.props.registerNodeCreate(this.props.documentation, node, this.props.selectedNode.id) :
-        //     this.props.registerNodeUpdate(this.props.documentation, node)
-        // this.props.syncNodes()
+    registerNodeCreate = (create) => {
+        console.log('registering node create', create)
     }
 
     isNewNode = (thisNode) => {
