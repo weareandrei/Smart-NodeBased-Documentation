@@ -5,10 +5,6 @@ import StarterKit from '@tiptap/starter-kit'
 import initialContent from "./initialContent"
 import {ExtensionKit} from "./extensions/extentionKit";
 
-// import { EditorContext } from '../context/EditorContext'
-// import { userColors, userNames } from '../lib/constants'
-// import { randomElement } from '../lib/utils'
-
 export const useBlockEditor = ({content, storeChangesExtention}) => {
     const editor = useEditor(
         {

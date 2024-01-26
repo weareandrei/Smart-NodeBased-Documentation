@@ -33,8 +33,7 @@ const createStoreChangesExtention = (nodeId, registerNodeUpdate) => Extension.cr
     }
 })
 
-const BlockTextEditor = ({content, nodeId, registerNodeUpdate, createNewNode}) => {
-
+const BlockTextEditor = ({ content, nodeId, registerNodeUpdate, createNewNode }) => {
     const menuContainerRef = useRef(null)
     const editorRef = useRef<PureEditorContent | null>(null)
 
@@ -46,6 +45,9 @@ const BlockTextEditor = ({content, nodeId, registerNodeUpdate, createNewNode}) =
     if (!editor) {
         return null
     }
+
+    editor.createNewNode = createNewNode
+    editor.nodeId = nodeId
 
     return (
         <>

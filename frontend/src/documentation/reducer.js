@@ -3,6 +3,7 @@ import {
     LOADED_DOCUMENTATION_FAIL,
     LOADING_DOCUMENTATION,
     REGISTER_NODE_UPDATE,
+    REGISTER_NODE_CREATE,
     SELECT_NODE,
     SELECT_PARENT_NODE,
     SELECT_PROJECT,
@@ -12,6 +13,7 @@ import {
 } from './action'
 import flatMap from 'lodash/flatMap'
 import filter from 'lodash/filter'
+import maxBy from 'lodash/maxBy'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import find from "lodash/find"
@@ -85,6 +87,14 @@ const applyNodeUpdate = (nodes, id, update) => {
     }
 }
 
+const applyNodeCreate = (allNodes, newNodeId, fromNode) => {
+    const currentParent = findParentNode(allNodes, find(allNodes, (node) => node.id === fromNode))
+    return {
+        ...currentParent,
+        children: [...currentParent.children, newNodeId]
+    }
+}
+
 const replaceOutdatedNodes = (allNodes, updatedNodes) =>
     map(allNodes, (oldNode) => {
         const foundUpdatedNode = find(updatedNodes, (updatedNode) => updatedNode.id === oldNode.id)
@@ -153,6 +163,29 @@ const documentationReducer = (state = initialState, action) => {
                     update: appendNodeUpdateQueue(state.nodesSyncQueue.update, action.id, action.update)
                 }
             }
+
+        case REGISTER_NODE_CREATE:
+            console.log('REGISTER_NODE_CREATE', action.fromNode)
+            const newNodeId = getMaxNodeId(state.documentation.nodes) + 1
+
+            const updatedParent = applyNodeCreate(state.documentation.nodes, newNodeId, action.fromNode)
+            const allNodes2 = [
+                ...replaceOutdatedNodes(state.documentation.nodes, [updatedParent]),
+                {id: newNodeId.toString(), projectId: state.selectedProject.id, type: 'note', content: '', title: '', attributes: {}, body: {}, layoutAttributes: {}}
+            ]
+            return {
+                ...state,
+                documentation: {
+                    ...state.documentation,
+                    nodes: allNodes2
+                },
+                selectedNodeChildren: getProjectNodes(allNodes2, state.selectedProject.id),
+                // nodesSyncQueue: {
+                //     create: state.nodesSyncQueue.create,
+                //     update: appendNodeUpdateQueue(state.nodesSyncQueue.update, action.id, action.update)
+                // }
+            }
+
         case SYNCING_NODES:
             return {
                 ...state,
@@ -294,5 +327,10 @@ const addParentData = (nodes) =>
         }
         return {...node, parent: parentNode.id}
     })
+
+const getMaxNodeId = (nodes) => {
+    const maxIdObject = maxBy(nodes, obj => parseInt(obj.id))
+    return parseInt(maxIdObject.id)
+}
 
 export default documentationReducer

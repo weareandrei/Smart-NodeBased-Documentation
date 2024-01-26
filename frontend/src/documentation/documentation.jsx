@@ -37,7 +37,7 @@ class Documentation extends React.Component {
             <NodesGridSurface nodes={this.props.selectedNodeChildren}
                               selectNode={this.props.selectNode}
                               registerNodeUpdate={this.registerNodeUpdate}
-                              registerNodeCreate={this.registerNodeCreate}/>
+                              registerNodeCreate={this.props.registerNodeCreate}/>
         )
     }
 
@@ -98,10 +98,6 @@ class Documentation extends React.Component {
             default:
                 break
         }
-    }
-
-    registerNodeCreate = (create) => {
-        console.log('registering node create', create)
     }
 
     isNewNode = (thisNode) => {

@@ -142,7 +142,7 @@ const customFetcher = async (url) => {
 }
 
 const renderNodeBody = (props, nodeSize) => {
-    console.log('content: ', props.content)
+    console.log('renderNodeBody props: ', props)
 
     return (
         <div style={style.nodeBody(nodeSize)} className="nodrag">

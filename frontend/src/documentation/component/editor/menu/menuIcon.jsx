@@ -3,10 +3,13 @@ import React from 'react'
 import { FaBold, FaItalic } from "react-icons/fa"
 import { MdOutlineFormatUnderlined } from "react-icons/md"
 import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu"
-
+import { RiCodeBoxFill } from "react-icons/ri"
+import { MdLibraryAdd } from "react-icons/md"
 
 const MenuIcon = ({ name, className}) => {
     switch (name) {
+        case 'newNode':
+            return (<MdLibraryAdd style={style.icon} className={className}/>)
         case 'paragraph':
             return (<FaBold style={style.icon} className={className}/>)
         case 'heading1':
@@ -19,6 +22,8 @@ const MenuIcon = ({ name, className}) => {
             return (<FaItalic style={style.icon} className={className}/>)
         case 'underline':
             return (<MdOutlineFormatUnderlined style={style.icon} className={className}/>)
+        case 'codeBlock':
+            return (<RiCodeBoxFill style={style.icon} className={className}/>)
 
     }
 }

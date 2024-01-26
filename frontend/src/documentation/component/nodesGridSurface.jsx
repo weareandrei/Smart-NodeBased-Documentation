@@ -8,6 +8,7 @@ import isEqual from 'lodash/isEqual'
 
 import NodesLayout from '../util/nodesLayout'
 import find from "lodash/find"
+import {registerNodeCreate} from "../action";
 
 export default class NodesGridSurface extends Component {
 
@@ -15,7 +16,7 @@ export default class NodesGridSurface extends Component {
         nodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired,
         registerNodeUpdate: PropTypes.func.isRequired,
-        // autoLayoutActivated: PropTypes.func.isRequired
+        registerNodeCreate: PropTypes.func.isRequired
     }
 
     static defaultProps = {
@@ -79,7 +80,8 @@ export default class NodesGridSurface extends Component {
         }))
 
     createNewNode = (fromNode) => {
-
+        console.log('create new node, from node:', fromNode)
+        this.props.registerNodeCreate(fromNode)
     }
 
     createFlowEdges = (nodes) =>

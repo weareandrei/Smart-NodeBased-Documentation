@@ -32,7 +32,7 @@ export const GROUPS = [
         description: 'High priority section title',
         aliases: ['nn'],
         action: editor => {
-          editor.createNewNode()
+          editor.createNewNode(editor.nodeId)
         },
       }
     ],
