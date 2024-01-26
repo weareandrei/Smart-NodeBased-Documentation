@@ -45,17 +45,20 @@ const Node = ({data}) => {
                 data.isChild ? <Handle type="target" position={Position.Top} id={data.id} style={style.nodeHandle} /> : null
             }
             {
-                renderNodeHeader(data.id, data.type, data.title, nodeSize.width, get(data, 'layoutAttributes', {}), data.registerNodeUpdate, state)
+                data.title === '' ?
+                    renderNewbornNodeHeader(nodeSize.width, state)
+                    :
+                    renderNodeHeader(data.id, data.type, data.title, nodeSize.width, get(data, 'layoutAttributes', {}), data.registerNodeUpdate, state)
             }
             {
                 renderNodeAttributes(nodeSize.width, get(data, 'attributes', {}))
             }
             {
-                get(data, 'body', null) !== null ?
-                    renderNodeBody(data, nodeSize) : null
+                get(data, 'body', null) === null ? null :
+                    renderNodeBody(data, nodeSize)
             }
             {
-                data.isParent ? <Handle type="source" position={Position.Bottom} id={data.id} style={style.nodeHandle} /> : null
+                data.isParent ? <Handle type="source" position={Position.Bottom} id={data.id} style={{...style.nodeHandle, bottom: '+22px'}} /> : null
             }
         </div>
     )
@@ -78,6 +81,16 @@ const renderNodeHeader = (id, nodeType, title, width, layoutAttributes, register
         </div>
     )
 }
+
+const renderNewbornNodeHeader = (width, state) =>
+    <div style={style.nodeHeader(false, width, true)}>
+        <NodeIcon nodeType={'none'} type={'main'}/>
+        ...
+        <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'row'}}>
+            <NodeMoreMenu/>
+        </div>
+    </div>
+
 
 const renderLockIcon = (id, locked, registerNodeUpdate) => {
     console.log('registerNodeUpdate func: ', registerNodeUpdate)
@@ -123,14 +136,18 @@ const handleNodeMenuButton = (context) => {
 }
 
 const renderNodeAttributes = (width, attributes) => {
+    if (Object.keys(attributes).length === 0) {
+        return null
+    }
+
     return (
-        <div style={{position: 'relative'}}>
-            {Object.keys(attributes).map(
-                (attribute, index) => (
-                    <div key={index} style={style.nodeAttribute(width, index)}>
-                        {attribute}
-                    </div>
-                ))}
+        <div style={style.nodeAttributes(width)}>
+            {Object.keys(attributes).map((attribute, index) => (
+                <div key={index} style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <span>{attribute}</span>
+                    <span>{attributes[attribute]}</span>
+                </div>
+            ))}
         </div>
     )
 }
@@ -145,7 +162,7 @@ const renderNodeBody = (props, nodeSize) => {
     console.log('renderNodeBody props: ', props)
 
     return (
-        <div style={style.nodeBody(nodeSize)} className="nodrag">
+        <div style={style.nodeBody(nodeSize, get(props, 'attributes', {}))} className="nodrag">
             {/*<BlockTextEditor content={this.getBodyContent(nodeType, content)}*/}
             <BlockTextEditor content={props.content}
                              nodeId={props.id}
@@ -308,40 +325,42 @@ const style = {
         position: 'relative',
         borderRadius: '15px',
     },
-    nodeHeader: (isPage, width) => {
+    nodeHeader: (isPage, width, newBorn=false) => {
         const borderDefined =  isPage ? '1px' : '0px'
         return {
-            position: 'absolute',
+            position: 'relative',
             zIndex: 1500,
             borderRadius: '15px',
             boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.1)',
-            height: '50px',
+            height: newBorn ? '30px' : '50px',
             width: width + 'px',
-            padding: '13px 18px',
+            padding: '0px 18px',
             background: '#fff',
             display: 'flex',
             flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
             fontWeight: 500,
-            border: borderDefined + '#552CF6 solid'
+            border: borderDefined + '#552CF6 solid',
+            color: newBorn ? '#DFDFDF' : '#000',
         }
     },
-    nodeAttribute: (width, yOffset) => ({
+    nodeAttributes: (width) => ({
         position: 'relative',
-        zIndex: 1500 - yOffset-1,
-        top: yOffset * 50,
-        height: '94px',
-        width: width + 'px',
-        padding: '63px 18px 13px 18px',
-        borderRadius: '15px',
+        top: '-25px',
+        padding: '38px 18px 13px 18px',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.1)',
         background: '#fff',
+        width: width + 'px',
+        borderRadius: '15px',
+        fontSize: '14px',
         color: '#938EA6',
-        fontSize: '14px'
+        zIndex: 1500 - 1,
     }),
-    nodeBody: (nodeSize) => ({
+    nodeBody: (nodeSize, attributes) => ({
         position: 'relative',
         zIndex: 1450,
-        top: '-25px',
+        top: Object.keys(attributes).length > 0 ? '-50px' : '-25px',
         height: nodeSize.bodyHeight + 25 + 'px',
         width: nodeSize.width + 'px',
         padding: '38px 18px 13px 18px',

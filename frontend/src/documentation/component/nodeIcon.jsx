@@ -6,6 +6,7 @@ import NotesIcon from '@mui/icons-material/Notes'
 import LayersIcon from '@mui/icons-material/Layers'
 import DataObjectIcon from '@mui/icons-material/DataObject'
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 
@@ -36,6 +37,8 @@ export default class NodeIcon extends React.Component {
                 return <InsertLinkIcon style={{...this.selectStyle(this.props.type), ...this.props.sx}}/>
             case 'backButton' :
                 return <KeyboardBackspaceIcon style={{...this.selectStyle('backButton'), ...this.props.sx}}/>
+            case 'none' :
+                return <AddCircleOutlineIcon style={{...this.selectStyle(this.props.type), color: '#DFDFDF', ...this.props.sx}}/>
         }
     }
 
