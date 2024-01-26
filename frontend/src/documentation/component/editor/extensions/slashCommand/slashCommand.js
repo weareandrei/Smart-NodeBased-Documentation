@@ -71,11 +71,11 @@ export const SlashCommand = Extension.create({
               ? end - ($head.nodeBefore.text?.substring($head.nodeBefore.text?.indexOf('/')).length ?? 0)
               : $from.start();
 
-          const tr = state.tr.deleteRange(from, end);
-          view.dispatch(tr);
+          const tr = state.tr.deleteRange(from, end)
+          view.dispatch(tr)
 
-          props.action(editor);
-          view.focus();
+          props.action(editor)
+          view.focus()
         },
         items: ({ query }) => {
           const withFilteredCommands = GROUPS.map(group => ({
