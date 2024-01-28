@@ -24,6 +24,7 @@ export default class NodesGridSurface extends Component {
     }
 
     state = {
+        nodesSizes: [],
         autoLayoutActivated: false
     }
 
@@ -35,7 +36,7 @@ export default class NodesGridSurface extends Component {
     }
 
     render() {
-        const nodesLayout = new NodesLayout(this.props.nodes)
+        const nodesLayout = new NodesLayout(this.props.nodes, this.state.nodesSizes)
         nodesLayout.buildLayout()
 
         return this.renderFlowComponent(
@@ -52,6 +53,7 @@ export default class NodesGridSurface extends Component {
                     edges={edges}
                     registerNodeUpdate={this.props.registerNodeUpdate}
                     autoLayoutActivated={this.autoLayoutActivated}
+                    registerNodesSizes={this.registerNodesSizes}
                 />
             </div>
         )
@@ -95,6 +97,32 @@ export default class NodesGridSurface extends Component {
                 // label: 'this is an edge label'
             }))
         )
+
+    registerNodesSizes = (nodesSizes) => {
+        if (this.sizesChanged(this.state.nodesSizes, nodesSizes)) {
+            console.log('sizesChanged')
+            this.setState({ nodesSizes: nodesSizes })
+        }
+    }
+
+    sizesChanged = (oldSizes, newSizes) => {
+        if (oldSizes.length === 0 && newSizes.length !== 0) {
+            return true
+        }
+
+        const foundUpdatedSize = find(oldSizes, (oldSize) => {
+            const oldId = oldSize.id
+            const sameIdNewSize = find(newSizes, (newSize) => newSize.id === oldId)
+            if (sameIdNewSize.height !== oldSize.height || sameIdNewSize.width !== oldSize.width) {
+                return true
+            }
+        })
+
+        if (foundUpdatedSize !== undefined) {
+            return true
+        }
+        return false
+    }
 
     getNodePosition = (thisNode, nodesLayout) => {
         // console.log('\n')

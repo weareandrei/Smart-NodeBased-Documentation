@@ -22,7 +22,6 @@ import Button from '@mui/material/Button'
 import { LinkPreview } from '@dhaiwat10/react-link-preview'
 import Microlink from "@microlink/react"
 
-import {calculateNodeSize, NODE_CONST_WIDTH} from "../util/sizeDeterminer"
 import NodeIcon from "./nodeIcon"
 import BlockTextEditor from "./editor/blockTextEditor"
 import NodeMoreMenu from "./NodeMoreMenu"
@@ -31,11 +30,6 @@ const Node = ({data}) => {
     const [state, setState] = useState({
         lockShown: false
     })
-
-    const nodeSize = {
-        partsHeight: calculateNodeSize(data),
-        width: NODE_CONST_WIDTH
-    }
 
     return (
         <div style={style.nodeContainer}
@@ -46,16 +40,16 @@ const Node = ({data}) => {
             }
             {
                 data.title === '' ?
-                    renderNewbornNodeHeader(nodeSize.width, state)
+                    renderNewbornNodeHeader(state)
                     :
-                    renderNodeHeader(data.id, data.type, data.title, nodeSize.width, get(data, 'layoutAttributes', {}), data.registerNodeUpdate, state)
+                    renderNodeHeader(data.id, data.type, data.title, get(data, 'layoutAttributes', {}), data.registerNodeUpdate, state)
             }
             {
-                renderNodeAttributes(nodeSize.width, get(data, 'attributes', {}))
+                renderNodeAttributes(get(data, 'attributes', {}))
             }
             {
                 get(data, 'body', null) === null ? null :
-                    renderNodeBody(data, nodeSize)
+                    renderNodeBody(data)
             }
             {
                 data.isParent ? <Handle type="source" position={Position.Bottom} id={data.id} style={{...style.nodeHandle, bottom: '+22px'}} /> : null
@@ -65,12 +59,12 @@ const Node = ({data}) => {
 
 }
 
-const renderNodeHeader = (id, nodeType, title, width, layoutAttributes, registerNodeUpdate, state) => {
+const renderNodeHeader = (id, nodeType, title, layoutAttributes, registerNodeUpdate, state) => {
     const isPage = nodeType === 'page' || nodeType === 'current page'
     const islockShown = state.lockShown || get(layoutAttributes, 'locked', false)
 
     return (
-        <div style={style.nodeHeader(isPage, width)}>
+        <div style={style.nodeHeader(isPage)}>
             <NodeIcon nodeType={nodeType} type={'main'}/>
             {title}
 
@@ -82,8 +76,8 @@ const renderNodeHeader = (id, nodeType, title, width, layoutAttributes, register
     )
 }
 
-const renderNewbornNodeHeader = (width, state) =>
-    <div style={style.nodeHeader(false, width, true)}>
+const renderNewbornNodeHeader = (state) =>
+    <div style={style.nodeHeader(false, true)}>
         <NodeIcon nodeType={'none'} type={'main'}/>
         ...
         <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'row'}}>
@@ -93,7 +87,6 @@ const renderNewbornNodeHeader = (width, state) =>
 
 
 const renderLockIcon = (id, locked, registerNodeUpdate) => {
-    console.log('registerNodeUpdate func: ', registerNodeUpdate)
     if (locked) {
         return (
             <IconButton
@@ -135,13 +128,13 @@ const handleNodeMenuButton = (context) => {
     console.log('context', context)
 }
 
-const renderNodeAttributes = (width, attributes) => {
+const renderNodeAttributes = (attributes) => {
     if (Object.keys(attributes).length === 0) {
         return null
     }
 
     return (
-        <div style={style.nodeAttributes(width)}>
+        <div style={style.nodeAttributes()}>
             {Object.keys(attributes).map((attribute, index) => (
                 <div key={index} style={{display: 'flex', justifyContent: 'space-between'}}>
                     <span>{attribute}</span>
@@ -158,11 +151,9 @@ const customFetcher = async (url) => {
     return json.metadata
 }
 
-const renderNodeBody = (props, nodeSize) => {
-    console.log('renderNodeBody props: ', props)
-
+const renderNodeBody = (props) => {
     return (
-        <div style={style.nodeBody(nodeSize, get(props, 'attributes', {}))} className="nodrag">
+        <div style={style.nodeBody(get(props, 'attributes', {}))} className="nodrag">
             {/*<BlockTextEditor content={this.getBodyContent(nodeType, content)}*/}
             <BlockTextEditor content={props.content}
                              nodeId={props.id}
@@ -181,7 +172,7 @@ const renderNodeBody = (props, nodeSize) => {
         //     fallback={<div>Fallback</div>}
         // />
         return (
-            <div style={style.nodeBody(nodeSize)}>
+            <div style={style.nodeBody()}>
                 <Microlink
                     url={'https://stripe.com/gb'}
                     // contrast
@@ -325,7 +316,7 @@ const style = {
         position: 'relative',
         borderRadius: '15px',
     },
-    nodeHeader: (isPage, width, newBorn=false) => {
+    nodeHeader: (isPage, newBorn=false) => {
         const borderDefined =  isPage ? '1px' : '0px'
         return {
             position: 'relative',
@@ -333,7 +324,7 @@ const style = {
             borderRadius: '15px',
             boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.1)',
             height: newBorn ? '30px' : '50px',
-            width: width + 'px',
+            width: '350px',
             padding: '0px 18px',
             background: '#fff',
             display: 'flex',
@@ -345,24 +336,24 @@ const style = {
             color: newBorn ? '#DFDFDF' : '#000',
         }
     },
-    nodeAttributes: (width) => ({
+    nodeAttributes: () => ({
         position: 'relative',
         top: '-25px',
         padding: '38px 18px 13px 18px',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.1)',
         background: '#fff',
-        width: width + 'px',
+        width: '350px',
         borderRadius: '15px',
         fontSize: '14px',
         color: '#938EA6',
         zIndex: 1500 - 1,
     }),
-    nodeBody: (nodeSize, attributes) => ({
+    nodeBody: (attributes) => ({
         position: 'relative',
         zIndex: 1450,
         top: Object.keys(attributes).length > 0 ? '-50px' : '-25px',
-        height: nodeSize.bodyHeight + 25 + 'px',
-        width: nodeSize.width + 'px',
+        // height: nodeSize.bodyHeight + 25 + 'px',
+        width: '350px',
         padding: '38px 18px 13px 18px',
         borderRadius: '15px',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.1)',

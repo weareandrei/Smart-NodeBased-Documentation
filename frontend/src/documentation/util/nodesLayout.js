@@ -4,7 +4,7 @@ const get = require("lodash/get")
 const filter = require("lodash/filter")
 const flatten = require("lodash/flatten")
 
-const {calculateNodeSize, NODE_CONST_WIDTH} = require("./sizeDeterminer")
+NODE_CONST_WIDTH = 350
 
 class NodesLayout {
 
@@ -14,9 +14,10 @@ class NodesLayout {
     nodesColumns = []
     nodesCoordinates = {}
 
-    constructor(nodes) {
+    constructor(nodes, nodesSizes) {
         // console.log('\n\n\n\n\n')
         this.nodes = nodes
+        this.nodesSizes = nodesSizes
         // console.log('----- nodes received', this.nodes)
         this.unpackedNodes = this.unpackNodes(nodes)
         // console.log('----- unpackedNodes', this.unpackedNodes)
@@ -86,25 +87,31 @@ class NodesLayout {
         }
     }
 
+    getNodeSize = (id) => {
+        const foundNodeSize = find(this.nodesSizes, (nodeSize) => nodeSize.id.toString() === id.toString())
+        if (!foundNodeSize) {
+            return {height: 0, width: NODE_CONST_WIDTH}
+        }
+        return {height: foundNodeSize.height, width: foundNodeSize.width}
+    }
+
     calculateColumnCoordinates = (columnNodes, xOffset, columnNumber) => {
         let yReached = 0
         for (let i = 0; i < columnNodes.length; i++) {
             if (columnNodes[i] == '') {
-                yReached = this.calculateColumnEmptySpaceHeight(columnNumber, i) + 50
+                yReached = this.calculateColumnEmptySpaceHeight(columnNumber, i).height + 25
                 continue
             }
             const node = this.findNodeById(columnNodes[i])
-            const nodeHeights = calculateNodeSize(node)
-            const nodeTotalHeight = nodeHeights.headerHeight + nodeHeights.attributesHeight + nodeHeights.bodyHeight
+            const nodeTotalHeight = this.getNodeSize(node.id).height
             this.nodesCoordinates[node.id.toString()] = {x: xOffset, y: yReached}
-            yReached = yReached + nodeTotalHeight + 50
+            yReached = yReached + nodeTotalHeight + 25
         }
     }
 
     calculateColumnEmptySpaceHeight = (columnNumber, nodeNumber) => {
         const node = this.findNodeById(this.nodesColumns[columnNumber-1][nodeNumber])
-        const nodeHeights = calculateNodeSize(node)
-        return nodeHeights.headerHeight + nodeHeights.attributesHeight + nodeHeights.bodyHeight
+        return this.getNodeSize(node.id)
     }
 
     splitNodesIntoTree = () => {

@@ -7,16 +7,19 @@ import ReactFlow, {
     Background,
     useNodesState,
     useEdgesState,
-    ReactFlowProvider
+    ReactFlowProvider,
+    useNodes
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
 import './overview.css'
 import NodeSelector from "./nodeSelector"
 import Node from "./node"
-import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
-import LockIcon from "@mui/icons-material/Lock";
-import IconButton from "@mui/material/IconButton";
+import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic'
+import LockIcon from "@mui/icons-material/Lock"
+import IconButton from "@mui/material/IconButton"
+
+import map from "lodash/map"
 
 const nodeTypes = {
     'page': Node,
@@ -46,44 +49,6 @@ const FlowComponent = (props) => {
     // console.log('FlowComponent edges(props): ', props.edges)
     // console.log('FlowComponent nodes: ', nodes)
 
-    const onDragOver = useCallback((event) => {
-        event.preventDefault();
-        event.dataTransfer.dropEffect = 'move'
-    }, [])
-
-    const onDrop = useCallback (
-        (event) => {
-            event.preventDefault()
-
-            const type = event.dataTransfer.getData('application/reactflow')
-
-            // check if the dropped element is valid
-            if (typeof type === 'undefined' || !type) {
-                return;
-            }
-
-            const position = reactFlowInstance.screenToFlowPosition({
-                x: event.clientX,
-                y: event.clientY,
-            })
-            const newNode = {
-                id: getNextId(nodes),
-                type,
-                position,
-                size: {
-                    width: 150,
-                    height: 60
-                },
-                data: { label: `${type} node` },
-            }
-
-            setNodes((nds) => nds.concat(newNode))
-
-            // props.registerNodeUpdate(newNode)
-        },
-        [reactFlowInstance],
-    )
-
     return (
         <ReactFlowProvider>
             <ReactFlow
@@ -94,6 +59,9 @@ const FlowComponent = (props) => {
                 onNodesChange={(event) => {
                     onNodesChange(event) // DON'T TOUCH
                     props.registerNodeUpdate(event[0])
+
+                    // If we use this, then event[0].dimensions is correct. But it is nly shown on update, not on init
+                    // console.log('event[0]', event[0])
                 }}
                 // panOnDrag={true}
 
@@ -133,7 +101,20 @@ const FlowComponent = (props) => {
                 >
                 <AutoAwesomeMosaicIcon style={{ width: '18px', color: '#000'}} />
             </IconButton>
+            <LayoutHelper registerNodesSizes={props.registerNodesSizes}/>
         </ReactFlowProvider>
+    )
+}
+
+const LayoutHelper = ({ registerNodesSizes }) => {
+    const nodes = useNodes()
+
+    registerNodesSizes(
+        map(nodes, (node) => ({
+            id: node.id,
+            width: node.width,
+            height: node.height
+        }))
     )
 }
 
