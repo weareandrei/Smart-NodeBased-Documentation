@@ -82,6 +82,26 @@ const applyNodeUpdate = (nodes, id, update) => {
                 }
                 return node
             })
+        case 'title':
+            return map(nodes, (node) => {
+                if (node.id === id) {
+                    return {
+                        ...node,
+                        title: update.value
+                    }
+                }
+                return node
+            })
+        case 'type':
+            return map(nodes, (node) => {
+                if (node.id === id) {
+                    return {
+                        ...node,
+                        type: update.value
+                    }
+                }
+                return node
+            })
         default:
             return nodes
     }
@@ -169,7 +189,7 @@ const documentationReducer = (state = initialState, action) => {
             const updatedParent = applyNodeCreate(state.documentation.nodes, newNodeId, action.fromNode)
             const allNodes2 = [
                 ...replaceOutdatedNodes(state.documentation.nodes, [updatedParent]),
-                {id: newNodeId, projectId: state.selectedProject.id, type: 'note', content: '', title: '', attributes: {}, body: {}, layoutAttributes: {}}
+                {id: newNodeId, projectId: state.selectedProject.id, type: 'none', content: '', title: '', attributes: {}, body: {}, layoutAttributes: {}}
             ]
             return {
                 ...state,

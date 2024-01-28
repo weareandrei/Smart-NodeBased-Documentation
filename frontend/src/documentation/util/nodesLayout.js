@@ -15,7 +15,7 @@ class NodesLayout {
     nodesCoordinates = {}
 
     constructor(nodes, nodesSizes) {
-        console.log('\n\n\n\n\n')
+        // console.log('\n\n\n\n\n')
         this.nodes = nodes
         this.nodesSizes = nodesSizes
         // console.log('----- nodes received', this.nodes)
@@ -26,13 +26,13 @@ class NodesLayout {
 
     buildLayout = () => {
         this.splitNodesIntoTree()
-        console.log('----- nodesTree', this.nodesTree)
+        // console.log('----- nodesTree', this.nodesTree)
         this.putNodesIntoColumns()
-        console.log('----- nodesColumns 1', this.nodesColumns)
+        // console.log('----- nodesColumns 1', this.nodesColumns)
         this.nodesColumns = map(this.nodesColumns, (column) => flatten(column))
-        console.log('----- nodesColumns 2', this.nodesColumns)
+        // console.log('----- nodesColumns 2', this.nodesColumns)
         this.calculateNodesCoordinates()
-        console.log('\n\n\n\n\n')
+        // console.log('\n\n\n\n\n')
     }
 
     // All nodes have children arrays, but they might be empty

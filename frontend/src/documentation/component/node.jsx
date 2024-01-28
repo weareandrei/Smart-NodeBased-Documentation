@@ -19,12 +19,15 @@ import LockOpenIcon from '@mui/icons-material/LockOpen'
 import LockIcon from '@mui/icons-material/Lock'
 
 import Button from '@mui/material/Button'
+import InputBase from '@mui/material/InputBase'
+
 import { LinkPreview } from '@dhaiwat10/react-link-preview'
 import Microlink from "@microlink/react"
 
 import NodeIcon from "./nodeIcon"
 import BlockTextEditor from "./editor/blockTextEditor"
 import NodeMoreMenu from "./NodeMoreMenu"
+import NodeTypeSelect from "./nodeTypeSelect"
   
 const Node = ({data}) => {
     const [state, setState] = useState({
@@ -39,10 +42,7 @@ const Node = ({data}) => {
                 data.isChild ? <Handle type="target" position={Position.Top} id={data.id} style={style.nodeHandle} /> : null
             }
             {
-                data.title === '' ?
-                    renderNewbornNodeHeader(state)
-                    :
-                    renderNodeHeader(data.id, data.type, data.title, get(data, 'layoutAttributes', {}), data.registerNodeUpdate, state)
+                renderNodeHeader(data.id, data.type, data.title, get(data, 'layoutAttributes', {}), data.registerNodeUpdate, state)
             }
             {
                 renderNodeAttributes(get(data, 'attributes', {}))
@@ -62,11 +62,27 @@ const Node = ({data}) => {
 const renderNodeHeader = (id, nodeType, title, layoutAttributes, registerNodeUpdate, state) => {
     const isPage = nodeType === 'page' || nodeType === 'current page'
     const islockShown = state.lockShown || get(layoutAttributes, 'locked', false)
+    const newBorn = (title === '')
 
     return (
-        <div style={style.nodeHeader(isPage)}>
-            <NodeIcon nodeType={nodeType} type={'main'}/>
-            {title}
+        <div style={style.nodeHeader(isPage, newBorn)}>
+            <NodeTypeSelect selectedType={nodeType}
+                            selectType={(typeName) => registerNodeUpdate({
+                                id: id,
+                                type: 'type',
+                                typeName: typeName
+                            })}/>
+            {/*<NodeIcon nodeType={newBorn ? 'none' : nodeType} type={'main'}/>*/}
+
+            <InputBase fullWidth
+                       placeholder={'...'}
+                       value={title}
+                       onChange={(event) => registerNodeUpdate({
+                           id: id,
+                           type: 'title',
+                           title: event.target.value
+                       })}
+                       sx={style.nodeHeaderTitleInput(title === '')}/>
 
             <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'row'}}>
                 {islockShown ? renderLockIcon(id, get(layoutAttributes, 'locked', false), registerNodeUpdate) : null}
@@ -75,16 +91,6 @@ const renderNodeHeader = (id, nodeType, title, layoutAttributes, registerNodeUpd
         </div>
     )
 }
-
-const renderNewbornNodeHeader = (state) =>
-    <div style={style.nodeHeader(false, true)}>
-        <NodeIcon nodeType={'none'} type={'main'}/>
-        ...
-        <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'row'}}>
-            <NodeMoreMenu/>
-        </div>
-    </div>
-
 
 const renderLockIcon = (id, locked, registerNodeUpdate) => {
     if (locked) {
@@ -331,11 +337,14 @@ const style = {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            fontWeight: 500,
-            border: borderDefined + '#552CF6 solid',
-            color: newBorn ? '#DFDFDF' : '#000',
+            border: borderDefined + '#552CF6 solid'
         }
     },
+    nodeHeaderTitleInput: (newBorn) => ({
+        fontWeight: newBorn ? '800' : '600',
+        color: newBorn ? '#DFDFDF' : '#000',
+        marginLeft: '10px'
+    }),
     nodeAttributes: () => ({
         position: 'relative',
         top: '-25px',

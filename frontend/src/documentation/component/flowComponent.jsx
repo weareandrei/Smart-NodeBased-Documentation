@@ -22,6 +22,7 @@ import IconButton from "@mui/material/IconButton"
 import map from "lodash/map"
 
 const nodeTypes = {
+    'none': Node,
     'page': Node,
     'code snippet': Node,
     'note': Node,

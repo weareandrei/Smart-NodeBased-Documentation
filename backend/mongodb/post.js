@@ -100,6 +100,18 @@ const prepareUpdateObject = (record) => {
                     'nodes.$.content': record.value
                 }
             }
+        case 'title':
+            return {
+                $set: {
+                    'nodes.$.title': record.value
+                }
+            }
+        case 'type':
+            return {
+                $set: {
+                    'nodes.$.type': record.value
+                }
+            }
         // Add other cases for different update types if needed
     }
 }
