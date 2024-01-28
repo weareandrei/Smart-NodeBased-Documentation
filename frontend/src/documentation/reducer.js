@@ -148,7 +148,6 @@ const documentationReducer = (state = initialState, action) => {
                 ...state,
             }
         case REGISTER_NODE_UPDATE:
-            console.log('REGISTER_NODE_UPDATE', action.id)
             const updatedNodes = applyNodeUpdate(state.selectedNodeChildren, action.id, action.update)
             const allNodes = replaceOutdatedNodes(state.documentation.nodes, updatedNodes)
             return {
@@ -165,13 +164,12 @@ const documentationReducer = (state = initialState, action) => {
             }
 
         case REGISTER_NODE_CREATE:
-            console.log('REGISTER_NODE_CREATE', action.fromNode)
-            const newNodeId = getMaxNodeId(state.documentation.nodes) + 1
+            const newNodeId = (getMaxNodeId(state.documentation.nodes) + 1).toString()
 
             const updatedParent = applyNodeCreate(state.documentation.nodes, newNodeId, action.fromNode)
             const allNodes2 = [
                 ...replaceOutdatedNodes(state.documentation.nodes, [updatedParent]),
-                {id: newNodeId.toString(), projectId: state.selectedProject.id, type: 'note', content: '', title: '', attributes: {}, body: {}, layoutAttributes: {}}
+                {id: newNodeId, projectId: state.selectedProject.id, type: 'note', content: '', title: '', attributes: {}, body: {}, layoutAttributes: {}}
             ]
             return {
                 ...state,

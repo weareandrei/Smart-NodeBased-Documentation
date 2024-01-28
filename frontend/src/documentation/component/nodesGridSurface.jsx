@@ -82,7 +82,6 @@ export default class NodesGridSurface extends Component {
         }))
 
     createNewNode = (fromNode) => {
-        console.log('create new node, from node:', fromNode)
         this.props.registerNodeCreate(fromNode)
     }
 
@@ -100,7 +99,6 @@ export default class NodesGridSurface extends Component {
 
     registerNodesSizes = (nodesSizes) => {
         if (this.sizesChanged(this.state.nodesSizes, nodesSizes)) {
-            console.log('sizesChanged')
             this.setState({ nodesSizes: nodesSizes })
         }
     }
@@ -130,7 +128,7 @@ export default class NodesGridSurface extends Component {
         if (this.state.autoLayoutActivated) {
             // If node's movement is not locked then give it auto-layout
             if (!get(thisNode, 'layoutAttributes.locked', false)) {
-                console.log('-- auto + not locked')
+                // console.log('-- auto + not locked')
                 const nodeCoordinates = nodesLayout.getNodeCoordinates(thisNode.id)
                 this.props.registerNodeUpdate({id: thisNode.id, type: 'position', autoLayout: true, position: nodeCoordinates})
                 return nodeCoordinates

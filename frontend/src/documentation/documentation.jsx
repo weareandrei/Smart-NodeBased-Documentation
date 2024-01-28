@@ -42,7 +42,6 @@ class Documentation extends React.Component {
     }
 
     registerNodeUpdate = (update) => {
-        console.log('registering node update', update)
 
         switch (update.type) {
             case 'position':
