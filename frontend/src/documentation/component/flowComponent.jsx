@@ -59,7 +59,7 @@ const FlowComponent = (props) => {
                     // Whenever we do anything to a node, drag, or click or else...
                 onNodesChange={(event) => {
                     onNodesChange(event) // DON'T TOUCH
-                    props.registerNodeUpdate(event[0])
+                    props.performNodeUpdate(event[0])
 
                     // If we use this, then event[0].dimensions is correct. But it is nly shown on update, not on init
                     // console.log('event[0]', event[0])
@@ -74,7 +74,7 @@ const FlowComponent = (props) => {
                 //     // console.log('onNodeDragStop, node:', node)
                 //     // We can see all the data about the node.
                 //     //   We are not given the update specifically
-                //     // props.registerNodeUpdate(node)
+                //     // props.performNodeUpdate(node)
                 // }}
 
                 // onElementClick={()=>console.log("onElementClick")}
@@ -122,7 +122,7 @@ const LayoutHelper = ({ registerNodesSizes }) => {
 FlowComponent.defaultProps = {
     nodes: [],
     edges: [],
-    registerNodeUpdate: null,
+    performNodeUpdate: null,
     autoLayoutActivated: null
 }
 

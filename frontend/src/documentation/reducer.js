@@ -45,6 +45,7 @@ const initialState = {
 }
 
 const applyNodeUpdate = (nodes, id, update) => {
+    console.log('applyNodeUpdate', nodes, id, update)
     switch (update.type) {
         case 'position':
             return map(nodes, (node) => {

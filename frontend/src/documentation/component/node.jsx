@@ -42,7 +42,7 @@ const Node = ({data}) => {
                 data.isChild ? <Handle type="target" position={Position.Top} id={data.id} style={style.nodeHandle} /> : null
             }
             {
-                renderNodeHeader(data.id, data.type, data.title, get(data, 'layoutAttributes', {}), data.registerNodeUpdate, state)
+                renderNodeHeader(data.id, data.type, data.title, get(data, 'layoutAttributes', {}), data.performNodeUpdate, state)
             }
             {
                 renderNodeAttributes(get(data, 'attributes', {}))
@@ -59,7 +59,7 @@ const Node = ({data}) => {
 
 }
 
-const renderNodeHeader = (id, nodeType, title, layoutAttributes, registerNodeUpdate, state) => {
+const renderNodeHeader = (id, nodeType, title, layoutAttributes, performNodeUpdate, state) => {
     const isPage = nodeType === 'page' || nodeType === 'current page'
     const islockShown = state.lockShown || get(layoutAttributes, 'locked', false)
     const newBorn = (title === '')
@@ -67,7 +67,7 @@ const renderNodeHeader = (id, nodeType, title, layoutAttributes, registerNodeUpd
     return (
         <div style={style.nodeHeader(isPage, newBorn)}>
             <NodeTypeSelect selectedType={nodeType}
-                            selectType={(typeName) => registerNodeUpdate({
+                            selectType={(typeName) => performNodeUpdate({
                                 id: id,
                                 type: 'type',
                                 typeName: typeName
@@ -77,7 +77,7 @@ const renderNodeHeader = (id, nodeType, title, layoutAttributes, registerNodeUpd
             <InputBase fullWidth
                        placeholder={'...'}
                        value={title}
-                       onChange={(event) => registerNodeUpdate({
+                       onChange={(event) => performNodeUpdate({
                            id: id,
                            type: 'title',
                            title: event.target.value
@@ -85,20 +85,20 @@ const renderNodeHeader = (id, nodeType, title, layoutAttributes, registerNodeUpd
                        sx={style.nodeHeaderTitleInput(title === '')}/>
 
             <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'row'}}>
-                {islockShown ? renderLockIcon(id, get(layoutAttributes, 'locked', false), registerNodeUpdate) : null}
+                {islockShown ? renderLockIcon(id, get(layoutAttributes, 'locked', false), performNodeUpdate) : null}
                 <NodeMoreMenu/>
             </div>
         </div>
     )
 }
 
-const renderLockIcon = (id, locked, registerNodeUpdate) => {
+const renderLockIcon = (id, locked, performNodeUpdate) => {
     if (locked) {
         return (
             <IconButton
                 className="nodrag"
                 style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
-                onClick={() => registerNodeUpdate({
+                onClick={() => performNodeUpdate({
                     id: id,
                     type: 'unlock'
                 })}>
@@ -110,7 +110,7 @@ const renderLockIcon = (id, locked, registerNodeUpdate) => {
             <IconButton
                 className="nodrag"
                 style={{ width: '27px', borderRadius: '5px', padding: '0px' }}
-                onClick={() => registerNodeUpdate({
+                onClick={() => performNodeUpdate({
                     id: id,
                     type: 'lock'
                 })}>
@@ -163,7 +163,7 @@ const renderNodeBody = (props) => {
             {/*<BlockTextEditor content={this.getBodyContent(nodeType, content)}*/}
             <BlockTextEditor content={props.content}
                              nodeId={props.id}
-                             registerNodeUpdate={props.registerNodeUpdate}
+                             performNodeUpdate={props.performNodeUpdate}
                              createNewNode={props.createNewNode}/>
         </div>
     )
