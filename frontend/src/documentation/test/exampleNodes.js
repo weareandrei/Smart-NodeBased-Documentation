@@ -1,4 +1,4 @@
-[
+const nodes = [
    {
       "id": "0",
       "type": "page",
@@ -81,3 +81,15 @@
       }
    }
 ]
+
+const nodesSizes = [
+   {id: '0', height: 400, width: 350},
+   {id: '1', height: 400, width: 350},
+   {id: '2', height: 400, width: 350},
+   {id: '3', height: 400, width: 350},
+   {id: '4', height: 400, width: 350},
+   {id: '5', height: 400, width: 350},
+   {id: '6', height: 400, width: 350}
+]
+
+module.exports = { nodes, nodesSizes }

@@ -50,16 +50,9 @@ export const registerNodeUpdate = (event) => ({
 //     return updates
 // }
 
-export const registerNodeCreate = (documentation, node, parentId) => ({
+export const registerNodeCreate = (fromNode) => ({
     type: REGISTER_NODE_CREATE,
-    nodeUpdate: {
-        action: 'create',
-        parentId: parentId,
-        node: prepareNodeCreate(
-            documentation,
-            node
-        )
-    }
+    fromNode: fromNode
 })
 
 const prepareNodeCreate = (documentation, node) => {

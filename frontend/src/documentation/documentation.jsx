@@ -12,7 +12,7 @@ import NodesGridSurface from './component/nodesGridSurface'
 class Documentation extends React.Component {
 
     static propTypes = {
-        nodesSyncQueue: PropTypes.array.isRequired,
+        nodesSyncQueue: PropTypes.object.isRequired,
         registerNodeUpdate: PropTypes.func.isRequired,
         registerNodeCreate: PropTypes.func.isRequired,
         syncNodes: PropTypes.func.isRequired,
@@ -36,12 +36,12 @@ class Documentation extends React.Component {
         return (
             <NodesGridSurface nodes={this.props.selectedNodeChildren}
                               selectNode={this.props.selectNode}
-                              registerNodeUpdate={this.registerNodeUpdate}/>
+                              registerNodeUpdate={this.registerNodeUpdate}
+                              registerNodeCreate={this.props.registerNodeCreate}/>
         )
     }
 
     registerNodeUpdate = (update) => {
-        console.log('registering node update', update)
 
         switch (update.type) {
             case 'position':
@@ -94,18 +94,33 @@ class Documentation extends React.Component {
                 )
                 this.props.syncNodes()
                 break
+            case 'title':
+                this.props.registerNodeUpdate(
+                    {
+                        id: update.id,
+                        update: {
+                            type: 'title',
+                            value: update.title
+                        }
+                    }
+                )
+                this.props.syncNodes()
+                break
+            case 'type':
+                this.props.registerNodeUpdate(
+                    {
+                        id: update.id,
+                        update: {
+                            type: 'type',
+                            value: update.typeName
+                        }
+                    }
+                )
+                this.props.syncNodes()
+                break
             default:
                 break
         }
-
-        // add updated node id and its type to reducer.
-        //   Then we will push all updates at once when command received
-
-        // console.log('nodeModified: ',node)
-        // this.isNewNode(node) ?
-        //     this.props.registerNodeCreate(this.props.documentation, node, this.props.selectedNode.id) :
-        //     this.props.registerNodeUpdate(this.props.documentation, node)
-        // this.props.syncNodes()
     }
 
     isNewNode = (thisNode) => {

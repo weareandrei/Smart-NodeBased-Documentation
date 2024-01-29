@@ -9,7 +9,7 @@ import StarterKit from '@tiptap/starter-kit'
 import {useBlockEditor} from "./useBlockEditor"
 // import {ContentItemMenu} from "./menu/containerMenu/contentItemMenu"
 import {TextMenu} from "./menu/textMenu/textMenu"
-import Button from "@mui/material/Button";
+import Button from "@mui/material/Button"
 
 // const extensions = [
 //     Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -33,8 +33,7 @@ const createStoreChangesExtention = (nodeId, registerNodeUpdate) => Extension.cr
     }
 })
 
-const BlockTextEditor = ({content, nodeId, registerNodeUpdate}) => {
-
+const BlockTextEditor = ({ content, nodeId, registerNodeUpdate, createNewNode }) => {
     const menuContainerRef = useRef(null)
     const editorRef = useRef<PureEditorContent | null>(null)
 
@@ -46,6 +45,9 @@ const BlockTextEditor = ({content, nodeId, registerNodeUpdate}) => {
     if (!editor) {
         return null
     }
+
+    editor.createNewNode = createNewNode
+    editor.nodeId = nodeId
 
     return (
         <>

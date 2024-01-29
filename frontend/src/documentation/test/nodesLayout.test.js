@@ -1,10 +1,10 @@
 const NodesLayout = require('../util/nodesLayout')
-const nodes = require ('./exampleNodes.json')
+const {nodes, nodesSizes} = require ('./exampleNodes.js')
 
 const main = () => {
-    const myNodesLayout = new NodesLayout(nodes)
+    const myNodesLayout = new NodesLayout(nodes, nodesSizes)
     myNodesLayout.buildLayout()
-    console.log(myNodesLayout.nodeCoordinates)
+    console.log(myNodesLayout.nodesCoordinates)
 }
 
 main()

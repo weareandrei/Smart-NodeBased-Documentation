@@ -3,6 +3,7 @@ import {
     LOADED_DOCUMENTATION_FAIL,
     LOADING_DOCUMENTATION,
     REGISTER_NODE_UPDATE,
+    REGISTER_NODE_CREATE,
     SELECT_NODE,
     SELECT_PARENT_NODE,
     SELECT_PROJECT,
@@ -12,6 +13,7 @@ import {
 } from './action'
 import flatMap from 'lodash/flatMap'
 import filter from 'lodash/filter'
+import maxBy from 'lodash/maxBy'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import find from "lodash/find"
@@ -80,8 +82,36 @@ const applyNodeUpdate = (nodes, id, update) => {
                 }
                 return node
             })
+        case 'title':
+            return map(nodes, (node) => {
+                if (node.id === id) {
+                    return {
+                        ...node,
+                        title: update.value
+                    }
+                }
+                return node
+            })
+        case 'type':
+            return map(nodes, (node) => {
+                if (node.id === id) {
+                    return {
+                        ...node,
+                        type: update.value
+                    }
+                }
+                return node
+            })
         default:
             return nodes
+    }
+}
+
+const applyNodeCreate = (allNodes, newNodeId, fromNode) => {
+    const currentParent = findParentNode(allNodes, find(allNodes, (node) => node.id === fromNode))
+    return {
+        ...currentParent,
+        children: [...currentParent.children, newNodeId]
     }
 }
 
@@ -138,7 +168,6 @@ const documentationReducer = (state = initialState, action) => {
                 ...state,
             }
         case REGISTER_NODE_UPDATE:
-            console.log('REGISTER_NODE_UPDATE', action.id)
             const updatedNodes = applyNodeUpdate(state.selectedNodeChildren, action.id, action.update)
             const allNodes = replaceOutdatedNodes(state.documentation.nodes, updatedNodes)
             return {
@@ -153,6 +182,28 @@ const documentationReducer = (state = initialState, action) => {
                     update: appendNodeUpdateQueue(state.nodesSyncQueue.update, action.id, action.update)
                 }
             }
+
+        case REGISTER_NODE_CREATE:
+            const newNodeId = (getMaxNodeId(state.documentation.nodes) + 1).toString()
+
+            const updatedParent = applyNodeCreate(state.documentation.nodes, newNodeId, action.fromNode)
+            const allNodes2 = [
+                ...replaceOutdatedNodes(state.documentation.nodes, [updatedParent]),
+                {id: newNodeId, projectId: state.selectedProject.id, type: 'none', content: '', title: '', attributes: {}, body: {}, layoutAttributes: {}}
+            ]
+            return {
+                ...state,
+                documentation: {
+                    ...state.documentation,
+                    nodes: allNodes2
+                },
+                selectedNodeChildren: getProjectNodes(allNodes2, state.selectedProject.id),
+                // nodesSyncQueue: {
+                //     create: state.nodesSyncQueue.create,
+                //     update: appendNodeUpdateQueue(state.nodesSyncQueue.update, action.id, action.update)
+                // }
+            }
+
         case SYNCING_NODES:
             return {
                 ...state,
@@ -294,5 +345,10 @@ const addParentData = (nodes) =>
         }
         return {...node, parent: parentNode.id}
     })
+
+const getMaxNodeId = (nodes) => {
+    const maxIdObject = maxBy(nodes, obj => parseInt(obj.id))
+    return parseInt(maxIdObject.id)
+}
 
 export default documentationReducer

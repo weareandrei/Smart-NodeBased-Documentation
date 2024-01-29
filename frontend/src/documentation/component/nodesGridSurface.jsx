@@ -8,6 +8,7 @@ import isEqual from 'lodash/isEqual'
 
 import NodesLayout from '../util/nodesLayout'
 import find from "lodash/find"
+import {registerNodeCreate} from "../action";
 
 export default class NodesGridSurface extends Component {
 
@@ -15,13 +16,15 @@ export default class NodesGridSurface extends Component {
         nodes: PropTypes.array.isRequired,
         selectNode: PropTypes.func.isRequired,
         registerNodeUpdate: PropTypes.func.isRequired,
-        autoLayoutActivated: PropTypes.func.isRequired
+        registerNodeCreate: PropTypes.func.isRequired
     }
+
     static defaultProps = {
         selectedNode: null
     }
 
     state = {
+        nodesSizes: [],
         autoLayoutActivated: false
     }
 
@@ -33,7 +36,7 @@ export default class NodesGridSurface extends Component {
     }
 
     render() {
-        const nodesLayout = new NodesLayout(this.props.nodes)
+        const nodesLayout = new NodesLayout(this.props.nodes, this.state.nodesSizes)
         nodesLayout.buildLayout()
 
         return this.renderFlowComponent(
@@ -50,14 +53,13 @@ export default class NodesGridSurface extends Component {
                     edges={edges}
                     registerNodeUpdate={this.props.registerNodeUpdate}
                     autoLayoutActivated={this.autoLayoutActivated}
+                    registerNodesSizes={this.registerNodesSizes}
                 />
             </div>
         )
     }
 
     autoLayoutActivated = () => {
-        // console.log('\n\n')
-        // console.log('Layout activated')
         this.setState({ autoLayoutActivated: true })
     }
 
@@ -69,7 +71,8 @@ export default class NodesGridSurface extends Component {
                 ...node,
                 isChild: this.isChild(node),
                 isParent: this.isParent(node),
-                registerNodeUpdate: this.props.registerNodeUpdate
+                registerNodeUpdate: this.props.registerNodeUpdate,
+                createNewNode: this.createNewNode
             },
             position: this.getNodePosition(node, nodesLayout),
             draggable: !get(node, 'layoutAttributes.locked', false)
@@ -77,6 +80,10 @@ export default class NodesGridSurface extends Component {
             //     // ...node.size
             // }
         }))
+
+    createNewNode = (fromNode) => {
+        this.props.registerNodeCreate(fromNode)
+    }
 
     createFlowEdges = (nodes) =>
         flatMap(nodes, (node) =>
@@ -90,13 +97,38 @@ export default class NodesGridSurface extends Component {
             }))
         )
 
+    registerNodesSizes = (nodesSizes) => {
+        if (this.sizesChanged(this.state.nodesSizes, nodesSizes)) {
+            this.setState({ nodesSizes: nodesSizes })
+        }
+    }
+
+    sizesChanged = (oldSizes, newSizes) => {
+        if (oldSizes.length === 0 && newSizes.length !== 0) {
+            return true
+        }
+
+        const foundUpdatedSize = find(oldSizes, (oldSize) => {
+            const oldId = oldSize.id
+            const sameIdNewSize = find(newSizes, (newSize) => newSize.id === oldId)
+            if (sameIdNewSize.height !== oldSize.height || sameIdNewSize.width !== oldSize.width) {
+                return true
+            }
+        })
+
+        if (foundUpdatedSize !== undefined) {
+            return true
+        }
+        return false
+    }
+
     getNodePosition = (thisNode, nodesLayout) => {
         // console.log('\n')
         // console.log('thisNode.id =', thisNode.id)
         if (this.state.autoLayoutActivated) {
             // If node's movement is not locked then give it auto-layout
             if (!get(thisNode, 'layoutAttributes.locked', false)) {
-                console.log('-- auto + not locked')
+                // console.log('-- auto + not locked')
                 const nodeCoordinates = nodesLayout.getNodeCoordinates(thisNode.id)
                 this.props.registerNodeUpdate({id: thisNode.id, type: 'position', autoLayout: true, position: nodeCoordinates})
                 return nodeCoordinates
