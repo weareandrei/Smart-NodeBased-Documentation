@@ -26,18 +26,18 @@ import Button from "@mui/material/Button"
 //     }),
 // ]
 
-const createStoreChangesExtention = (nodeId, registerNodeUpdate) => Extension.create({
+const createStoreChangesExtention = (nodeId, performNodeUpdate) => Extension.create({
     onUpdate({ editor }) {
         const content = editor.getHTML()
-        registerNodeUpdate({id: nodeId, type: 'content', content: content})
+        performNodeUpdate({id: nodeId, type: 'content', content: content})
     }
 })
 
-const BlockTextEditor = ({ content, nodeId, registerNodeUpdate, createNewNode }) => {
+const BlockTextEditor = ({ content, nodeId, performNodeUpdate, createNewNode }) => {
     const menuContainerRef = useRef(null)
     const editorRef = useRef<PureEditorContent | null>(null)
 
-    const storeChangesExtention = createStoreChangesExtention(nodeId, registerNodeUpdate)
+    const storeChangesExtention = createStoreChangesExtention(nodeId, performNodeUpdate)
     const { editor, characterCount } = useBlockEditor({content, storeChangesExtention})
 
     // const displayedUsers = users.slice(0, 3)
