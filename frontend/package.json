@@ -54,7 +54,8 @@
     "redux-thunk": "^2.4.2",
     "styled-components": "^5.3.11",
     "tailwind-merge": "^2.2.0",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "model": "https://github.com/weareandrei/Model.git"
   },
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
