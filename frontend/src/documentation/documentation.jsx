@@ -105,7 +105,7 @@ class Documentation extends Component {
         }))
 
     createNewNode = (fromNode) => {
-        this.registerNodeCreate(fromNode)
+        this.props.registerNodeCreate(fromNode)
     }
 
     createFlowEdges = (nodes) =>
