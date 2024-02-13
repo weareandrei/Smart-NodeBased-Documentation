@@ -25,4 +25,4 @@ const loadDocumentation = async (req, res) => {
 
 module.exports = {
     loadDocumentation,
-};
+}
