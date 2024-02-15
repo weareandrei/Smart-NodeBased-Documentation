@@ -2,7 +2,6 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.6.7",
     "body-parser": "^1.20.2",
     "bson": "^5.0.0",
     "cors": "^2.8.5",
@@ -22,6 +22,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "ts-node": "^10.9.2"
   }
 }
