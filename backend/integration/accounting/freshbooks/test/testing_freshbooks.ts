@@ -11,9 +11,9 @@ const run = async () => {
     //     .then(res => console.log(res))
     //     .catch(err => console.error(err))
 
-    // getProfitAndLossesReport(accountId, businessUuid)
-    //     .then(res => console.log(res))
-    //     .catch(err => console.error(err))
+    await getProfitAndLossesReport(accountId, businessUuid)
+        .then((res: any) => console.log(res))
+        .catch((err: any) => console.error(err))
 }
 
 run()
