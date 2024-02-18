@@ -1,10 +1,12 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "echo \\\"Error: no src/test specified\\\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -18,11 +20,12 @@
     "lodash": "^4.17.21",
     "mongodb": "^6.3.0",
     "mongoose": "^7.6.0",
-    "node-fetch": "^3.3.2",
-    "typescript": "^5.3.3"
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.202",
-    "ts-node": "^10.9.2"
+    "@types/node": "^20.11.19",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }

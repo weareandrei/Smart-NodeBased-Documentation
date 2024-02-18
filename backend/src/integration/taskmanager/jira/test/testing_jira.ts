@@ -36,7 +36,7 @@ const boardId = 2
 //     .then(text => console.log(text))
 //     .catch(err => console.error(err));
 
-import {getCurrentSprint, getCurrentSprintIssues} from "../index"
+import {getCurrentSprint, getCurrentSprintIssues} from "../index.js"
 
 const run = async () => {
 

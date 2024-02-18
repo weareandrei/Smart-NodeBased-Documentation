@@ -1,7 +1,7 @@
-import { executeURL } from '../../api'
-import { getAccessToken } from '../../index'
+import { executeURL } from '../../api.js'
+import { getAccessToken } from '../../index.js'
 
-export const getCurrentSprint = (userId: string, boardId: number) => {
+const getCurrentSprint = (userId: string, boardId: number) => {
     const accessToken = getAccessToken(userId, 'jira')
     const result = executeURL(
         'https://weareandrei.atlassian.net/rest/agile/1.0/board/'+boardId+'/sprint',
@@ -12,7 +12,7 @@ export const getCurrentSprint = (userId: string, boardId: number) => {
     return result
 }
 
-export const getCurrentSprintIssues = (userId: string, sprintId: number) => {
+const getCurrentSprintIssues = (userId: string, sprintId: number) => {
     const accessToken = getAccessToken(userId, 'jira')
     const result = executeURL(
         'https://weareandrei.atlassian.net/rest/agile/1.0/sprint/'+sprintId+'/issue',
@@ -21,4 +21,9 @@ export const getCurrentSprintIssues = (userId: string, sprintId: number) => {
             'Accept': 'application/json'
         })
     return result
+}
+
+module.exports = {
+    getCurrentSprint,
+    getCurrentSprintIssues
 }

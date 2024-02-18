@@ -1,4 +1,4 @@
-import { listAllInvoices, getProfitAndLossesReport } from "../index"
+import { listAllInvoices, getProfitAndLossesReport } from "../index.js"
 
 const axios = require('axios')
 

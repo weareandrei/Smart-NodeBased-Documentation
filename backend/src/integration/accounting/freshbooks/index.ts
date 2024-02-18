@@ -1,5 +1,5 @@
-import { executeURL } from '../../api'
-import { getAccessToken, getRefreshTokenToken } from '../../index'
+import { executeURL } from '../../api.js'
+import { getAccessToken, getRefreshTokenToken } from '../../index.js'
 
 export const listAllInvoices = (accountId: string) => {
     const accessToken = getAccessToken(accountId, 'freshbooks')
