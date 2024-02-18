@@ -1,5 +1,5 @@
-const { DocumentationModel } = require('./model')
-const {mongoose} = require("mongoose")
+import { DocumentationModel } from './model.js';
+import mongoose from 'mongoose';
 
 const loadDocumentation = async (req, res) => {
     const documentationId = req.query.documentationId

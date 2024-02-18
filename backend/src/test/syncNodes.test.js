@@ -1,4 +1,4 @@
-const {syncNodes} = require("../mongodb/post")
+const {syncNodes} = require("../mongodb/post.js")
 
 
 const run = async () => {

@@ -1,4 +1,4 @@
-const { DocumentationModel } = require('../mongodb/model')
+import { DocumentationModel } from '../mongodb/model.js'
 
 const validateUserCredentials = async (req, res) => {
     console.log('API Called - /validateUserCredentials')

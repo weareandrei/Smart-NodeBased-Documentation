@@ -1,8 +1,8 @@
-const { DocumentationModel } = require('./model')
-const {mongoose} = require("mongoose")
-const {mapWithThrottle} = require("../util/mapWithThrottle")
-const map = require("lodash/map")
-const ObjectId = require('mongodb').ObjectId;
+import { DocumentationModel } from './model.js';
+import mongoose from 'mongoose';
+import { mapWithThrottle } from '../util/mapWithThrottle.js';
+import map from 'lodash/map';
+import { ObjectId } from 'mongodb';
 
 const createNewEntity = async (documentationId, nodeCreateRecord) => {
     console.log('func -> createNewEntity, (params): \n', documentationId, nodeCreateRecord)

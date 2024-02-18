@@ -1,4 +1,4 @@
-const { DocumentationModel } = require('../mongodb/model')
+const { DocumentationModel } = require('../mongodb/model.js')
 const {mongoose} = require("mongoose")
 
 const createNewEntity = async (req) => {
