@@ -1,10 +1,41 @@
 {
    "compilerOptions": {
-      "module": "NodeNext",
-      "moduleResolution": "NodeNext",
       "target": "ES2020",
+      "moduleResolution": "NodeNext",
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noImplicitAny": false,
+      "allowJs": true,
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "skipLibCheck": true,
+      "jsx": "react",
+      "experimentalDecorators": true,
+      "types": [
+          "node",
+//          "mocha",
+//          "expect",
+//          "cypress",
+          "express"
+      ],
+      "module": "NodeNext",
+      "plugins": [
+        {
+          "name": "@typescript-eslint"
+        }
+      ],
       "sourceMap": true,
-      "outDir": "dist"
+      "outDir": "dist",
+      "strictNullChecks": false,
+      "strict": false
    },
-   "include": ["src/**/*"]
+
+   "include": [
+     "src/**/*"
+   ],
+
+   "exclude": [
+        "node_modules",
+        "/**/node_modules/*"
+   ]
 }

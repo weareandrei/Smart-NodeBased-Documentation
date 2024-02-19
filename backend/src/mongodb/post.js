@@ -1,7 +1,7 @@
 import { DocumentationModel } from './model.js';
 import mongoose from 'mongoose';
 import { mapWithThrottle } from '../util/mapWithThrottle.js';
-import map from 'lodash/map';
+import map from 'lodash/map.js';
 import { ObjectId } from 'mongodb';
 
 const createNewEntity = async (documentationId, nodeCreateRecord) => {

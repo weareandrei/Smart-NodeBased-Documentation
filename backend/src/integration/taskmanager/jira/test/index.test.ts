@@ -1,4 +1,4 @@
-const axios = require('axios')
+// const axios = require('axios')
 
 // const execute = async (url: string, params, ...args): Promise<any> => {
 //     if (isEmpty(params)) {
@@ -12,12 +12,12 @@ const axios = require('axios')
 // const formJiraUrlParams = (): string =>
 //     ''
 
-import fetch from 'node-fetch'
+// import fetch from 'node-fetch'
 
-const jiraAccessToken = 'ATATT3xFfGF09ZDggJTihAoG7rBh3b8ExHKnFeSd_3o1zdHdNbUw9Xl_zOEFoOJuE9XO3rdJ8eUYg88AI58_d3D0QJskSJky-nt-QH_YGjHK4RiRuNiUaeqGaC_WgJNWImFTyOrO52aSZXTnV0-DvwjgGU2Pyp01daV3Uq6_WlL1bRukJq4HY-4=F15109A6'
+// const jiraAccessToken = 'ATATT3xFfGF09ZDggJTihAoG7rBh3b8ExHKnFeSd_3o1zdHdNbUw9Xl_zOEFoOJuE9XO3rdJ8eUYg88AI58_d3D0QJskSJky-nt-QH_YGjHK4RiRuNiUaeqGaC_WgJNWImFTyOrO52aSZXTnV0-DvwjgGU2Pyp01daV3Uq6_WlL1bRukJq4HY-4=F15109A6'
 // until 20 apr
 
-const boardId = 2
+// const boardId = 2
 
 // fetch('https://weareandrei.atlassian.net/rest/agile/1.0/board/'+boardId+'/sprint', {
 // // fetch('https://weareandrei.atlassian.net/rest/agile/1.0/board', {
@@ -36,9 +36,9 @@ const boardId = 2
 //     .then(text => console.log(text))
 //     .catch(err => console.error(err));
 
-import {getCurrentSprint, getCurrentSprintIssues} from "../index.js"
+// import {getCurrentSprint, getCurrentSprintIssues} from "../index.js"
 
-const run = async () => {
+// const run = async () => {
 
     // const result = await axios.post(
     //     'https://accounts.zoho.com/oauth/v2/token',
@@ -56,13 +56,13 @@ const run = async () => {
 
     // 1000.cac243f24208b0d4e08613ee7e9696e7.dd8573e7b08999fa9a33cf082de86edf
     // console.log(result)
-    getCurrentSprint('0', 2)
-        .then(res => console.log(res))
-        .catch(err => console.error(err))
+    // getCurrentSprint('0', 2)
+    //     .then(res => console.log(res))
+    //     .catch(err => console.error(err))
 
     // getCurrentSprintIssues(0, 1)
     //     .then(res => console.log(res))
     //     .catch(err => console.error(err))
-}
+// }
 
-run()
+// run()

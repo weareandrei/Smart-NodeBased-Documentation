@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": true,
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "types": [
+      "node",
+      "mocha",
+      "expect",
+      "cypress",
+      "express",
+      "lodash",
+      "proxyquire",
+      "sharp"
+    ],
+    "module": "CommonJS",
+    "plugins": [
+      {
+        "name": "@typescript-eslint"
+      }
+    ]
+  },
+  "include": [
+    "/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "/**/node_modules/*"
+  ]
+}
