@@ -1,30 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="auth.test works. &#10;Can connect to mongoDB and retrieve objects.">
-      <change afterPath="$PROJECT_DIR$/backend/auth/authMangoose.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth/authPure.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/mongodb/get.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/mongodb/model.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/dashboard/action.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/dashboard/reducer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/documentation/documentation.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/tasks/tasks.jsx" afterDir="false" />
+    <list default="true" id="4053ccd1-1103-4962-819d-6b631789fd50" name="Changes" comment="Frontend and backend fixed from eslint and ts error. Can run.&#10;&#10;To run - npm build for backend and then run node index from /dist folder.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth/auth.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test/index.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test/index.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/auth/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/auth/action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/auth/auth.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/auth/auth.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/core/route.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/core/route.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dashboard/dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/dashboard/dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dashboard/dashboard.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/navigation/navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/navigation/navigation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/navigation/navigationLeft.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/navigation/navigationLeft.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/tasks/exampleData.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/tasks/tasks.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/tasks/tasks.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +23,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -49,55 +40,83 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/weareandrei/Documents/Omega/frontend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;js.linters.configure.manually.selectedeslint&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/weareandrei/Documents/Omega/backend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.linters.eslint&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/weareandrei/Documents/Omega/frontend/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "JSON"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;JSON&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backend" />
       <recent name="$PROJECT_DIR$/frontend" />
       <recent name="$PROJECT_DIR$/frontend/src/navigation" />
       <recent name="$PROJECT_DIR$/frontend/src" />
       <recent name="$PROJECT_DIR$/frontend/src/core" />
-      <recent name="$PROJECT_DIR$/frontend/public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/backend/mongodb" />
-      <recent name="$PROJECT_DIR$/frontend/src/common/icon" />
-      <recent name="$PROJECT_DIR$/frontend/src/navigation" />
-      <recent name="$PROJECT_DIR$/frontend/src/navigation/component" />
-      <recent name="$PROJECT_DIR$/frontend/src" />
+      <recent name="$PROJECT_DIR$/frontend/src/dashboard" />
+      <recent name="$PROJECT_DIR$/frontend/src/tasks" />
+      <recent name="$PROJECT_DIR$/backend/src" />
+      <recent name="$PROJECT_DIR$/backend/integration/taskmanager/jira/test" />
+      <recent name="$PROJECT_DIR$/backend/integration/taskmanager/jira" />
     </key>
   </component>
-  <component name="RunManager" selected="Node.js.authMangoose.test.js">
-    <configuration name="authMangoose.test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/backend/auth/authMangoose.test.js" working-dir="$PROJECT_DIR$/backend/auth">
+  <component name="RunManager" selected="Node.js.index.test.ts">
+    <configuration name="index.test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/backend/dist/integration/taskmanager/jira/test/index.test.js" working-dir="$PROJECT_DIR$/backend/dist/integration/taskmanager/jira/test">
       <method v="2" />
     </configuration>
-    <configuration name="authPure.test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/backend/auth/authPure.test.js" working-dir="$PROJECT_DIR$/backend/auth">
+    <configuration name="index.test.ts" type="NodeJSConfigurationType" temporary="true" node-parameters="--require ts-node/register " path-to-js-file="$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test/index.test.ts" working-dir="$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test">
       <method v="2" />
     </configuration>
-    <configuration name="auth.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/backend/auth/auth.js" working-dir="$PROJECT_DIR$/backend/auth">
+    <configuration name="index_test.ts" type="NodeJSConfigurationType" temporary="true" node-parameters="--require ts-node/register " path-to-js-file="$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test/index.test.js" working-dir="$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test">
+      <method v="2" />
+    </configuration>
+    <configuration name="testing_jira.ts (1)" type="TypeScriptProgramRunner" factoryName="TypeScript" temporary="true">
+      <module name="Omega" />
+      <option name="interpreterRef" value="project" />
+      <option name="enabledTsNodeEsmLoader" value="false" />
+      <option name="interpreterOptions" value="" />
+      <option name="workingDirectory" value="$PROJECT_DIR$/backend/integration/taskmanager/jira/test" />
+      <option name="tsconfigFile" value="" />
+      <option name="extraTypeScriptOptions" value="" />
+      <option name="scriptName" value="$PROJECT_DIR$/backend/integration/taskmanager/jira/test/testing_jira.ts" />
+      <option name="programParameters" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/backend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Node.js.authMangoose.test.js" />
-        <item itemvalue="Node.js.authPure.test.js" />
-        <item itemvalue="Node.js.auth.js" />
+        <item itemvalue="Node.js.index.test.ts" />
+        <item itemvalue="Node.js.index.test.ts" />
+        <item itemvalue="Node.js.index.test.ts" />
+        <item itemvalue="Node.js.index.test.ts" />
+        <item itemvalue="Node.js.index.test.js" />
       </list>
     </recent_temporary>
   </component>
@@ -111,6 +130,20 @@
       <updated>1696441191689</updated>
       <workItem from="1696441192811" duration="522000" />
       <workItem from="1696441725611" duration="78842000" />
+      <workItem from="1707595344933" duration="2246000" />
+      <workItem from="1707836992433" duration="29897000" />
+      <workItem from="1708271483490" duration="3350000" />
+      <workItem from="1708281487714" duration="1348000" />
+      <workItem from="1708282852864" duration="1216000" />
+      <workItem from="1708284081120" duration="939000" />
+      <workItem from="1708285036167" duration="1506000" />
+      <workItem from="1708290726388" duration="144000" />
+      <workItem from="1708290880932" duration="210000" />
+      <workItem from="1708291099077" duration="13220000" />
+      <workItem from="1709492507688" duration="2319000" />
+      <workItem from="1709734425243" duration="121000" />
+      <workItem from="1709745543682" duration="598000" />
+      <workItem from="1709764916310" duration="592000" />
     </task>
     <task id="LOCAL-00001" summary="Initial project setup finished.&#10;No code yet.">
       <created>1696441554023</created>
@@ -154,7 +187,63 @@
       <option name="project" value="LOCAL" />
       <updated>1696867081499</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="..">
+      <created>1707836659069</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1707836659069</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Jira API working. Fetched all boards">
+      <created>1707844660854</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1707844660854</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Created API's getCurrentSprint and getCurrentSprintIssues.&#10;&#10;They work and can be tested in testing_jira.ts.&#10; (If not working, maybe API key is old)">
+      <created>1707996748686</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1707996748686</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Created API's listAllInvoices and getProfitAndLossesReport.&#10;&#10;They work and can be tested in testing_freshbooks.ts.&#10; (If not working, access_token needs to be refreshed - check notion or jira task description)">
+      <created>1708113231031</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1708113231031</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Updated freshbook's API. Now refreshes access_token if expired.">
+      <created>1708120301265</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1708120301265</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Work in progress">
+      <created>1708270880522</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1708270880522</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Merged + Fixed Eslint + TS configured for backend and frontend">
+      <created>1708271603083</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1708271603084</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Frontend and backend fixed from eslint and ts error. Can run.&#10;&#10;To run - npm build for backend and then run node index from /dist folder.">
+      <created>1708367031051</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1708367031051</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,7 +267,16 @@
     <MESSAGE value="React Route used more properly.&#10;Basic authenticaion API works and allows us to move to Main page." />
     <MESSAGE value="Successfully accessed mongoDB" />
     <MESSAGE value="auth.test works. &#10;Can connect to mongoDB and retrieve objects." />
-    <option name="LAST_COMMIT_MESSAGE" value="auth.test works. &#10;Can connect to mongoDB and retrieve objects." />
+    <MESSAGE value=".." />
+    <MESSAGE value="Jira API working. Fetched all boards" />
+    <MESSAGE value="Created API's getCurrentSprint and getCurrentSprintIssues.&#10;&#10;They work and can be tested in testing_jira.ts.&#10; (If not working, maybe API key is old)" />
+    <MESSAGE value="Created API's listAllInvoices and getProfitAndLossesReport.&#10;&#10;They work and can be tested in testing_freshbooks.ts.&#10; (If not working, access_token needs to be refreshed - check notion or jira task description)" />
+    <MESSAGE value="Updated freshbook's API. Now refreshes access_token if expired." />
+    <MESSAGE value="Work in progress" />
+    <MESSAGE value="Merged + Fixed Eslint + TS configured for backend and frontend" />
+    <MESSAGE value="Frontend and backend fixed from eslint and ts error. Can run" />
+    <MESSAGE value="Frontend and backend fixed from eslint and ts error. Can run.&#10;&#10;To run - npm build for backend and then run node index from /dist folder." />
+    <option name="LAST_COMMIT_MESSAGE" value="Frontend and backend fixed from eslint and ts error. Can run.&#10;&#10;To run - npm build for backend and then run node index from /dist folder." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -186,8 +284,52 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/frontend/src/dashboard/dashboard.jsx</url>
           <line>6</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test/index.test.ts</url>
+          <line>60</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test/index.test.ts</url>
+          <line>59</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/backend/src/integration/accounting/freshbooks/test/testing_freshbooks.ts</url>
+          <line>14</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/backend/src/integration/accounting/freshbooks/index.ts</url>
+          <line>50</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/backend/src/integration/accounting/freshbooks/index.ts</url>
+          <line>60</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/backend/src/integration/accounting/freshbooks/index.ts</url>
+          <line>38</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/backend/src/integration/accounting/freshbooks/index.ts</url>
+          <line>33</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test/index.test.ts</url>
+          <line>27</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/backend/src/integration/taskmanager/jira/test/index.test.ts</url>
+          <line>28</line>
+          <option name="timeStamp" value="43" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
